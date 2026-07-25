@@ -23,7 +23,7 @@ html{font-optical-sizing:auto;}
 body{background:#c9ccd2;font-family:var(--font);-webkit-font-smoothing:antialiased;
   min-height:100vh;display:grid;place-items:center;padding:40px;}
 
-/* ── device frame — HAND-ROLLED because the skill ships none (this is the gap) ── */
+/* ── device frame — exact spec from app.md §1 (never hand-roll) ── */
 .device{position:relative;width:393px;height:852px;background:#000;border-radius:55px;
   padding:12px;box-shadow:0 50px 100px rgba(0,0,0,0.5);}
 .screen{position:relative;width:100%;height:100%;background:var(--bg);border-radius:44px;overflow:hidden;
@@ -70,7 +70,6 @@ body{background:#c9ccd2;font-family:var(--font);-webkit-font-smoothing:antialias
 .tx .m .t{font-size:15px;color:var(--text);font-weight:500;}
 .tx .m .s{font-size:12.5px;color:var(--text-3);margin-top:1px;}
 .tx .a{font-size:15px;font-weight:600;color:var(--text);font-variant-numeric:tabular-nums;}
-.tx .a.in{color:var(--live);}
 
 .tabbar{flex:none;height:83px;padding:8px 0 22px;
   background:rgba(245,245,247,0.82);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);

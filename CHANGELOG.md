@@ -8,6 +8,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Fixed
+- Replaced non-existent `dequelabs/axe-api-action@v1` with `@axe-core/cli` in CI — axe scan now covers all three pages (account, wallet, reference) and requires no API key
+- Fixed `reference.html` four-level grey swatch from `#6e6e73` to `#aeaeb2` to match `tokens.css --text-4`
+- Fixed invalid font shorthand `font: 700 18px/-apple-system` in `reference.html` sheet title (line-height was parsed as font-family, declaration dropped)
+- Added focus trap and `aria-hidden` toggling to `reference.html` modal sheet (aligned with `account.html` and `wallet.html` implementations)
+- Filled empty `.ic` placeholder divs in `wallet.html` sheet options with Lucide SVG icons (credit-card, arrow-transfer, scan)
+- Unified `components.md` segmented control class from `.seg` to `.c-seg` to match the shared CSS block
+- Added `aria-labelledby` associations to all toggle switches in `account.html`
+- Replaced 🍎 emoji brand mark in `reference.html` with a text-based brand monogram (aligned with `icons.md` "no emoji as icons" rule)
+- Fixed mixed Chinese in English documentation: `app.md` ("原型" → "prototype") and `icons.md` (rule 1 Chinese clause translated to English)
+
+### Changed
+- `reference.html` now links `tokens.css` via `<link>` and uses `var(--…)` throughout — eliminates token drift between the living style guide and the token source
+- Upgraded `treosh/lighthouse-ci-action` from v11 to v12 in CI
+- Raised Lighthouse accessibility threshold from 0.85 to 0.9 and best-practices threshold from 0.85 to 0.9 in `.lighthouserc.json`
+- Added dark-mode, `prefers-reduced-motion`, and `prefers-reduced-transparency` support to `reference.html`
+
+### Previous fixes
 - Corrected `--link #2997ff` comment in `tokens.css` — now accurately documents as "LARGE TEXT / non-text AA only (3.0:1)" instead of misleading "WCAG AA compliant"
 - Added ARIA dialog roles, focus trap, and keyboard navigation to `examples/wallet.html` (aligned with `account.html`)
 - Added `role="tablist"`, `role="tab"`, `aria-selected` to wallet tab bar

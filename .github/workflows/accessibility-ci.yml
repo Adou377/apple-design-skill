@@ -27,7 +27,7 @@ jobs:
           sleep 2
 
       - name: Run Lighthouse CI
-        uses: treosh/lighthouse-ci-action@v11
+        uses: treosh/lighthouse-ci-action@v12
         with:
           urls: |
             http://localhost:8080/examples/account.html
@@ -43,14 +43,26 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install @axe-core/cli
+        run: npm install -g @axe-core/cli
+
       - name: Start static server
         run: |
           python3 -m http.server 8080 &
           sleep 2
 
-      - name: Run axe-core
-        uses: dequelabs/axe-api-action@v1
-        with:
-          url: http://localhost:8080/examples/account.html
-          # Fail on serious/critical violations
-          tags: wcag2a,wcag2aa,wcag21a,wcag21aa
+      - name: Run axe-core on all pages
+        run: |
+          axe \
+            http://localhost:8080/examples/account.html \
+            http://localhost:8080/examples/wallet.html \
+            http://localhost:8080/reference.html \
+            --tags wcag2a,wcag2aa,wcag21a,wcag21aa \
+            --exit \
+            --chrome-options="no-sandbox,disable-setuid-sandbox,disable-dev-shm-usage" \
+            --timeout=60

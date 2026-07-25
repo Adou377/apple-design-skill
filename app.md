@@ -2,7 +2,7 @@
 
 The core skill is desktop-web scale (720/1080 containers, hover lift). An **App screen** is different: it lives inside a device, is touch-first, and needs iOS chrome the web system doesn't ship — device frame, status bar, large-title nav, tab bar, bottom sheet, safe areas. This file adds that shell. **Everything else stays the same**: tokens, unified-panel-not-cards, glass-only-on-overlap, grayscale + one accent, tabular-nums, materialize motion.
 
-> Read this when the task is "an app / iOS screen / mobile mockup / app 原型." Use the core files (`design-system.md`, `components.md`) for the *content*; use this file for the *shell around it*.
+> Read this when the task is "an app / iOS screen / mobile mockup / app prototype." Use the core files (`design-system.md`, `components.md`) for the *content*; use this file for the *shell around it*.
 
 ## Iron rule — never hand-roll the device frame
 

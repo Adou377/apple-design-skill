@@ -6,7 +6,7 @@ The core skill ships tokens, panels, glass, motion, and the App shell — but **
 
 ## The 4 rules
 
-1. **`currentColor`, grayscale by default — accent only for action/active.** Icons inherit text color; they sit at `--text-3` grey like body chrome.染 accent **只**在图标本身即操作或激活态时（激活的 tab、主操作按钮）。绝不彩色图标堆叠 — that's the rainbow-icon slop the core skill already forbids for color.
+1. **`currentColor`, grayscale by default — accent only for action/active.** Icons inherit text color; they sit at `--text-3` grey like body chrome. Apply accent **only** when the icon itself is an action or in an active state (active tab, primary action button). Never stack colored icons — that's the rainbow-icon slop the core skill already forbids for color.
 2. **An icon must earn its place.** Not every row / title / stat / bullet gets one — decorative icons *are* slop (SKILL.md anti-slop #5). A pure-text settings list is **cleaner without** leading icons. Add an icon only when it aids scanning (object-type rows) or names an action (nav/button).
 3. **One stroke, one grid, one viewBox.** All icons: `viewBox="0 0 24 24"`, `stroke-width:1.75`, round caps/joins. The **only** allowed second weight is *line (default) → filled (active)* for the current iOS tab item. Never mix line and fill anywhere else, never mix stroke widths.
 4. **Icon size ≠ touch target.** A 22px icon still needs a **≥44px hit box** — pad the control or make the whole row the target. (Same rule as `app.md` §5.)

@@ -153,29 +153,26 @@ For genuinely independent items (e.g. article cards). Still no colored borders.
 
 ## 5. Segmented pill control (apple.com style)
 
-Grey track + a single moving pill. Two selected styles: **black** (strong filter) / **white** (light toggle).
+Grey track + a single moving pill. Two selected styles: **black** (strong filter) / **white** (light toggle). Uses the shared `.c-seg` class from the CSS block above.
 
 ```html
-<div class="seg" style="display:inline-flex; background:rgba(0,0,0,0.05); border-radius:var(--r-pill); padding:3px; gap:2px;">
+<div class="c-seg">
   <button data-seg="a">Unified</button>
   <button data-seg="b">Grid</button>
   <button data-seg="c">Focus</button>
 </div>
 ```
 ```css
-.seg button {
-  border:none; cursor:pointer; font-size:13px; font-weight:500; padding:7px 15px;
-  border-radius:var(--r-pill); background:transparent; color:var(--text-2); transition:all .25s cubic-bezier(.25,.1,.25,1);
-}
-.seg button.active {                 /* WHITE pill (light toggle) */
+/* Extends the shared .c-seg / .c-seg button from the CSS block above */
+.c-seg button.active {                 /* WHITE pill (light toggle) */
   background:var(--surface); color:var(--text); font-weight:600; box-shadow:0 1px 3px rgba(0,0,0,0.12);
 }
-.seg button.active--black {          /* BLACK pill (strong filter) */
+.c-seg button.active--black {          /* BLACK pill (strong filter) */
   background:var(--text); color:#fff; box-shadow:0 1px 2px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.16);
 }
 ```
 ```js
-const seg = document.querySelector('.seg');
+const seg = document.querySelector('.c-seg');
 seg.addEventListener('click', e => {
   const b = e.target.closest('button'); if (!b) return;
   seg.querySelectorAll('button').forEach(x => x.classList.remove('active'));

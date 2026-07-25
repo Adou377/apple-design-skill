@@ -101,6 +101,12 @@ backdrop-filter: blur(8px);
 ```
 Glass needs **something to refract**: place blurred light orbs (`filter:blur(46–50px)` translucent circles) behind glass elements on the CTA.
 
+**Liquid Glass variants (regular vs clear).** Apple's HIG defines two variants — map them to web `backdrop-filter` strength:
+- **Regular** (default): blurs and adjusts luminosity to keep text legible. Use the `blur(20px) saturate(180%)` recipe above. Pick this when background content might hurt legibility, or the component carries significant text (nav, modal, popover, sidebar). Most components use regular.
+- **Clear**: highly translucent — prioritize seeing the content behind. Use a lighter `blur(8–12px)` with no luminosity shift. Reserve for components floating over visually rich media (photos, videos). If the underlying content is bright, add a `rgba(0,0,0,0.35)` dimming layer behind the clear element to preserve contrast.
+
+On native Apple platforms these are `Glass.regular` / `Glass.clear` (SwiftUI); on the web we approximate with `backdrop-filter` — the dynamic light refraction of native Liquid Glass cannot be fully replicated.
+
 ✅ Glass: nav, modal/popover, labels inside a colored CTA, source badge on hero art.
 ❌ Not glass: plain content cards, list rows, between white blocks — solid `#fff` + shadow.
 

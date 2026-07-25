@@ -31,7 +31,7 @@
 克隆到你的智能体 skills 目录。Claude Code：
 
 ```bash
-git clone https://github.com/naplesblue/apple-design-skill.git \
+git clone https://github.com/Adou377/apple-design-skill.git \
   ~/.claude/skills/apple-liquid-glass
 ```
 

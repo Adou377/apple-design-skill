@@ -326,7 +326,7 @@ footer{border-top:1px solid var(--hairline);padding:26px 0 40px;margin-top:8px;}
 
 <!-- cancel sheet -->
 <div class="scrim" id="scrim"></div>
-<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle" aria-hidden="true">
   <h3 id="sheetTitle">要取消 Plus 订阅吗？</h3>
   <p>取消后，Plus 将在本计费周期结束（2026年7月1日）后停止。你的文件会保留，但超出 5 GB 的部分将变为只读，直到你重新升级。</p>
   <div class="acts">
@@ -345,14 +345,34 @@ document.querySelectorAll('.tg').forEach(t=>{
 });
 
 const scrim=document.getElementById('scrim'),sheet=document.getElementById('sheet');
-function openSheet(){scrim.classList.add('open');sheet.classList.add('open');}
-function closeSheet(){scrim.classList.remove('open');sheet.classList.remove('open');}
+const sheetFocusables=[document.getElementById('keepPlan'),document.getElementById('switchFree'),document.getElementById('confirmCancel')];
+let lastFocused=null;
+
+function openSheet(){
+  lastFocused=document.activeElement;
+  scrim.classList.add('open');sheet.classList.add('open');
+  sheet.setAttribute('aria-hidden','false');
+  setTimeout(()=>sheetFocusables[0].focus(),50);
+}
+function closeSheet(){
+  scrim.classList.remove('open');sheet.classList.remove('open');
+  sheet.setAttribute('aria-hidden','true');
+  if(lastFocused)lastFocused.focus();
+}
 document.getElementById('openCancel').addEventListener('click',openSheet);
 scrim.addEventListener('click',closeSheet);
 document.getElementById('keepPlan').addEventListener('click',closeSheet);
 document.getElementById('switchFree').addEventListener('click',closeSheet);
 document.getElementById('confirmCancel').addEventListener('click',closeSheet);
-addEventListener('keydown',e=>{if(e.key==='Escape')closeSheet();});
+
+// Focus trap: Tab / Shift+Tab stays inside the sheet
+sheet.addEventListener('keydown',e=>{
+  if(e.key!=='Tab')return;
+  var first=sheetFocusables[0],last=sheetFocusables[sheetFocusables.length-1];
+  if(e.shiftKey){if(document.activeElement===first){e.preventDefault();last.focus();}}
+  else{if(document.activeElement===last){e.preventDefault();first.focus();}}
+});
+addEventListener('keydown',e=>{if(e.key==='Escape'&&sheet.classList.contains('open'))closeSheet();});
 </script>
 </body>
 </html>

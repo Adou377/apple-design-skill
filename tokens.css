@@ -13,7 +13,7 @@
   --text-body: #424245;   /* long-form body */
   --text-2:    #6e6e73;   /* secondary / summary / meta */
   --text-3:    #86868b;   /* tertiary / captions — LARGE TEXT ONLY (WCAG AA requires 18pt+) */
-  --text-4:    #6e6e73;   /* placeholder / quaternary — DECORATIVE ONLY (contrast ~2.2:1, NOT for readable text) */
+  --text-4:    #aeaeb2;   /* placeholder / quaternary — DECORATIVE ONLY (contrast ~2.2:1, NOT for readable text) */
   --faint:     #d2d2d7;   /* index numbers, arrows, dividers (very light) */
   --hairline:  rgba(0,0,0,0.07);   /* the divider line — used everywhere */
 

@@ -1,0 +1,10 @@
+# Default owner for all files
+* @Adou377
+
+# Design system core — requires owner review
+/tokens.css @Adou377
+/SKILL.md @Adou377
+/design-system.md @Adou377
+
+# Examples — accessibility-sensitive
+/examples/ @Adou377

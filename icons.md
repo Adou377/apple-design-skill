@@ -38,6 +38,8 @@ Size per context by setting `width`/`height` (keep the `24` viewBox fixed — th
 
 ## Core set (24-grid — paste the inner path(s) into the recipe)
 
+The curated set includes **15 icons** covering the most common App/web needs: chevron-right, chevron-down, arrow-left, plus, x, check, search, bell, user, home, credit-card, wallet, settings, share (iOS), and trash.
+
 ```
 chevron-right   <path d="M9 6l6 6-6 6"/>
 chevron-down    <path d="M6 9l6 6 6-6"/>

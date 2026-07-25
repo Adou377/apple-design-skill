@@ -59,6 +59,14 @@ You are designing in the **latest Apple visual language**: calm, premium, restra
 - ❌ **Even, timid spacing**: everything equally padded. → intentional whitespace, sections breathe (`clamp(34px,6vw,56px)`), panels short or tall as needed.
 - ❌ Numbers/stats added to look "data-rich". → only numbers that carry meaning, in `tabular-nums`.
 
+## Security red lines (never violate)
+
+- ❌ **Never use `innerHTML` to concatenate dynamic data.** This is an XSS vector. Use `textContent`, `createElement`, or template literals with proper escaping. Static HTML strings in code are acceptable; mixing user/data input into `innerHTML` is not.
+- ❌ **Never use inline event handlers** (`onclick="..."` in HTML attributes). Use `addEventListener` in a `<script>` block — this separates behavior from structure and prevents CSP violations.
+- ❌ **Never embed untrusted URLs** in `href` or `src` without validation. Sanitize against `javascript:` and `data:` schemes.
+
+These rules apply to all generated code — the Agent must produce safe DOM patterns by default.
+
 ## Self-check (gate before "done")
 - [ ] Ground `#f5f5f7` (cool), content on `#fff` surfaces, container centered (`max-width` 720 reading / 1080 grid).
 - [ ] Sibling items use **one panel + hairline** (`rgba(0,0,0,0.07)`), not fragmented cards.

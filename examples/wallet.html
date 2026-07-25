@@ -4,20 +4,31 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Wallet — App screen test (current skill)</title>
+<link rel="stylesheet" href="../tokens.css">
 <style>
-:root{
-  --bg:#f5f5f7; --surface:#fff; --hover:#fbfbfd;
-  --text:#1d1d1f; --text-body:#424245; --text-2:#6e6e73; --text-3:#86868b; --text-4:#aeaeb2;
-  --faint:#d2d2d7; --hairline:rgba(0,0,0,0.07);
-  --accent:#0071e3; --accent-link:#0066cc; --indigo:#5e5ce6; --heat:#ff6b00; --live:#30d158;
-  --grad-cta:linear-gradient(135deg,#0071e3 0%,#5e5ce6 100%);
-  --track:#e8e8ed;
-  --font:-apple-system,BlinkMacSystemFont,'SF Pro Text','SF Pro Display','Helvetica Neue','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;
-  --r-pill:999px; --r-chip:6px; --r-thumb:12px; --r-sheet:16px; --r-card:18px; --r-panel:22px; --r-hero:26px;
-  --sh-card:0 1px 2px rgba(0,0,0,0.04),0 8px 24px rgba(0,0,0,0.05);
-  --sh-panel:0 1px 3px rgba(0,0,0,0.05),0 14px 40px rgba(0,0,0,0.05);
-  --sh-cta:0 20px 54px rgba(0,113,227,0.24);
+/* Design tokens loaded via ../tokens.css (includes dark mode + motion curves) */
+
+/* Dark-mode adjustments for hardcoded values */
+@media (prefers-color-scheme: dark) {
+  body{background:#1c1c1e;}
+  .navc{background:rgba(28,28,30,0.72);}
+  .tabbar{background:rgba(28,28,30,0.82);}
+  .homebar{background:rgba(255,255,255,0.85);}
+  .tx .ic{background:#3a3a3c;}
+  .sheet .opt .ic{background:#3a3a3c;}
 }
+
+/* Reduced-motion support */
+@media (prefers-reduced-motion: reduce) {
+  .navc,.scrim,.sheet{transition:opacity 200ms ease,transform 200ms ease !important;}
+}
+
+/* Reduced-transparency support */
+@media (prefers-reduced-transparency: reduce) {
+  .navc,.tabbar{background:var(--bg);backdrop-filter:none;-webkit-backdrop-filter:none;}
+  .glass-chip{background:rgba(255,255,255,0.3);backdrop-filter:none;-webkit-backdrop-filter:none;}
+}
+
 *{margin:0;padding:0;box-sizing:border-box;}
 html{font-optical-sizing:auto;}
 body{background:#c9ccd2;font-family:var(--font);-webkit-font-smoothing:antialiased;
@@ -108,8 +119,8 @@ body{background:#c9ccd2;font-family:var(--font);-webkit-font-smoothing:antialias
             <div class="lbl">可用余额</div>
             <div class="amt">¥12,480.00</div>
             <div class="row">
-              <a class="glass-chip">转账</a>
-              <a class="glass-chip">收款</a>
+              <button class="glass-chip" type="button">转账</button>
+              <button class="glass-chip" type="button">收款</button>
             </div>
           </div>
         </div>
@@ -125,29 +136,79 @@ body{background:#c9ccd2;font-family:var(--font);-webkit-font-smoothing:antialias
       </div>
     </div>
 
-    <div class="tabbar">
-      <div class="tab on"><svg class="ic" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10.5h18"/><circle cx="17" cy="14.5" r="1.25"/></svg>钱包</div>
-      <div class="tab"><svg class="ic" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M2.5 10h19"/></svg>卡片</div>
-      <div class="tab" id="addTab"><svg class="ic" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>添加</div>
-      <div class="tab"><svg class="ic" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0 1 16 0"/></svg>我的</div>
+    <div class="tabbar" role="tablist" aria-label="主导航">
+      <div class="tab on" role="tab" aria-selected="true" tabindex="0"><svg class="ic" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10.5h18"/><circle cx="17" cy="14.5" r="1.25"/></svg>钱包</div>
+      <div class="tab" role="tab" aria-selected="false" tabindex="0"><svg class="ic" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M2.5 10h19"/></svg>卡片</div>
+      <div class="tab" role="button" tabindex="0" id="addTab" aria-haspopup="dialog"><svg class="ic" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>添加</div>
+      <div class="tab" role="tab" aria-selected="false" tabindex="0"><svg class="ic" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0 1 16 0"/></svg>我的</div>
     </div>
     <div class="homebar"></div>
 
     <div class="scrim" id="scrim"></div>
-    <div class="sheet" id="sheet">
+    <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle" aria-hidden="true">
       <div class="grab"></div>
-      <h3>添加</h3>
-      <div class="opt"><div class="ic"></div>添加银行卡</div>
-      <div class="opt"><div class="ic"></div>发起转账</div>
-      <div class="opt"><div class="ic"></div>扫码收款</div>
+      <h3 id="sheetTitle">添加</h3>
+      <div class="opt" role="button" tabindex="0"><div class="ic"></div>添加银行卡</div>
+      <div class="opt" role="button" tabindex="0"><div class="ic"></div>发起转账</div>
+      <div class="opt" role="button" tabindex="0"><div class="ic"></div>扫码收款</div>
     </div>
   </div>
 </div>
 <script>
 const scrim=document.getElementById('scrim'),sheet=document.getElementById('sheet');
 const sc=document.getElementById('scroll'),nc=document.getElementById('navc');sc.addEventListener('scroll',()=>nc.classList.toggle('show',sc.scrollTop>44),{passive:true});
-document.getElementById('addTab').addEventListener('click',()=>{scrim.classList.add('open');sheet.classList.add('open');});
-scrim.addEventListener('click',()=>{scrim.classList.remove('open');sheet.classList.remove('open');});
+
+// Sheet focus management (aligned with account.html)
+const sheetFocusables=[...sheet.querySelectorAll('[role="button"][tabindex="0"]')];
+let lastFocused=null;
+
+function openSheet(){
+  lastFocused=document.activeElement;
+  scrim.classList.add('open');sheet.classList.add('open');
+  sheet.setAttribute('aria-hidden','false');
+  setTimeout(()=>sheetFocusables[0]&&sheetFocusables[0].focus(),50);
+}
+function closeSheet(){
+  scrim.classList.remove('open');sheet.classList.remove('open');
+  sheet.setAttribute('aria-hidden','true');
+  if(lastFocused)lastFocused.focus();
+}
+
+const addTab=document.getElementById('addTab');
+addTab.addEventListener('click',openSheet);
+addTab.addEventListener('keydown',e=>{
+  if(e.key==='Enter'||e.key===' '){e.preventDefault();openSheet();}
+});
+scrim.addEventListener('click',closeSheet);
+
+// Focus trap: Tab / Shift+Tab stays inside the sheet
+sheet.addEventListener('keydown',e=>{
+  if(e.key!=='Tab')return;
+  var first=sheetFocusables[0],last=sheetFocusables[sheetFocusables.length-1];
+  if(e.shiftKey){if(document.activeElement===first){e.preventDefault();last.focus();}}
+  else{if(document.activeElement===last){e.preventDefault();first.focus();}}
+});
+// Escape to close
+addEventListener('keydown',e=>{if(e.key==='Escape'&&sheet.classList.contains('open'))closeSheet();});
+
+// Sheet options: Enter/Space to activate
+sheet.querySelectorAll('.opt').forEach(opt=>{
+  opt.addEventListener('keydown',e=>{
+    if(e.key==='Enter'||e.key===' '){e.preventDefault();opt.click();}
+  });
+});
+
+// Tabbar keyboard navigation
+const tabs=[...document.querySelectorAll('.tabbar [role="tab"]')];
+tabs.forEach(tab=>{
+  tab.addEventListener('keydown',e=>{
+    if(e.key==='Enter'||e.key===' '){e.preventDefault();tab.click();}
+  });
+  tab.addEventListener('click',()=>{
+    tabs.forEach(t=>{t.classList.remove('on');t.setAttribute('aria-selected','false');});
+    tab.classList.add('on');tab.setAttribute('aria-selected','true');
+  });
+});
 </script>
 </body>
 </html>

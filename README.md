@@ -31,7 +31,7 @@ This skill encodes *why* that's wrong and *what* Apple actually does, as executa
 Clone into your agent's skills directory. For Claude Code:
 
 ```bash
-git clone https://github.com/naplesblue/apple-design-skill.git \
+git clone https://github.com/Adou377/apple-design-skill.git \
   ~/.claude/skills/apple-liquid-glass
 ```
 

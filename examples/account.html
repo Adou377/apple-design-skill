@@ -72,12 +72,12 @@ section.block{padding-bottom:clamp(34px,6vw,56px);}
 .tier-desc{margin-top:6px;font-size:13.5px;color:var(--text-2);line-height:1.5;}
 .tier-feat{margin-top:16px;display:flex;flex-direction:column;gap:9px;}
 .tier-feat div{font-size:13px;color:var(--text-body);display:flex;gap:9px;line-height:1.4;}
-.tier-feat .ck{color:var(--text-4);flex:none;}
+.tier-feat .ck{color:var(--text-3);flex:none;}
 .tier-cta{margin-top:auto;padding-top:20px;}
 .btn-block{display:flex;align-items:center;justify-content:center;height:40px;border-radius:var(--r-pill);
   font-size:14px;font-weight:600;text-decoration:none;cursor:pointer;border:none;width:100%;}
 .btn-fill{background:var(--accent);color:#fff;}
-.btn-quiet{background:rgba(0,0,0,0.05);color:var(--text);}
+.btn-quiet{background:var(--btn-quiet-bg);color:var(--text);}
 .btn-current{background:transparent;color:var(--text-3);font-weight:550;}
 
 /* ── unified panel (account details, notifications, billing) ── */
@@ -118,7 +118,7 @@ section.block{padding-bottom:clamp(34px,6vw,56px);}
 /* manage row (quiet, holds destructive entry) */
 .manage{margin-top:14px;display:flex;gap:22px;padding:0 4px;}
 .manage-link{background:none;border:none;padding:0;font:inherit;cursor:pointer;font-size:13.5px;color:var(--text-2);text-decoration:none;font-weight:500;}
-.manage-link.danger{color:var(--text-2);}
+.manage-link.danger{color:var(--danger-fg);}
 
 /* ── colored CTA (the one place: color + glass + orbs) ── */
 .cta{position:relative;overflow:hidden;border-radius:var(--r-hero);padding:clamp(28px,4vw,44px);
@@ -161,7 +161,7 @@ footer{border-top:1px solid var(--hairline);padding:26px 0 40px;margin-top:8px;}
 .sheet .acts button{display:flex;align-items:center;justify-content:center;height:46px;border-radius:var(--r-sheet);
   font-size:15px;font-weight:600;text-decoration:none;cursor:pointer;border:none;width:100%;font-family:inherit;}
 .sheet .primary{background:var(--accent);color:#fff;}
-.sheet .ghost{background:rgba(0,0,0,0.05);color:var(--text);}
+.sheet .ghost{background:var(--btn-quiet-bg);color:var(--text);}
 .sheet .destroy{background:transparent;color:var(--text-2);font-weight:500;font-size:14px;height:40px;}
 
 @media (max-width:680px){
@@ -332,7 +332,8 @@ footer{border-top:1px solid var(--hairline);padding:26px 0 40px;margin-top:8px;}
 
 <script>
 const nav=document.getElementById('nav');
-addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8),{passive:true});
+let scrollTicking=false;
+addEventListener('scroll',()=>{if(!scrollTicking){scrollTicking=true;requestAnimationFrame(()=>{nav.classList.toggle('scrolled',scrollY>8);scrollTicking=false;});}},{passive:true});
 
 document.querySelectorAll('.tg').forEach(t=>{
   t.addEventListener('click',()=>t.setAttribute('aria-checked',t.getAttribute('aria-checked')!=='true'));
@@ -362,7 +363,7 @@ document.getElementById('confirmCancel').addEventListener('click',closeSheet);
 // Focus trap: Tab / Shift+Tab stays inside the sheet
 sheet.addEventListener('keydown',e=>{
   if(e.key!=='Tab')return;
-  var first=sheetFocusables[0],last=sheetFocusables[sheetFocusables.length-1];
+  const first=sheetFocusables[0],last=sheetFocusables[sheetFocusables.length-1];
   if(e.shiftKey){if(document.activeElement===first){e.preventDefault();last.focus();}}
   else{if(document.activeElement===last){e.preventDefault();first.focus();}}
 });

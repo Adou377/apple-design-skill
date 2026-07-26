@@ -157,7 +157,7 @@ body{background:#c9ccd2;font-family:var(--font);-webkit-font-smoothing:antialias
 </div>
 <script>
 const scrim=document.getElementById('scrim'),sheet=document.getElementById('sheet');
-const sc=document.getElementById('scroll'),nc=document.getElementById('navc');sc.addEventListener('scroll',()=>nc.classList.toggle('show',sc.scrollTop>44),{passive:true});
+const sc=document.getElementById('scroll'),nc=document.getElementById('navc');let scrollTicking=false;sc.addEventListener('scroll',()=>{if(!scrollTicking){scrollTicking=true;requestAnimationFrame(()=>{nc.classList.toggle('show',sc.scrollTop>44);scrollTicking=false;});}},{passive:true});
 
 // Sheet focus management (aligned with account.html)
 const sheetFocusables=[...sheet.querySelectorAll('[role="button"][tabindex="0"]')];
@@ -185,7 +185,7 @@ scrim.addEventListener('click',closeSheet);
 // Focus trap: Tab / Shift+Tab stays inside the sheet
 sheet.addEventListener('keydown',e=>{
   if(e.key!=='Tab')return;
-  var first=sheetFocusables[0],last=sheetFocusables[sheetFocusables.length-1];
+  const first=sheetFocusables[0],last=sheetFocusables[sheetFocusables.length-1];
   if(e.shiftKey){if(document.activeElement===first){e.preventDefault();last.focus();}}
   else{if(document.activeElement===last){e.preventDefault();first.focus();}}
 });

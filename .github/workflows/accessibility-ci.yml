@@ -46,6 +46,7 @@ jobs:
           urls: |
             http://localhost:8080/examples/wallet.html
             http://localhost:8080/examples/account.html
+            http://localhost:8080/reference.html
           uploadArtifacts: true
           temporaryPublicStorage: true
           configPath: ./.lighthouserc-mobile.json

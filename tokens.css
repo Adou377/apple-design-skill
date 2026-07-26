@@ -43,7 +43,7 @@
   /* ── Signature gradients (hero / CTA / placeholder art ONLY) ── */
   --grad-blue: linear-gradient(135deg, #0a84ff 0%, #5e5ce6 100%);
   --grad-warm: linear-gradient(135deg, #ff9f0a 0%, #ff375f 100%);
-  --grad-green:linear-gradient(135deg, #30d158 0%, #0a84ff 100%);
+  --grad-green: linear-gradient(135deg, #30d158 0%, #0a84ff 100%);
   --grad-cta:  linear-gradient(135deg, #0071e3 0%, #5e5ce6 100%);
 
   /* ── Type ── */
@@ -69,6 +69,7 @@
 
   /* ── Component greys (semantic — don't hand-pick a one-off grey) ── */
   --track:  #e8e8ed;  /* progress/meter track, toggle-off track — visible-but-quiet fill grey */
+  --btn-quiet-bg: rgba(0,0,0,0.05);  /* quiet/ghost button background — translucent overlay (dark-mode aware below) */
 
   /* ── Layout ── */
   --max-read: 720px;   /* reading column */
@@ -101,9 +102,10 @@
     --success-fg:  #30d158;
     --danger:      #ff453a;
     --danger-bg:   rgba(255,69,58,0.10);
-    --danger-fg:   #ff453a;
+    --danger-fg:  #ff453a;
 
     --track:       #3a3a3c;
+    --btn-quiet-bg: rgba(255,255,255,0.08);  /* dark-mode quiet button background — light overlay on dark surface */
   }
 }
 

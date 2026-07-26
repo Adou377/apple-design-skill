@@ -8,11 +8,11 @@
 <style>
 /* Design tokens loaded via ../tokens.css (includes dark mode + motion curves) */
 
-/* Dark-mode adjustments for hardcoded values */
+/* Dark-mode adjustments — reuse tokens.css dark-mode custom properties */
 @media (prefers-color-scheme: dark) {
-  .nav{background:rgba(28,28,30,0.72);}
+  .nav{background:color-mix(in srgb, var(--bg) 72%, transparent);}
   .glass-chip{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.18);}
-  .sheet{background:rgba(44,44,46,0.86);}
+  .sheet{background:color-mix(in srgb, var(--surface) 86%, transparent);}
 }
 
 /* Reduced-motion support */
@@ -117,8 +117,8 @@ section.block{padding-bottom:clamp(34px,6vw,56px);}
 
 /* manage row (quiet, holds destructive entry) */
 .manage{margin-top:14px;display:flex;gap:22px;padding:0 4px;}
-.manage a{font-size:13.5px;color:var(--text-2);text-decoration:none;font-weight:500;cursor:pointer;}
-.manage a.danger{color:var(--text-2);}
+.manage-link{background:none;border:none;padding:0;font:inherit;cursor:pointer;font-size:13.5px;color:var(--text-2);text-decoration:none;font-weight:500;}
+.manage-link.danger{color:var(--text-2);}
 
 /* ── colored CTA (the one place: color + glass + orbs) ── */
 .cta{position:relative;overflow:hidden;border-radius:var(--r-hero);padding:clamp(28px,4vw,44px);
@@ -133,7 +133,8 @@ section.block{padding-bottom:clamp(34px,6vw,56px);}
 .glass-chip{display:inline-flex;align-items:center;height:44px;padding:0 20px;border-radius:var(--r-pill);
   background:rgba(255,255,255,0.16);border:1px solid rgba(255,255,255,0.22);
   backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
-  color:#fff;font-size:14px;font-weight:600;text-decoration:none;cursor:pointer;}
+  color:#fff;font-size:14px;font-weight:600;text-decoration:none;cursor:pointer;font-family:inherit;}
+.cta-glass{height:44px;}
 .cta .fine{color:rgba(255,255,255,0.72);font-size:13px;}
 
 /* footer */
@@ -157,8 +158,8 @@ footer{border-top:1px solid var(--hairline);padding:26px 0 40px;margin-top:8px;}
 .sheet h3{font-size:20px;font-weight:700;letter-spacing:-0.02em;}
 .sheet p{margin-top:10px;font-size:14px;color:var(--text-body);line-height:1.6;}
 .sheet .acts{margin-top:22px;display:flex;flex-direction:column;gap:9px;}
-.sheet .acts a{display:flex;align-items:center;justify-content:center;height:46px;border-radius:var(--r-sheet);
-  font-size:15px;font-weight:600;text-decoration:none;cursor:pointer;}
+.sheet .acts button{display:flex;align-items:center;justify-content:center;height:46px;border-radius:var(--r-sheet);
+  font-size:15px;font-weight:600;text-decoration:none;cursor:pointer;border:none;width:100%;font-family:inherit;}
 .sheet .primary{background:var(--accent);color:#fff;}
 .sheet .ghost{background:rgba(0,0,0,0.05);color:var(--text);}
 .sheet .destroy{background:transparent;color:var(--text-2);font-weight:500;font-size:14px;height:40px;}
@@ -167,7 +168,7 @@ footer{border-top:1px solid var(--hairline);padding:26px 0 40px;margin-top:8px;}
   .tiers{grid-template-columns:1fr;}
   .hide-sm{display:none;}
 }
-.btn-block:active,.glass-chip:active,.sheet .acts a:active{transform:scale(0.98);transition:transform 100ms ease-out;}
+.btn-block:active,.glass-chip:active,.sheet .acts button:active{transform:scale(0.98);transition:transform 100ms ease-out;}
 </style>
 </head>
 <body>
@@ -207,7 +208,7 @@ footer{border-top:1px solid var(--hairline);padding:26px 0 40px;margin-top:8px;}
           <div><span class="ck">—</span>基础导出</div>
           <div><span class="ck">—</span>单设备同步</div>
         </div>
-        <div class="tier-cta"><button class="btn-block btn-quiet">切换到 Free</button></div>
+        <div class="tier-cta"><button class="btn-block btn-quiet" type="button">切换到 Free</button></div>
       </div>
       <div class="tier current">
         <div class="tier-top"><span class="tier-name">Plus</span><span class="tag-current">当前方案</span></div>
@@ -218,7 +219,7 @@ footer{border-top:1px solid var(--hairline);padding:26px 0 40px;margin-top:8px;}
           <div><span class="ck">—</span>高清导出与版本历史</div>
           <div><span class="ck">—</span>最多 5 台设备同步</div>
         </div>
-        <div class="tier-cta"><button class="btn-block btn-current">使用中</button></div>
+        <div class="tier-cta"><button class="btn-block btn-current" type="button">使用中</button></div>
       </div>
       <div class="tier">
         <div class="tier-top"><span class="tier-name">Pro</span></div>
@@ -229,12 +230,12 @@ footer{border-top:1px solid var(--hairline);padding:26px 0 40px;margin-top:8px;}
           <div><span class="ck">—</span>无损导出与优先渲染</div>
           <div><span class="ck">—</span>协作空间与权限管理</div>
         </div>
-        <div class="tier-cta"><button class="btn-block btn-fill">升级到 Pro</button></div>
+        <div class="tier-cta"><button class="btn-block btn-fill" type="button">升级到 Pro</button></div>
       </div>
     </div>
     <div class="manage">
-      <a href="#">查看方案对比</a>
-      <a class="danger" id="openCancel">取消订阅</a>
+      <button type="button" class="manage-link">查看方案对比</button>
+      <button type="button" class="manage-link danger" id="openCancel">取消订阅</button>
     </div>
   </section>
 
@@ -269,10 +270,10 @@ footer{border-top:1px solid var(--hairline);padding:26px 0 40px;margin-top:8px;}
   <section class="block">
     <div class="sec-label">通知偏好</div>
     <div class="panel">
-      <div class="prow"><span class="lbl" id="lbl-bill">账单与续费提醒</span><button class="tg" role="switch" aria-checked="true" aria-labelledby="lbl-bill"></button></div>
-      <div class="prow"><span class="lbl" id="lbl-news">新功能与产品公告</span><button class="tg" role="switch" aria-checked="true" aria-labelledby="lbl-news"></button></div>
-      <div class="prow"><span class="lbl" id="lbl-storage">存储空间预警</span><button class="tg" role="switch" aria-checked="false" aria-labelledby="lbl-storage"></button></div>
-      <div class="prow"><span class="lbl" id="lbl-mkt">营销与优惠邮件</span><button class="tg" role="switch" aria-checked="false" aria-labelledby="lbl-mkt"></button></div>
+      <div class="prow"><span class="lbl" id="lbl-bill">账单与续费提醒</span><button type="button" class="tg" role="switch" aria-checked="true" aria-labelledby="lbl-bill"></button></div>
+      <div class="prow"><span class="lbl" id="lbl-news">新功能与产品公告</span><button type="button" class="tg" role="switch" aria-checked="true" aria-labelledby="lbl-news"></button></div>
+      <div class="prow"><span class="lbl" id="lbl-storage">存储空间预警</span><button type="button" class="tg" role="switch" aria-checked="false" aria-labelledby="lbl-storage"></button></div>
+      <div class="prow"><span class="lbl" id="lbl-mkt">营销与优惠邮件</span><button type="button" class="tg" role="switch" aria-checked="false" aria-labelledby="lbl-mkt"></button></div>
     </div>
   </section>
 
@@ -299,7 +300,7 @@ footer{border-top:1px solid var(--hairline);padding:26px 0 40px;margin-top:8px;}
         <h2>升级到 Pro，解锁 6 TB 与优先渲染</h2>
         <p>更大的空间、无损导出、团队协作空间。随时可降级，按日抵扣已付费用。</p>
         <div class="row">
-          <a class="glass-chip">升级到 Pro</a>
+          <button type="button" class="glass-chip cta-glass">升级到 Pro</button>
           <span class="fine num">¥68 / 月 · 前 14 天免费</span>
         </div>
       </div>
@@ -323,9 +324,9 @@ footer{border-top:1px solid var(--hairline);padding:26px 0 40px;margin-top:8px;}
   <h3 id="sheetTitle">要取消 Plus 订阅吗？</h3>
   <p>取消后，Plus 将在本计费周期结束（2026年7月1日）后停止。你的文件会保留，但超出 5 GB 的部分将变为只读，直到你重新升级。</p>
   <div class="acts">
-    <a class="ghost" id="keepPlan">继续保留 Plus</a>
-    <a class="primary" id="switchFree">改用 Free 方案</a>
-    <a class="destroy" id="confirmCancel">仍要取消订阅</a>
+    <button type="button" class="ghost" id="keepPlan">继续保留 Plus</button>
+    <button type="button" class="primary" id="switchFree">改用 Free 方案</button>
+    <button type="button" class="destroy" id="confirmCancel">仍要取消订阅</button>
   </div>
 </div>
 

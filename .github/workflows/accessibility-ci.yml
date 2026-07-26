@@ -3,20 +3,12 @@ name: Accessibility & Performance CI
 on:
   push:
     branches: [main]
-    paths:
-      - 'examples/**'
-      - 'reference.html'
-      - 'tokens.css'
   pull_request:
     branches: [main]
-    paths:
-      - 'examples/**'
-      - 'reference.html'
-      - 'tokens.css'
 
 jobs:
-  lighthouse:
-    name: Lighthouse Audit
+  lighthouse-desktop:
+    name: Lighthouse Audit (Desktop)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -26,7 +18,7 @@ jobs:
           python3 -m http.server 8080 &
           sleep 2
 
-      - name: Run Lighthouse CI
+      - name: Run Lighthouse CI (desktop)
         uses: treosh/lighthouse-ci-action@v12
         with:
           urls: |
@@ -36,6 +28,27 @@ jobs:
           uploadArtifacts: true
           temporaryPublicStorage: true
           configPath: ./.lighthouserc.json
+
+  lighthouse-mobile:
+    name: Lighthouse Audit (Mobile)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Start static server
+        run: |
+          python3 -m http.server 8080 &
+          sleep 2
+
+      - name: Run Lighthouse CI (mobile)
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          urls: |
+            http://localhost:8080/examples/wallet.html
+            http://localhost:8080/examples/account.html
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+          configPath: ./.lighthouserc-mobile.json
 
   axe:
     name: Axe Accessibility Scan

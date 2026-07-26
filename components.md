@@ -187,7 +187,7 @@ seg.querySelector('button').classList.add('active');
 <span style="font-family:var(--mono); font-size:10.5px; font-weight:700; color:#fff; background:var(--x-blue); padding:2px 7px; border-radius:var(--r-chip);">X</span>
 <span style="font-size:11.5px; color:var(--text-2); background:rgba(0,0,0,0.05); padding:3px 10px; border-radius:var(--r-pill);">plain tag</span>
 <span style="font-size:11.5px; color:var(--accent-link); background:rgba(0,113,227,0.08); padding:3px 10px; border-radius:var(--r-pill); font-weight:550;">accent tag</span>
-<span style="font-size:11.5px; font-weight:650; color:var(--heat); background:var(--heat-bg); padding:3px 10px; border-radius:var(--r-pill);">🔥 hottest</span>
+<span style="font-size:11.5px; font-weight:650; color:var(--heat); background:var(--heat-bg); padding:3px 10px; border-radius:var(--r-pill);">hottest</span>
 ```
 
 ## 7. Buttons

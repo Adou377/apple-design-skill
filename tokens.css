@@ -102,7 +102,7 @@
     --success-fg:  #30d158;
     --danger:      #ff453a;
     --danger-bg:   rgba(255,69,58,0.10);
-    --danger-fg:  #ff453a;
+    --danger-fg:   #ff453a;
 
     --track:       #3a3a3c;
     --btn-quiet-bg: rgba(255,255,255,0.08);  /* dark-mode quiet button background — light overlay on dark surface */

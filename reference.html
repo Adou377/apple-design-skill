@@ -287,7 +287,7 @@ const DATA = {
 };
 
 // Helper to get element by ID
-function $(id) { return document.getElementById(id); }
+function byId(id) { return document.getElementById(id); }
 
 // Helper to create element with text content (safe DOM method)
 function createEl(tag, className, textContent) {
@@ -326,12 +326,12 @@ function createSwatch(c) {
 
 // Render neutrals
 DATA.neutrals.forEach(c => {
-  $('ds-neutrals').appendChild(createSwatch(c));
+  byId('ds-neutrals').appendChild(createSwatch(c));
 });
 
 // Render accents
 DATA.accents.forEach(c => {
-  $('ds-accents').appendChild(createSwatch(c));
+  byId('ds-accents').appendChild(createSwatch(c));
 });
 
 // Render gradients
@@ -345,7 +345,7 @@ DATA.gradients.forEach(g => {
   label.textContent = g.name;
   
   container.appendChild(label);
-  $('ds-gradients').appendChild(container);
+  byId('ds-gradients').appendChild(container);
 });
 
 // Render type scale
@@ -365,7 +365,7 @@ DATA.typeScale.forEach(t => {
   
   container.appendChild(spec);
   container.appendChild(sample);
-  $('ds-type').appendChild(container);
+  byId('ds-type').appendChild(container);
 });
 
 // Render radii
@@ -388,7 +388,7 @@ DATA.radii.forEach(r => {
   container.appendChild(box);
   container.appendChild(label);
   container.appendChild(value);
-  $('ds-radii').appendChild(container);
+  byId('ds-radii').appendChild(container);
 });
 
 // Render shadows
@@ -406,7 +406,7 @@ DATA.shadows.forEach(sh => {
   
   container.appendChild(box);
   container.appendChild(label);
-  $('ds-shadows').appendChild(container);
+  byId('ds-shadows').appendChild(container);
 });
 
 // Segmented control (using safe DOM methods and event delegation)
@@ -426,7 +426,7 @@ function segStyle(key, kind) {
 }
 
 function renderSeg() {
-  const container = $('ds-seg');
+  const container = byId('ds-seg');
   container.innerHTML = '';
   
   SEGS.forEach(s => {
@@ -444,7 +444,7 @@ function renderSeg() {
 renderSeg();
 
 // Event delegation for segmented control
-$('ds-seg').addEventListener('click', function(e) {
+byId('ds-seg').addEventListener('click', function(e) {
   const btn = e.target.closest('[data-seg]');
   if (!btn) return;
   segState = btn.getAttribute('data-seg');
@@ -452,9 +452,9 @@ $('ds-seg').addEventListener('click', function(e) {
 });
 
 // Keyboard navigation for segmented control
-$('ds-seg').addEventListener('keydown', function(e) {
+byId('ds-seg').addEventListener('keydown', function(e) {
   if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
-    const buttons = Array.from($('ds-seg').querySelectorAll('[data-seg]'));
+    const buttons = Array.from(byId('ds-seg').querySelectorAll('[data-seg]'));
     const currentIndex = buttons.findIndex(b => b.getAttribute('data-seg') === segState);
     let nextIndex;
     if (e.key === 'ArrowRight') {
@@ -469,12 +469,12 @@ $('ds-seg').addEventListener('keydown', function(e) {
 });
 
 // 06 — 动效 demo:同路径进出 + 材质化(blur+scale+opacity 同动)
-const mSheet = $('mSheet');
-const mScrim = $('mScrim');
-const mSheetBtn = $('mSheetBtn');
-const mSheetClose = $('mSheetClose');
-const mFeedbackBtn = $('mFeedbackBtn');
-const mFocusInput = $('mFocusInput');
+const mSheet = byId('mSheet');
+const mScrim = byId('mScrim');
+const mSheetBtn = byId('mSheetBtn');
+const mSheetClose = byId('mSheetClose');
+const mFeedbackBtn = byId('mFeedbackBtn');
+const mFocusInput = byId('mFocusInput');
 let mOpen = false;
 let mLastFocused = null;
 const mSheetFocusables = [mSheetClose];
@@ -509,7 +509,7 @@ mScrim.addEventListener('click', function() { mToggle(false); });
 // Focus trap: Tab / Shift+Tab stays inside the sheet
 mSheet.addEventListener('keydown', function(e) {
   if (e.key !== 'Tab') return;
-  var first = mSheetFocusables[0], last = mSheetFocusables[mSheetFocusables.length - 1];
+  const first = mSheetFocusables[0], last = mSheetFocusables[mSheetFocusables.length - 1];
   if (e.shiftKey) { if (document.activeElement === first) { e.preventDefault(); last.focus(); } }
   else { if (document.activeElement === last) { e.preventDefault(); first.focus(); } }
 });

@@ -38,7 +38,7 @@ Size per context by setting `width`/`height` (keep the `24` viewBox fixed — th
 
 ## Core set (24-grid — paste the inner path(s) into the recipe)
 
-The curated set includes **15 icons** covering the most common App/web needs: chevron-right, chevron-down, arrow-left, plus, x, check, search, bell, user, home, credit-card, wallet, settings, share (iOS), and trash.
+The curated set includes **20 icons** covering the most common App/web needs: chevron-right, chevron-down, arrow-left, plus, x, check, search, bell, user, home, credit-card, wallet, settings, share (iOS), trash, bookmark, more-horizontal, more-vertical, sidebar, and panel-right.
 
 ```
 chevron-right   <path d="M9 6l6 6-6 6"/>
@@ -56,6 +56,11 @@ wallet          <rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 1
 settings        <circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/>
 share (iOS)     <path d="M12 3v12"/><path d="M8 7l4-4 4 4"/><path d="M6 12v6a1.5 1.5 0 0 0 1.5 1.5h9A1.5 1.5 0 0 0 18 18v-6"/>
 trash           <path d="M4 7h16"/><path d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/><path d="M6 7l1 13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1l1-13"/>
+bookmark        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+more-horizontal <circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/>
+more-vertical   <circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/>
+sidebar         <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/>
+panel-right     <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M15 3v18"/>
 ```
 
 Need more? These are Lucide (24-grid, `stroke-width:1.75` matches) — pull any other glyph from **lucide.dev** into the same recipe. On a real Apple platform, prefer **SF Symbols** (not web-distributable — don't inline SF Symbol assets on the web).
@@ -80,11 +85,45 @@ Line+grey for inactive tabs, accent for the one active tab. The *ideal* active s
 - Every title / stat / bullet (decoration = slop).
 - Emoji as icons (never Apple).
 
+## Glass-surface icon rules
+
+Icons on glass control surfaces (toolbar, tab bar, sidebar, popover, FAB, context menu) follow the same `currentColor` discipline — but the glass material adds vibrancy and state-awareness considerations:
+
+1. **Grayscale `currentColor` by default.** Icons on glass inherit the text color of their control surface. At rest, this is `var(--text-3)` grey — the glass material's saturation boost keeps grey readable over translucent backgrounds. Never hard-code a separate icon color for glass; let `currentColor` + `inherit` do the work.
+
+2. **Accent only on the active state.** The one allowed accent is the *active* / *selected* control: active tab, pressed segmented segment, checked checkbox. When a glass control transitions to active, its icon shifts from `var(--text-3)` to `var(--accent)` alongside the glass state change (rest → active). Never scatter accent across multiple glass controls in the same view.
+
+3. **Size table for glass controls:**
+
+| Glass control | Icon px | Treatment |
+|---|---|---|
+| Glass toolbar action | 22 | line, grey (accent if primary action) |
+| Glass tab bar | 26 | line → **filled + accent** when active |
+| Glass sidebar item | 20 | line, grey (accent on selected) |
+| Glass popover / dropdown item | 18–20 | line, grey |
+| Glass context menu item | 18–20 | line, grey (danger-color on destructive) |
+| Glass FAB | 24 | line, accent (the FAB is the primary action) |
+| Glass switch / slider | — | no icon (thumb is solid) |
+| Glass tooltip | — | no icon (text only) |
+
+4. **Vibrancy bump on glass.** Over translucent surfaces, icons at `--text-3` may lose contrast against busy content beneath. If the glass is Clear (over media), bump the icon color one step: `var(--text-2)` instead of `var(--text-3)`. This mirrors the "vibrancy for text on glass" rule — never flat grey over bright media.
+
+5. **State-aware icon weight.** The active tab's ideal swaps line → filled (iOS behavior). A single accent color is the acceptable floor. The glass state transition (rest → active → pressed → scrolled) and the icon state transition should fire together — sync them in the same event handler.
+
+```css
+/* Glass tab — icon follows the control's state */
+.glass-tabbar .tab .ic { color: var(--text-3); transition: color .25s var(--ease-spring); }
+.glass-tabbar .tab.on .ic { color: var(--accent); }
+/* Glass sidebar — selected item */
+.glass-sidebar a.on .ic { color: var(--accent); }
+```
+
 ## Self-check
 - [ ] One stroke width + one 24-grid viewBox everywhere; no line/fill mix except the active tab.
 - [ ] Icons are `currentColor` grey by default; accent appears **only** on action/active elements.
 - [ ] No "an icon on every row" decoration; icons earn their place.
 - [ ] Every icon control has a ≥44px hit box (icon px ≠ touch target).
 - [ ] Real line icons — not grey filled squares, not emoji.
+- [ ] Icons on glass control surfaces follow vibrancy rules (grey `currentColor` at rest, accent on active; bump to `--text-2` over Clear glass on bright media).
 
 Credit: icon paths from **Lucide** (ISC License, © Lucide Contributors, lucide.dev).

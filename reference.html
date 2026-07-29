@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="tokens.css">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { font-optical-sizing: auto; }
   body {
     background: var(--bg);
     color: var(--text);
@@ -15,98 +16,206 @@
     -moz-osx-font-smoothing: grayscale;
     line-height: 1.6;
   }
-  /* Renamed from dsPulse to pulse-dot to match tokens.css */
-  @keyframes pulse-dot {
-    0% { box-shadow: 0 0 0 0 rgba(48,209,88,0.5); }
-    70% { box-shadow: 0 0 0 7px rgba(48,209,88,0); }
-    100% { box-shadow: 0 0 0 0 rgba(48,209,88,0); }
+
+  /* Focus-visible — one ring style, everywhere */
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
+  [role="switch"]:focus-visible,
+  [role="tab"]:focus-visible,
+  [tabindex="0"]:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+    border-radius: var(--r-pill);
   }
+
   .ds-row + .ds-row { border-top: 1px solid var(--hairline); }
   @media (max-width: 680px) {
     .ds-2col { grid-template-columns: 1fr !important; }
+    .ds-3col { grid-template-columns: 1fr !important; }
   }
 
-  /* Focus-visible styles */
-  button:focus-visible,
-  a:focus-visible,
-  input:focus-visible {
-    outline: none;
-    box-shadow: var(--focus-ring);
+  /* ════════════════════════════════════════════════════════════════
+     LIQUID GLASS — CONTROL LAYER SYSTEM
+     Dual-track model: content surfaces = solid var(--surface);
+     control surfaces = Regular liquid glass as the main material.
+     State tokens drive rest → hover → pressed → scrolled.
+     The base .glass-nav / .glass-chip come from tokens.css; we upgrade
+     .glass-nav to the state-token system and define the rest of the
+     control vocabulary here (so the degradation ladder in tokens.css —
+     which already targets these class names — applies automatically).
+     ════════════════════════════════════════════════════════════════ */
+
+  /* Base control surfaces — Regular material, REST state */
+  .glass-toolbar,
+  .glass-sidebar,
+  .glass-tabbar,
+  .glass-popover,
+  .glass-tooltip,
+  .glass-modal,
+  .glass-fab,
+  .glass-float,
+  .glass-seg,
+  .glass-switch {
+    background: var(--glass-bg-regular-light);
+    -webkit-backdrop-filter: saturate(var(--glass-sat-rest)) blur(var(--glass-blur-rest));
+    backdrop-filter: saturate(var(--glass-sat-rest)) blur(var(--glass-blur-rest));
+    box-shadow: var(--glass-shadow-rest);
+    border: 1px solid var(--glass-hairline-light);
+    transition: -webkit-backdrop-filter .28s var(--ease-out-quart),
+                backdrop-filter .28s var(--ease-out-quart),
+                box-shadow .28s var(--ease-out-quart),
+                transform .18s var(--ease-out-quart);
   }
 
-  /* Button active states */
-  .btn-primary:active,
-  .btn-secondary:active {
+  /* Upgrade tokens.css .glass-nav to the state-token system (scroll-edge) */
+  .glass-nav {
+    background: var(--glass-bg-regular-light);
+    -webkit-backdrop-filter: saturate(var(--glass-sat-rest)) blur(var(--glass-blur-rest));
+    backdrop-filter: saturate(var(--glass-sat-rest)) blur(var(--glass-blur-rest));
+    box-shadow: var(--glass-shadow-rest);
+    border-bottom: 1px solid transparent;
+    transition: -webkit-backdrop-filter .28s var(--ease-out-quart),
+                backdrop-filter .28s var(--ease-out-quart),
+                box-shadow .28s var(--ease-out-quart),
+                border-color .28s var(--ease-out-quart);
+  }
+  /* Scrolled: content has moved under the nav — bump blur + shadow, reveal hairline */
+  .glass-nav.is-scrolled {
+    -webkit-backdrop-filter: saturate(var(--glass-sat-scrolled)) blur(var(--glass-blur-scrolled));
+    backdrop-filter: saturate(var(--glass-sat-scrolled)) blur(var(--glass-blur-scrolled));
+    box-shadow: var(--glass-shadow-scrolled);
+    border-bottom-color: var(--hairline);
+  }
+
+  /* HOVER / active material — stronger blur + saturation + active shadow */
+  .glass-fab:hover,
+  .glass-float:hover,
+  .glass-popover:hover,
+  .glass-toolbar:hover,
+  .glass-tabbar:hover,
+  .glass-sidebar:hover,
+  .glass-seg:hover,
+  .glass-switch:hover {
+    -webkit-backdrop-filter: saturate(var(--glass-sat-active)) blur(var(--glass-blur-active));
+    backdrop-filter: saturate(var(--glass-sat-active)) blur(var(--glass-blur-active));
+    box-shadow: var(--glass-shadow-active);
+  }
+  /* PRESSED — collapse shadow, micro-scale */
+  .glass-fab:active,
+  .glass-float:active,
+  .glass-seg button:active,
+  .glass-switch:active {
+    box-shadow: var(--glass-shadow-pressed);
     transform: scale(0.97);
-    transition: transform 100ms ease-out;
   }
 
-  /* Segmented control button styles */
-  .seg-btn {
-    border: none;
-    cursor: pointer;
-    font-size: 13px;
-    padding: 7px 15px;
-    border-radius: var(--r-pill);
-    background: transparent;
-    color: var(--text-2);
-    transition: all 0.2s;
+  /* ── State-forcing helpers for the static state showcase ── */
+  .gdemo {
+    background: var(--glass-bg-regular-light);
+    border: 1px solid var(--glass-hairline-light);
+    border-radius: var(--r-card);
+    color: var(--text);
   }
-  .seg-btn:hover {
-    background: rgba(0,0,0,0.03);
+  .gdemo.gs-rest {
+    -webkit-backdrop-filter: saturate(var(--glass-sat-rest)) blur(var(--glass-blur-rest));
+    backdrop-filter: saturate(var(--glass-sat-rest)) blur(var(--glass-blur-rest));
+    box-shadow: var(--glass-shadow-rest);
   }
-  .seg-btn:active {
+  .gdemo.gs-hover {
+    -webkit-backdrop-filter: saturate(var(--glass-sat-active)) blur(var(--glass-blur-active));
+    backdrop-filter: saturate(var(--glass-sat-active)) blur(var(--glass-blur-active));
+    box-shadow: var(--glass-shadow-active);
+  }
+  .gdemo.gs-pressed {
+    -webkit-backdrop-filter: saturate(var(--glass-sat-active)) blur(var(--glass-blur-active));
+    backdrop-filter: saturate(var(--glass-sat-active)) blur(var(--glass-blur-active));
+    box-shadow: var(--glass-shadow-pressed);
     transform: scale(0.98);
   }
-  .seg-btn:focus-visible {
-    outline: none;
-    box-shadow: var(--focus-ring);
+  .gdemo.gs-scrolled {
+    -webkit-backdrop-filter: saturate(var(--glass-sat-scrolled)) blur(var(--glass-blur-scrolled));
+    backdrop-filter: saturate(var(--glass-sat-scrolled)) blur(var(--glass-blur-scrolled));
+    box-shadow: var(--glass-shadow-scrolled);
   }
+
+  /* ── Dark-mode glass variants ── */
+  @media (prefers-color-scheme: dark) {
+    .glass-nav {
+      background: var(--glass-bg-regular-dark);
+    }
+    .glass-toolbar, .glass-sidebar, .glass-tabbar, .glass-popover,
+    .glass-tooltip, .glass-modal, .glass-fab, .glass-float,
+    .glass-seg, .glass-switch, .gdemo {
+      background: var(--glass-bg-regular-dark);
+      border-color: var(--glass-hairline-dark);
+    }
+  }
+
+  /* ── Degradation-ladder visual levels (static representations) ── */
+  .lvl2 { background: var(--surface) !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; border: 1px solid var(--hairline) !important; }
+  .lvl3 { -webkit-backdrop-filter: blur(var(--glass-regular-blur)) !important; backdrop-filter: blur(var(--glass-regular-blur)) !important; }
+  .lvl4 { background: var(--surface) !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; border: 1px solid rgba(0,0,0,0.35) !important; }
+  .lvl5 { background: color-mix(in srgb, var(--bg) 94%, transparent) !important; }
+  @media (prefers-color-scheme: dark) {
+    .lvl4 { border-color: rgba(255,255,255,0.35) !important; }
+  }
+
+  /* Segmented control */
+  .seg-btn {
+    border: none; cursor: pointer; font-size: 13px; padding: 0 16px;
+    border-radius: var(--r-pill); background: transparent; color: var(--text-2);
+    transition: all .2s var(--ease-out-quart); min-height: 44px;
+  }
+  .seg-btn:hover { background: var(--btn-quiet-bg); }
   .seg-btn[aria-selected="true"] {
-    background: var(--text);
-    color: #fff;
-    font-weight: 600;
+    background: var(--text); color: #fff; font-weight: 600;
     box-shadow: 0 1px 2px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.16);
   }
 
-  /* Dark-mode adjustments */
-  @media (prefers-color-scheme: dark) {
-    .glass-nav { background: color-mix(in srgb, var(--bg) 72%, transparent) !important; }
-    .ds-surface { background: var(--surface) !important; }
+  /* Button active states */
+  .btn-primary:active, .btn-secondary:active {
+    transform: scale(0.97); transition: transform 100ms ease-out;
   }
 
-  /* Reduced-motion support */
-  @media (prefers-reduced-motion: reduce) {
-    #mSheet { transition: opacity .2s ease !important; }
+  /* Refraction stage — gives the glass something to refract */
+  .stage {
+    position: relative; overflow: hidden; border-radius: var(--r-hero);
+    background: var(--grad-cta); padding: clamp(22px,4vw,34px);
   }
-  /* Reduced-transparency support */
-  @media (prefers-reduced-transparency: reduce) {
-    .glass-nav { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; background: var(--bg) !important; }
+  .stage-orb { position: absolute; border-radius: 50%; pointer-events: none; }
+  .stage-inner { position: relative; z-index: var(--z-content); }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    #mSheet { transition: opacity .2s ease !important; transform: none !important; }
   }
 </style>
 </head>
 <body>
 <div style="min-height: 100vh; padding-bottom: 64px;">
 
-  <header class="glass-nav" style="position: sticky; top: 0; z-index: 50; background: rgba(245,245,247,0.72); backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px); border-bottom: 1px solid var(--hairline);">
+  <!-- ── Glass nav (state-token system; scroll-edge) ── -->
+  <header class="glass-nav" id="topNav" style="position: sticky; top: 0; z-index: var(--z-sticky);">
     <div style="max-width: var(--max-grid); margin: 0 auto; padding: 0 var(--pad-x); height: 54px; display: flex; align-items: center; justify-content: space-between; gap: 16px;">
       <div style="display: flex; align-items: center; gap: 9px;">
         <span style="width: 26px; height: 26px; border-radius: var(--r-chip); background: var(--text); color: #fff; display: grid; place-items: center; font-size: 13px; font-weight: 700; letter-spacing: -0.02em;" aria-hidden="true">A</span>
         <span style="font-size: 15px; font-weight: 650; letter-spacing: -0.01em;">Apple Liquid Glass</span><span style="font-size:15px;font-weight:650;letter-spacing:-0.01em;"> · 设计系统</span>
       </div>
-      <span style="font-size: 12.5px; color: var(--text-3);">液态玻璃 · v1</span>
+      <span style="font-size: 12.5px; color: var(--text-3);">液态玻璃 · v2</span>
     </div>
   </header>
 
   <main style="max-width: 1080px; margin: 0 auto; padding: 0 24px;">
 
+    <!-- ── Intro: dual-track model ── -->
     <section style="padding: clamp(36px,6vw,64px) 0 clamp(20px,4vw,32px);">
       <div style="display: flex; align-items: center; gap: 9px; font-size: 12px; font-weight: 600; letter-spacing: 0.14em; color: var(--text-3);">
         <span style="width: 7px; height: 7px; border-radius: 50%; background: var(--live); animation: pulse-dot 2.2s infinite;" aria-hidden="true"></span>
         样板间 · LIVING STYLE GUIDE
       </div>
-      <h1 style="margin-top: 15px; font-size: clamp(32px,6vw,52px); font-weight: 700; letter-spacing: -0.03em; line-height: 1.06;">设计系统</h1>
-      <p style="margin-top: 16px; font-size: clamp(15px,2.5vw,18px); color: var(--text-2); line-height: 1.6; max-width: 560px;">苹果灰白底 + 统一白色表面 + 发丝分隔线，玻璃只在图层真正重叠处点到为止。下方是真实渲染的令牌与组件，照此即可保持全站一致。</p>
+      <h1 style="margin-top: 15px; font-size: clamp(32px,6vw,52px); font-weight: 700; letter-spacing: -0.03em; line-height: 1.06;">双轨材质系统</h1>
+      <p style="margin-top: 16px; font-size: clamp(15px,2.5vw,18px); color: var(--text-2); line-height: 1.6; max-width: 600px;"><strong style="color: var(--text);">双轨模型：</strong>内容表面用实色 <code style="font-family: var(--mono);">#fff</code>，控制表面用液态玻璃作为主材质。玻璃只作为<strong style="color: var(--text);">控制层</strong>出现在图层重叠处——导航、工具栏、标签栏、侧栏与各类控件；阅读内容永远是实色白 + 阴影，绝不玻璃。所有玻璃统一走 <code style="font-family: var(--mono);">--glass-*</code> 令牌，状态由 rest → hover → pressed → scrolled 驱动。</p>
     </section>
 
     <!-- 颜色 -->
@@ -152,7 +261,7 @@
 
         <div style="background: var(--surface); border-radius: var(--r-panel); padding: clamp(20px,3vw,28px); box-shadow: var(--sh-panel);">
           <h3 style="font-size: 13px; font-weight: 600; color: var(--text-3); margin-bottom: 16px;">胶囊分段控件</h3>
-          <div id="ds-seg" role="tablist" aria-label="分段控件示例" style="display: inline-flex; background: rgba(0,0,0,0.05); border-radius: var(--r-pill); padding: 3px; gap: 2px; margin-bottom: 14px;"></div>
+          <div id="ds-seg" role="tablist" aria-label="分段控件示例" style="display: inline-flex; background: var(--btn-quiet-bg); border-radius: var(--r-pill); padding: 3px; gap: 2px; margin-bottom: 14px;"></div>
           <p style="font-size: 12.5px; color: var(--text-2);">点一下试试选中态切换。</p>
         </div>
 
@@ -187,54 +296,176 @@
       </div>
     </section>
 
-    <!-- 玻璃 -->
+    <!-- ═══════ 05 — 液态玻璃（扩展） ═══════ -->
     <section style="margin-top: 40px;" aria-labelledby="glass-section-title">
-      <div id="glass-section-title" style="font-size: 12px; font-weight: 650; letter-spacing: 0.14em; color: var(--text-2); margin-bottom: 16px;">05 — 液态玻璃（克制使用）</div>
-      <div style="position: relative; overflow: hidden; border-radius: var(--r-hero); padding: clamp(26px,4vw,40px); background: var(--grad-cta); box-shadow: var(--sh-cta);">
-        <div style="position: absolute; width: 260px; height: 260px; border-radius: 50%; background: rgba(255,255,255,0.18); filter: blur(46px); top: -80px; right: -40px;" aria-hidden="true"></div>
-        <div style="position: absolute; width: 200px; height: 200px; border-radius: 50%; background: rgba(120,80,255,0.5); filter: blur(50px); bottom: -90px; left: 12%;" aria-hidden="true"></div>
-        <div style="position: relative;">
-          <h3 style="font-size: clamp(18px,3vw,24px); font-weight: 700; color: #fff; letter-spacing: -0.02em;">玻璃要有可折射的背景才有灵魂</h3>
-          <p style="margin-top: 10px; font-size: 14px; color: rgba(255,255,255,0.82); line-height: 1.6; max-width: 460px;">彩色 CTA 里用模糊光球垫底，上层放半透明玻璃元素，制造折射感。只在导航 / 浮层 / CTA 使用。</p>
-          <div style="display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap;">
-            <span class="glass-chip" style="display: inline-flex; align-items: center; height: 42px; padding: 0 18px; border-radius: var(--r-pill); background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.22); color: #fff; font-size: 13.5px; font-weight: 550; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);">玻璃标签</span>
-            <span class="glass-chip" style="display: inline-flex; align-items: center; height: 42px; padding: 0 18px; border-radius: var(--r-pill); background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.22); color: #fff; font-size: 13.5px; font-weight: 550; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);">毛玻璃按钮</span>
-          </div>
+      <div id="glass-section-title" style="font-size: 12px; font-weight: 650; letter-spacing: 0.14em; color: var(--text-2); margin-bottom: 16px;">05 — 液态玻璃 · 控制层系统</div>
+
+      <!-- Dual-track explainer (content solid / control glass) -->
+      <div class="ds-2col" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
+        <div style="background: var(--surface); border-radius: var(--r-thumb); padding: 16px 18px; border: 1px solid var(--hairline);">
+          <div style="font-size: 13px; font-weight: 650; color: var(--text); margin-bottom: 6px;">内容轨 · 实色 #fff</div>
+          <div style="font-size: 12.5px; color: var(--text-2); line-height: 1.6;">卡片、列表行、阅读区块——永远 <code style="font-family: var(--mono);">var(--surface)</code> + 阴影 + 发丝线。实色保证可读与连续表面。</div>
+        </div>
+        <div style="background: var(--glass-bg-regular-light); border: 1px solid var(--glass-hairline-light); border-radius: var(--r-thumb); padding: 16px 18px; -webkit-backdrop-filter: saturate(var(--glass-sat-rest)) blur(var(--glass-blur-rest)); backdrop-filter: saturate(var(--glass-sat-rest)) blur(var(--glass-blur-rest));">
+          <div style="font-size: 13px; font-weight: 650; color: var(--text); margin-bottom: 6px;">控制轨 · 液态玻璃</div>
+          <div style="font-size: 12.5px; color: var(--text-2); line-height: 1.6;">导航 / 工具栏 / 标签栏 / 侧栏 / 控件——作为<strong>控制层</strong>浮于内容之上，统一 <code style="font-family: var(--mono);">--glass-*</code> 令牌。</div>
         </div>
       </div>
+
+      <!-- (a) Control-layer glass showcase on a refraction stage -->
+      <div class="stage">
+        <div class="stage-orb" style="width: 260px; height: 260px; background: rgba(255,255,255,0.18); filter: blur(46px); top: -80px; right: -40px;" aria-hidden="true"></div>
+        <div class="stage-orb" style="width: 200px; height: 200px; background: rgba(120,80,255,0.5); filter: blur(50px); bottom: -90px; left: 12%;" aria-hidden="true"></div>
+        <div class="stage-inner" style="display: flex; flex-direction: column; gap: 18px;">
+
+          <div>
+            <div style="font-size: 11px; font-weight: 700; letter-spacing: 0.12em; color: rgba(255,255,255,0.8); margin-bottom: 10px;">A · 控制层玻璃展示 · CONTROL LAYER GLASS</div>
+
+            <!-- glass nav (mini) -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+              <div>
+                <div style="font-size: 11px; color: rgba(255,255,255,0.7); margin-bottom: 6px;">glass-nav</div>
+                <div class="glass-nav" style="position: relative; border-radius: var(--r-pill); padding: 0 14px; height: 38px; display: flex; align-items: center; justify-content: space-between; border-bottom: none;">
+                  <span style="font-size: 13px; font-weight: 650; color: var(--text);">导航 Nav</span>
+                  <span style="font-size: 11px; color: var(--text-2);">滚动时进入 scrolled 态</span>
+                </div>
+              </div>
+              <div>
+                <div style="font-size: 11px; color: rgba(255,255,255,0.7); margin-bottom: 6px;">glass-toolbar</div>
+                <div class="glass-toolbar" style="position: relative; border-radius: var(--r-card); padding: 8px 12px; display: flex; align-items: center; gap: 8px;">
+                  <span class="glass-float" style="display: grid; place-items: center; width: 30px; height: 30px; border-radius: var(--r-pill); cursor: pointer; color: var(--text);" aria-hidden="true">←</span>
+                  <span class="glass-float" style="display: grid; place-items: center; width: 30px; height: 30px; border-radius: var(--r-pill); cursor: pointer; color: var(--text);" aria-hidden="true">→</span>
+                  <span style="flex: 1; font-size: 12px; color: var(--text-2); padding-left: 6px;">工具栏 Toolbar</span>
+                  <span class="glass-float" style="display: grid; place-items: center; width: 30px; height: 30px; border-radius: var(--r-pill); cursor: pointer; color: var(--text);" aria-hidden="true">⋯</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- glass tabbar + sidebar -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 14px;">
+              <div>
+                <div style="font-size: 11px; color: rgba(255,255,255,0.7); margin-bottom: 6px;">glass-tabbar</div>
+                <div class="glass-tabbar" style="position: relative; border-radius: var(--r-pill); padding: 6px; display: inline-flex; gap: 4px;">
+                  <span style="font-size: 12px; font-weight: 600; color: var(--accent); padding: 6px 14px; border-radius: var(--r-pill); background: var(--surface);">首页</span>
+                  <span style="font-size: 12px; color: var(--text-2); padding: 6px 14px; border-radius: var(--r-pill);">发现</span>
+                  <span style="font-size: 12px; color: var(--text-2); padding: 6px 14px; border-radius: var(--r-pill);">我的</span>
+                </div>
+              </div>
+              <div>
+                <div style="font-size: 11px; color: rgba(255,255,255,0.7); margin-bottom: 6px;">glass-sidebar</div>
+                <div class="glass-sidebar" style="position: relative; border-radius: var(--r-card); padding: 10px; display: flex; flex-direction: column; gap: 6px; width: 150px;">
+                  <span style="font-size: 12px; color: var(--text); font-weight: 600; padding: 4px 8px; background: var(--btn-quiet-bg); border-radius: var(--r-pill);">概览</span>
+                  <span style="font-size: 12px; color: var(--text-2); padding: 4px 8px;">项目</span>
+                  <span style="font-size: 12px; color: var(--text-2); padding: 4px 8px;">设置</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- glass switches / sliders / segmented -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-top: 14px;" class="ds-3col">
+              <div>
+                <div style="font-size: 11px; color: rgba(255,255,255,0.7); margin-bottom: 8px;">glass-switch</div>
+                <div class="glass-switch" style="position: relative; border-radius: var(--r-pill); padding: 8px 12px; display: flex; align-items: center; justify-content: space-between; min-height: 44px;">
+                  <span style="font-size: 12px; color: var(--text);">通知</span>
+                  <span style="width: 30px; height: 18px; border-radius: var(--r-pill); background: var(--accent); position: relative;">
+                    <span style="position: absolute; top: 2px; right: 2px; width: 14px; height: 14px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.2);"></span>
+                  </span>
+                </div>
+              </div>
+              <div>
+                <div style="font-size: 11px; color: rgba(255,255,255,0.7); margin-bottom: 8px;">glass slider</div>
+                <div class="glass-switch" style="position: relative; border-radius: var(--r-pill); padding: 14px 12px; min-height: 44px;">
+                  <span style="display: block; height: 4px; border-radius: var(--r-pill); background: var(--track); position: relative;">
+                    <span style="position: absolute; left: 0; top: 0; height: 100%; width: 55%; border-radius: var(--r-pill); background: var(--accent);"></span>
+                    <span style="position: absolute; left: 55%; top: 50%; transform: translate(-50%,-50%); width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.25);"></span>
+                  </span>
+                </div>
+              </div>
+              <div>
+                <div style="font-size: 11px; color: rgba(255,255,255,0.7); margin-bottom: 8px;">glass-seg</div>
+                <div class="glass-seg" role="tablist" aria-label="玻璃分段" style="position: relative; border-radius: var(--r-pill); padding: 4px; display: inline-flex; gap: 2px;">
+                  <button class="seg-btn" role="tab" aria-selected="true" data-gseg="a" style="color:#fff;">日</button>
+                  <button class="seg-btn" role="tab" aria-selected="false" data-gseg="b" style="color:var(--text-2);">周</button>
+                  <button class="seg-btn" role="tab" aria-selected="false" data-gseg="c" style="color:var(--text-2);">月</button>
+                </div>
+              </div>
+            </div>
+            <p style="margin-top: 14px; font-size: 12.5px; color: rgba(255,255,255,0.82); line-height: 1.6;">所有控制层玻璃统一使用 <code style="font-family: var(--mono);">--glass-*</code> 令牌；背景的彩色光球给玻璃提供可折射内容。悬停 / 按下即时进入对应材质态。</p>
+          </div>
+
+          <!-- State ladder: rest → hover → pressed → scrolled -->
+          <div>
+            <div style="font-size: 11px; font-weight: 700; letter-spacing: 0.12em; color: rgba(255,255,255,0.8); margin-bottom: 10px;">B · 状态阶梯 · rest → hover → pressed → scrolled</div>
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;" class="ds-3col">
+              <div>
+                <div class="gdemo gs-rest" style="height: 76px; display: grid; place-items: center; font-size: 12px; font-weight: 600; color: var(--text);">rest</div>
+                <div style="font-size: 10.5px; color: rgba(255,255,255,0.7); margin-top: 6px; font-family: var(--mono);">blur-rest · sat-rest</div>
+              </div>
+              <div>
+                <div class="gdemo gs-hover" style="height: 76px; display: grid; place-items: center; font-size: 12px; font-weight: 600; color: var(--text);">hover</div>
+                <div style="font-size: 10.5px; color: rgba(255,255,255,0.7); margin-top: 6px; font-family: var(--mono);">blur-active · sat-active</div>
+              </div>
+              <div>
+                <div class="gdemo gs-pressed" style="height: 76px; display: grid; place-items: center; font-size: 12px; font-weight: 600; color: var(--text);">pressed</div>
+                <div style="font-size: 10.5px; color: rgba(255,255,255,0.7); margin-top: 6px; font-family: var(--mono);">shadow-pressed</div>
+              </div>
+              <div>
+                <div class="gdemo gs-scrolled" style="height: 76px; display: grid; place-items: center; font-size: 12px; font-weight: 600; color: var(--text);">scrolled</div>
+                <div style="font-size: 10.5px; color: rgba(255,255,255,0.7); margin-top: 6px; font-family: var(--mono);">blur-scrolled</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- do / don't -->
       <div class="ds-2col" style="margin-top: 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
         <div style="background: var(--success-bg); border: 1px solid color-mix(in srgb, var(--success) 25%, transparent); border-radius: var(--r-thumb); padding: 16px 18px;">
-          <div style="font-size: 13px; font-weight: 650; color: var(--success-fg); margin-bottom: 6px;">✓ 用玻璃</div>
-          <div style="font-size: 12.5px; color: var(--text-2); line-height: 1.6;">吸顶导航、模态浮层、彩色 CTA 内的标签、题图上的来源徽标。</div>
+          <div style="font-size: 13px; font-weight: 650; color: var(--success-fg); margin-bottom: 6px;">✓ 玻璃用于控制层</div>
+          <div style="font-size: 12.5px; color: var(--text-2); line-height: 1.6;">吸顶导航、工具栏、标签栏、侧栏、模态浮层、浮岛 / FAB、控件——图层重叠处的控制表面。</div>
         </div>
         <div style="background: var(--danger-bg); border: 1px solid color-mix(in srgb, var(--danger) 25%, transparent); border-radius: var(--r-thumb); padding: 16px 18px;">
-          <div style="font-size: 13px; font-weight: 650; color: var(--danger-fg); margin-bottom: 6px;">✕ 不用玻璃</div>
-          <div style="font-size: 12.5px; color: var(--text-2); line-height: 1.6;">普通内容卡片、列表行、纯白区块之间——实色白 + 阴影即可。</div>
+          <div style="font-size: 13px; font-weight: 650; color: var(--danger-fg); margin-bottom: 6px;">✕ 内容不用玻璃</div>
+          <div style="font-size: 12.5px; color: var(--text-2); line-height: 1.6;">普通内容卡片、列表行、阅读区块之间——实色 <code style="font-family: var(--mono);">var(--surface)</code> + 阴影即可。</div>
+        </div>
+      </div>
+
+      <!-- (b) Degradation ladder — 5 levels -->
+      <div style="margin-top: 18px; background: var(--surface); border-radius: var(--r-panel); padding: clamp(20px,3vw,28px); box-shadow: var(--sh-panel);">
+        <h3 style="font-size: 13px; font-weight: 600; color: var(--text-3); margin-bottom: 6px;">C · 性能降级阶梯 · 5 级</h3>
+        <p style="font-size: 12.5px; color: var(--text-2); line-height: 1.6; margin-bottom: 16px; max-width: 620px;">下方为各降级层的<strong>视觉示意</strong>；真实阶梯写在 <code style="font-family: var(--mono);">tokens.css</code>，按 <code style="font-family: var(--mono);">prefers-reduced-transparency</code> → <code style="font-family: var(--mono);">reduced-data</code> → <code style="font-family: var(--mono);">contrast</code> → <code style="font-family: var(--mono);">@supports</code> → <code style="font-family: var(--mono);">print</code> 顺序自动套用，无需嗅探硬件。</p>
+
+        <div class="stage" style="padding: 18px;">
+          <div class="stage-orb" style="width: 180px; height: 180px; background: rgba(255,255,255,0.18); filter: blur(40px); top: -60px; right: 10%;" aria-hidden="true"></div>
+          <div class="stage-orb" style="width: 150px; height: 150px; background: rgba(120,80,255,0.5); filter: blur(44px); bottom: -60px; left: 10%;" aria-hidden="true"></div>
+          <div class="stage-inner" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px;" id="ladderGrid"></div>
         </div>
       </div>
     </section>
 
-    <p style="text-align: center; margin-top: 44px; font-size: 12px; color: var(--text-2);">完整规范见 <code style="font-family: var(--mono);">design-system.md</code> · 组件见 <code style="font-family: var(--mono);">components.md</code></p>
+    <p style="text-align: center; margin-top: 44px; font-size: 12px; color: var(--text-2);">完整规范见 <code style="font-family: var(--mono);">design-system.md</code> · 组件见 <code style="font-family: var(--mono);">components.md</code> · 控件示例见 <code style="font-family: var(--mono);">examples/</code></p>
 
 
+    <!-- 06 — 动效 -->
     <section style="margin-top: 40px;" aria-labelledby="motion-section-title">
       <div id="motion-section-title" style="font-size: 12px; font-weight: 650; letter-spacing: 0.14em; color: var(--text-2); margin-bottom: 16px;">06 — 动效(交互层,见 motion.md)</div>
       <div style="background: var(--surface); border-radius: var(--r-panel); padding: clamp(22px,4vw,32px); box-shadow: var(--sh-panel);">
         <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
-          <button id="mSheetBtn" aria-haspopup="dialog" style="height: 44px; padding: 0 22px; border: none; border-radius: var(--r-pill); background: var(--accent); color: #fff; font: 600 14.5px/1 var(--font); cursor: pointer; transition: background .2s cubic-bezier(.25,1,.5,1), transform .1s ease-out;">召出 Sheet(材质化入场)</button>
+          <button id="mSheetBtn" aria-haspopup="dialog" style="height: 44px; padding: 0 22px; border: none; border-radius: var(--r-pill); background: var(--accent); color: #fff; font: 600 14.5px/1 var(--font); cursor: pointer; transition: background .2s var(--ease-out-quart), transform .1s ease-out;">召出 Sheet(材质化入场)</button>
           <button id="mFeedbackBtn" style="height: 44px; padding: 0 20px; border-radius: var(--r-pill); background: rgba(255,255,255,0.8); border: 1px solid rgba(0,0,0,0.1); box-shadow: 0 1px 2px rgba(0,0,0,0.05); font: 600 14.5px/1 var(--font); color: var(--text); cursor: pointer; transition: transform .1s ease-out;">按下反馈(pointer-down)</button>
-          <input id="mFocusInput" placeholder="焦点环 200ms 过渡" aria-label="焦点环测试输入框" style="height: 44px; padding: 0 16px; border: 1px solid rgba(0,0,0,0.1); border-radius: var(--r-pill); font: 400 14px var(--font); outline: none; transition: border-color .2s cubic-bezier(.25,1,.5,1), box-shadow .2s cubic-bezier(.25,1,.5,1);">
+          <input id="mFocusInput" placeholder="焦点环 200ms 过渡" aria-label="焦点环测试输入框" style="height: 44px; padding: 0 16px; border: 1px solid rgba(0,0,0,0.1); border-radius: var(--r-pill); font: 400 14px var(--font); outline: none; transition: border-color .2s var(--ease-out-quart), box-shadow .2s var(--ease-out-quart);">
         </div>
-        <p style="margin-top: 14px; font-size: 13px; color: var(--text-3); line-height: 1.6;">规则:反馈在按下瞬间(不等松开);入场 ~400ms <code style="font-family: var(--mono);">--ease-spring</code>、退场同路径 ~260ms;玻璃面 blur+scale+opacity 同动(材质化);CSS transition 可中途反向(不用 keyframes);三条 <code style="font-family: var(--mono);">prefers-reduced-*</code> 必备。</p>
+        <p style="margin-top: 14px; font-size: 13px; color: var(--text-3); line-height: 1.6;">规则:反馈在按下瞬间(不等松开);入场 ~400ms <code style="font-family: var(--mono);">--ease-spring</code>、退场同路径 ~260ms;玻璃面 opacity+scale+shadow 同动(材质化);CSS transition 可中途反向(不用 keyframes);三条 <code style="font-family: var(--mono);">prefers-reduced-*</code> 必备。</p>
       </div>
     </section>
 
-    <!-- Sheet demo:同路径进出 + 材质化 + scrim -->
-    <div id="mScrim" aria-hidden="true" style="position: fixed; inset: 0; background: rgba(0,0,0,0.28); opacity: 0; pointer-events: none; transition: opacity .25s ease; z-index: 98;"></div>
-    <div id="mSheet" role="dialog" aria-modal="true" aria-labelledby="mSheetTitle" aria-hidden="true" style="position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%) translateY(24px) scale(0.98); width: min(480px, calc(100vw - 32px)); padding: 26px; border-radius: var(--r-hero); background: rgba(245,245,247,0.72); backdrop-filter: blur(0px) saturate(180%); -webkit-backdrop-filter: blur(0px) saturate(180%); box-shadow: var(--sh-overlay); opacity: 0; pointer-events: none; transform-origin: 50% 100%; transition: opacity .4s cubic-bezier(.32,.72,0,1), transform .4s cubic-bezier(.32,.72,0,1), backdrop-filter .4s cubic-bezier(.32,.72,0,1), -webkit-backdrop-filter .4s cubic-bezier(.32,.72,0,1); z-index: 99;">
+    <!-- Sheet demo:同路径进出 + 材质化 + scrim (glass-modal tokens) -->
+    <div id="mScrim" aria-hidden="true" style="position: fixed; inset: 0; background: var(--glass-dim); opacity: 0; pointer-events: none; transition: opacity .25s ease; z-index: var(--z-modal);"></div>
+    <div id="mSheet" class="glass-modal" role="dialog" aria-modal="true" aria-labelledby="mSheetTitle" aria-hidden="true" style="position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%) translateY(24px) scale(0.98); width: min(480px, calc(100vw - 32px)); padding: 26px; border-radius: var(--r-hero); opacity: 0; pointer-events: none; transform-origin: 50% 100%; transition: opacity .4s var(--ease-spring), transform .4s var(--ease-spring), box-shadow .4s var(--ease-spring); z-index: var(--z-toast);">
       <h3 id="mSheetTitle" style="font: 700 18px/1.2 var(--font); letter-spacing: -0.02em; color: var(--text);">材质化 Sheet</h3>
-      <p style="margin-top: 8px; font: 400 14px/1.65 var(--font); color: var(--text-body);">blur 0→20 与位移/缩放同动,从触发方向(底部)升起,退场原路返回。连点按钮试试中途反向——transition 天然可打断。</p>
-      <button id="mSheetClose" style="margin-top: 16px; height: 40px; padding: 0 18px; border: none; border-radius: var(--r-pill); background: var(--accent); color: #fff; font: 600 13.5px/1 var(--font); cursor: pointer;">收回</button>
+      <p style="margin-top: 8px; font: 400 14px/1.65 var(--font); color: var(--text-body);">opacity + 位移 + 缩放同动,从触发方向(底部)升起,退场原路返回。玻璃使用 <code style="font-family: var(--mono);">--glass-*</code> 令牌保持全程一致。连点按钮试试中途反向——transition 天然可打断。</p>
+      <button id="mSheetClose" style="margin-top: 16px; height: 44px; padding: 0 18px; border: none; border-radius: var(--r-pill); background: var(--accent); color: #fff; font: 600 13.5px/1 var(--font); cursor: pointer;">收回</button>
     </div>
 
   </main>
@@ -286,240 +517,201 @@ const DATA = {
   ]
 };
 
-// Helper to get element by ID
+// Safe DOM helpers — never innerHTML with data, always textContent / createElement
 function byId(id) { return document.getElementById(id); }
-
-// Helper to create element with text content (safe DOM method)
 function createEl(tag, className, textContent) {
   const el = document.createElement(tag);
   if (className) el.className = className;
-  if (textContent) el.textContent = textContent;
+  if (textContent != null) el.textContent = textContent;
   return el;
-}
-
-// Helper to append multiple children
-function appendChildren(parent, children) {
-  children.forEach(child => parent.appendChild(child));
 }
 
 // Create swatch card for colors
 function createSwatch(c) {
-  const container = document.createElement('div');
-  container.setAttribute('role', 'listitem');
-  
-  const colorBox = document.createElement('div');
+  const container = createEl('div'); container.setAttribute('role', 'listitem');
+  const colorBox = createEl('div');
   colorBox.style.cssText = 'height: 64px; border-radius: var(--r-thumb); background: ' + c.hex + '; border: 1px solid rgba(0,0,0,0.06); box-shadow: inset 0 0 0 0.5px rgba(0,0,0,0.02);';
-  
-  const nameLabel = document.createElement('div');
+  const nameLabel = createEl('div', null, c.name);
   nameLabel.style.cssText = 'margin-top: 8px; font-size: 12px; font-weight: 600;';
-  nameLabel.textContent = c.name;
-  
-  const hexLabel = document.createElement('div');
+  const hexLabel = createEl('div', null, c.hex);
   hexLabel.style.cssText = 'font-size: 11px; color: var(--text-2); font-family: var(--mono);';
-  hexLabel.textContent = c.hex;
-  
-  container.appendChild(colorBox);
-  container.appendChild(nameLabel);
-  container.appendChild(hexLabel);
+  container.appendChild(colorBox); container.appendChild(nameLabel); container.appendChild(hexLabel);
   return container;
 }
 
-// Render neutrals
-DATA.neutrals.forEach(c => {
-  byId('ds-neutrals').appendChild(createSwatch(c));
-});
+DATA.neutrals.forEach(c => byId('ds-neutrals').appendChild(createSwatch(c)));
+DATA.accents.forEach(c => byId('ds-accents').appendChild(createSwatch(c)));
 
-// Render accents
-DATA.accents.forEach(c => {
-  byId('ds-accents').appendChild(createSwatch(c));
-});
-
-// Render gradients
 DATA.gradients.forEach(g => {
-  const container = document.createElement('div');
-  container.setAttribute('role', 'listitem');
+  const container = createEl('div'); container.setAttribute('role', 'listitem');
   container.style.cssText = 'height: 70px; border-radius: var(--r-thumb); background: ' + g.css + '; display: flex; align-items: flex-end; padding: 10px;';
-  
-  const label = document.createElement('span');
-  label.style.cssText = 'font-size: 11px; color: rgba(255,255,255,0.95); font-weight: 600; background: rgba(0,0,0,0.18); padding: 2px 8px; border-radius: var(--r-chip); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);';
-  label.textContent = g.name;
-  
+  const label = createEl('span', null, g.name);
+  label.style.cssText = 'font-size: 11px; color: rgba(255,255,255,0.95); font-weight: 600; background: rgba(0,0,0,0.45); padding: 2px 8px; border-radius: var(--r-chip);';
   container.appendChild(label);
   byId('ds-gradients').appendChild(container);
 });
 
-// Render type scale
 DATA.typeScale.forEach(t => {
-  const container = document.createElement('div');
-  container.setAttribute('role', 'listitem');
-  container.className = 'ds-row';
-  container.style.cssText = 'padding-top: 22px;';
-  
-  const spec = document.createElement('div');
+  const container = createEl('div'); container.setAttribute('role', 'listitem');
+  container.className = 'ds-row'; container.style.cssText = 'padding-top: 22px;';
+  const spec = createEl('div', null, t.spec);
   spec.style.cssText = 'font-size: 11.5px; color: var(--text-2); font-family: var(--mono); margin-bottom: 8px;';
-  spec.textContent = t.spec;
-  
-  const sample = document.createElement('div');
+  const sample = createEl('div', null, t.sample);
   sample.style.cssText = 'font-size: ' + t.size + '; font-weight: ' + t.weight + '; letter-spacing: ' + t.tracking + '; line-height: ' + t.lh + '; color: var(--text);';
-  sample.textContent = t.sample;
-  
-  container.appendChild(spec);
-  container.appendChild(sample);
+  container.appendChild(spec); container.appendChild(sample);
   byId('ds-type').appendChild(container);
 });
 
-// Render radii
 DATA.radii.forEach(r => {
-  const container = document.createElement('div');
-  container.setAttribute('role', 'listitem');
+  const container = createEl('div'); container.setAttribute('role', 'listitem');
   container.style.cssText = 'text-align: center;';
-  
-  const box = document.createElement('div');
+  const box = createEl('div');
   box.style.cssText = 'width: 60px; height: 60px; background: var(--bg); border: 1px solid rgba(0,0,0,0.08); border-radius: ' + r.value + ';';
-  
-  const label = document.createElement('div');
+  const label = createEl('div', null, r.label);
   label.style.cssText = 'margin-top: 7px; font-size: 11px; color: var(--text-2); font-weight: 550;';
-  label.textContent = r.label;
-  
-  const value = document.createElement('div');
+  const value = createEl('div', null, r.value);
   value.style.cssText = 'font-size: 10.5px; color: var(--text-2); font-family: var(--mono);';
-  value.textContent = r.value;
-  
-  container.appendChild(box);
-  container.appendChild(label);
-  container.appendChild(value);
+  container.appendChild(box); container.appendChild(label); container.appendChild(value);
   byId('ds-radii').appendChild(container);
 });
 
-// Render shadows
 DATA.shadows.forEach(sh => {
-  const container = document.createElement('div');
-  container.setAttribute('role', 'listitem');
+  const container = createEl('div'); container.setAttribute('role', 'listitem');
   container.style.cssText = 'text-align: center;';
-  
-  const box = document.createElement('div');
+  const box = createEl('div');
   box.style.cssText = 'width: 78px; height: 56px; background: var(--surface); border-radius: var(--r-card); box-shadow: ' + sh.value + ';';
-  
-  const label = document.createElement('div');
+  const label = createEl('div', null, sh.label);
   label.style.cssText = 'margin-top: 12px; font-size: 11px; color: var(--text-2); font-weight: 550;';
-  label.textContent = sh.label;
-  
-  container.appendChild(box);
-  container.appendChild(label);
+  container.appendChild(box); container.appendChild(label);
   byId('ds-shadows').appendChild(container);
 });
 
-// Segmented control (using safe DOM methods and event delegation)
+// Segmented control (04) — safe DOM, event delegation, no innerHTML
 const SEGS = [
-  { key: 'a', label: '黑胶囊', kind: 'black' },
-  { key: 'b', label: '白胶囊', kind: 'white' },
-  { key: 'c', label: '焦点流', kind: 'white' }
+  { key: 'a', label: '黑胶囊' },
+  { key: 'b', label: '白胶囊' },
+  { key: 'c', label: '焦点流' }
 ];
 let segState = 'a';
-
-function segStyle(key, kind) {
-  const active = segState === key;
-  if (kind === 'black') {
-    return { bg: active ? 'var(--text)' : 'transparent', fg: active ? '#fff' : 'var(--text-2)', sh: active ? '0 1px 2px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.16)' : 'none', w: active ? '600' : '500' };
-  }
-  return { bg: active ? 'var(--surface)' : 'transparent', fg: active ? 'var(--text)' : 'var(--text-2)', sh: active ? '0 1px 3px rgba(0,0,0,0.12)' : 'none', w: active ? '600' : '500' };
-}
-
 function renderSeg() {
   const container = byId('ds-seg');
-  container.innerHTML = '';
-  
+  container.replaceChildren();
   SEGS.forEach(s => {
-    const st = segStyle(s.key, s.kind);
-    const btn = document.createElement('button');
-    btn.className = 'seg-btn';
+    const active = segState === s.key;
+    const btn = createEl('button', 'seg-btn', s.label);
     btn.setAttribute('role', 'tab');
-    btn.setAttribute('aria-selected', segState === s.key ? 'true' : 'false');
+    btn.setAttribute('aria-selected', active ? 'true' : 'false');
     btn.setAttribute('data-seg', s.key);
-    btn.style.cssText = 'background: ' + st.bg + '; color: ' + st.fg + '; box-shadow: ' + st.sh + '; font-weight: ' + st.w + ';';
-    btn.textContent = s.label;
+    if (active) {
+      btn.style.background = 'var(--text)';
+      btn.style.color = '#fff';
+      btn.style.fontWeight = '600';
+      btn.style.boxShadow = '0 1px 2px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.16)';
+    }
     container.appendChild(btn);
   });
 }
 renderSeg();
-
-// Event delegation for segmented control
 byId('ds-seg').addEventListener('click', function(e) {
-  const btn = e.target.closest('[data-seg]');
-  if (!btn) return;
-  segState = btn.getAttribute('data-seg');
-  renderSeg();
+  const btn = e.target.closest('[data-seg]'); if (!btn) return;
+  segState = btn.getAttribute('data-seg'); renderSeg();
 });
-
-// Keyboard navigation for segmented control
 byId('ds-seg').addEventListener('keydown', function(e) {
-  if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
-    const buttons = Array.from(byId('ds-seg').querySelectorAll('[data-seg]'));
-    const currentIndex = buttons.findIndex(b => b.getAttribute('data-seg') === segState);
-    let nextIndex;
-    if (e.key === 'ArrowRight') {
-      nextIndex = (currentIndex + 1) % buttons.length;
-    } else {
-      nextIndex = (currentIndex - 1 + buttons.length) % buttons.length;
-    }
-    segState = buttons[nextIndex].getAttribute('data-seg');
-    renderSeg();
-    buttons[nextIndex].focus();
-  }
+  if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+  const buttons = Array.from(byId('ds-seg').querySelectorAll('[data-seg]'));
+  const currentIndex = buttons.findIndex(b => b.getAttribute('data-seg') === segState);
+  const nextIndex = e.key === 'ArrowRight'
+    ? (currentIndex + 1) % buttons.length
+    : (currentIndex - 1 + buttons.length) % buttons.length;
+  segState = buttons[nextIndex].getAttribute('data-seg');
+  renderSeg(); buttons[nextIndex].focus();
 });
 
-// 06 — 动效 demo:同路径进出 + 材质化(blur+scale+opacity 同动)
-const mSheet = byId('mSheet');
-const mScrim = byId('mScrim');
-const mSheetBtn = byId('mSheetBtn');
-const mSheetClose = byId('mSheetClose');
-const mFeedbackBtn = byId('mFeedbackBtn');
-const mFocusInput = byId('mFocusInput');
-let mOpen = false;
-let mLastFocused = null;
-const mSheetFocusables = [mSheetClose];
+// Glass segmented (05) — toggle selected
+byId('glass-section-title') && document.querySelectorAll('[data-gseg]').forEach(b => {
+  b.addEventListener('click', function() {
+    document.querySelectorAll('[data-gseg]').forEach(x => {
+      x.setAttribute('aria-selected', 'false');
+      x.style.color = 'var(--text-2)';
+      x.style.background = 'transparent';
+      x.style.fontWeight = '500';
+    });
+    this.setAttribute('aria-selected', 'true');
+    this.style.color = '#fff';
+    this.style.background = 'var(--text)';
+    this.style.fontWeight = '600';
+  });
+});
+
+// Degradation ladder — 5 visual levels (static representation)
+const LADDER = [
+  { n: '1', cls: 'gdemo gs-rest', title: '完整玻璃', sub: 'backdrop-filter 完整', mq: '默认' },
+  { n: '2', cls: 'gdemo lvl2', title: '减少透明度', sub: '实色表面 · 去模糊', mq: 'prefers-reduced-transparency' },
+  { n: '3', cls: 'gdemo lvl3', title: '省流量', sub: '仅模糊 · 去饱和', mq: 'prefers-reduced-data' },
+  { n: '4', cls: 'gdemo lvl4', title: '增强对比', sub: '实色 + 高对比边', mq: 'prefers-contrast' },
+  { n: '5', cls: 'gdemo lvl5', title: '不支持回退', sub: '近不透明', mq: '@supports not backdrop-filter' }
+];
+LADDER.forEach(l => {
+  const wrap = createEl('div');
+  const tile = createEl('div', l.cls);
+  tile.style.cssText = 'height: 84px; border-radius: var(--r-card); display: grid; place-items: center; text-align: center; color: var(--text);';
+  const t = createEl('div'); t.style.cssText = 'font-size: 12px; font-weight: 650;';
+  t.textContent = l.title;
+  tile.appendChild(t);
+  wrap.appendChild(tile);
+  const sub = createEl('div', null, l.sub);
+  sub.style.cssText = 'font-size: 10.5px; color: rgba(255,255,255,0.85); margin-top: 6px;';
+  const mq = createEl('div', null, l.mq);
+  mq.style.cssText = 'font-size: 9.5px; color: rgba(255,255,255,0.6); margin-top: 2px; font-family: var(--mono);';
+  wrap.appendChild(sub); wrap.appendChild(mq);
+  byId('ladderGrid').appendChild(wrap);
+});
+
+// Glass nav scrolled state — rAF-throttled scroll
+const topNav = byId('topNav');
+let ticking = false;
+addEventListener('scroll', function() {
+  if (ticking) return;
+  ticking = true;
+  requestAnimationFrame(function() {
+    topNav.classList.toggle('is-scrolled', scrollY > 8);
+    ticking = false;
+  });
+}, { passive: true });
+
+// 06 — Sheet demo: same-path enter/exit + materialized (opacity+scale+shadow)
+const mSheet = byId('mSheet'), mScrim = byId('mScrim');
+const mSheetBtn = byId('mSheetBtn'), mSheetClose = byId('mSheetClose');
+const mFeedbackBtn = byId('mFeedbackBtn'), mFocusInput = byId('mFocusInput');
+let mOpen = false, mLastFocused = null;
 
 function mToggle(want) {
   mOpen = typeof want === 'boolean' ? want : !mOpen;
   const on = mOpen;
   mSheet.style.opacity = on ? '1' : '0';
   mSheet.style.transform = on ? 'translateX(-50%) translateY(0) scale(1)' : 'translateX(-50%) translateY(24px) scale(0.98)';
-  const blur = on ? 'blur(20px) saturate(180%)' : 'blur(0px) saturate(180%)';
-  mSheet.style.backdropFilter = blur;
-  mSheet.style.webkitBackdropFilter = blur;
+  mSheet.style.boxShadow = on ? 'var(--glass-shadow-active)' : 'var(--glass-shadow-rest)';
   mSheet.style.pointerEvents = on ? 'auto' : 'none';
-  mSheet.setAttribute('aria-hidden', !on);
+  mSheet.setAttribute('aria-hidden', String(!on));
   mScrim.style.opacity = on ? '1' : '0';
   mScrim.style.pointerEvents = on ? 'auto' : 'none';
-  mScrim.setAttribute('aria-hidden', !on);
-  
-  // Focus management for accessibility
-  if (on) {
-    mLastFocused = document.activeElement;
-    mSheetClose.focus();
-  } else {
-    if (mLastFocused) mLastFocused.focus();
-  }
+  mScrim.setAttribute('aria-hidden', String(!on));
+  if (on) { mLastFocused = document.activeElement; mSheetClose.focus(); }
+  else if (mLastFocused) { mLastFocused.focus(); }
 }
-
 mSheetBtn.addEventListener('click', function() { mToggle(); });
 mSheetClose.addEventListener('click', function() { mToggle(false); });
 mScrim.addEventListener('click', function() { mToggle(false); });
-
-// Focus trap: Tab / Shift+Tab stays inside the sheet
 mSheet.addEventListener('keydown', function(e) {
   if (e.key !== 'Tab') return;
-  const first = mSheetFocusables[0], last = mSheetFocusables[mSheetFocusables.length - 1];
+  const focusables = [mSheetClose];
+  const first = focusables[0], last = focusables[focusables.length - 1];
   if (e.shiftKey) { if (document.activeElement === first) { e.preventDefault(); last.focus(); } }
   else { if (document.activeElement === last) { e.preventDefault(); first.focus(); } }
 });
-
-// Pointer-down feedback
-mFeedbackBtn.addEventListener('mousedown', function() { this.style.transform = 'scale(0.94)'; });
-mFeedbackBtn.addEventListener('mouseup', function() { this.style.transform = ''; });
-mFeedbackBtn.addEventListener('mouseleave', function() { this.style.transform = ''; });
-
-// Focus ring demo
+mFeedbackBtn.addEventListener('pointerdown', function() { this.style.transform = 'scale(0.94)'; });
+mFeedbackBtn.addEventListener('pointerup', function() { this.style.transform = ''; });
+mFeedbackBtn.addEventListener('pointerleave', function() { this.style.transform = ''; });
 mFocusInput.addEventListener('focus', function() {
   this.style.borderColor = 'var(--accent)';
   this.style.boxShadow = 'var(--focus-ring)';
@@ -528,15 +720,9 @@ mFocusInput.addEventListener('blur', function() {
   this.style.borderColor = 'rgba(0,0,0,0.1)';
   this.style.boxShadow = 'none';
 });
-
-// Escape key to close sheet
 document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape' && mOpen) {
-    mToggle(false);
-  }
+  if (e.key === 'Escape' && mOpen) mToggle(false);
 });
-
-// Reduced motion preference
 if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
   mSheet.style.transition = 'opacity .2s ease';
 }

@@ -63,18 +63,20 @@ When real gesture physics are needed (drag-to-dismiss with velocity handoff), us
 
 ## 5. Materialize — glass arrives as material, not as a fade
 
-For liquid-glass surfaces (this skill's nav/overlay/CTA), **animate blur + scale + opacity together** on enter/exit, so the surface reads as a physical material arriving:
+For liquid-glass surfaces (this skill's control surfaces — nav/overlay/CTA/sheet), **animate blur + scale + opacity together** on enter/exit, so the surface reads as a physical material arriving:
 
 ```css
 .sheet {
   opacity: 0; transform: translateY(12px) scale(0.98);
-  backdrop-filter: blur(0px) saturate(180%);
+  backdrop-filter: blur(0px) saturate(var(--glass-sat-rest));
+  -webkit-backdrop-filter: blur(0px) saturate(var(--glass-sat-rest));
   transition: opacity .4s var(--ease-spring), transform .4s var(--ease-spring),
               backdrop-filter .4s var(--ease-spring), -webkit-backdrop-filter .4s var(--ease-spring);
 }
 .sheet.open {
   opacity: 1; transform: none;
-  backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(var(--glass-blur-rest)) saturate(var(--glass-sat-rest));
+  -webkit-backdrop-filter: blur(var(--glass-blur-rest)) saturate(var(--glass-sat-rest));
 }
 ```
 
@@ -103,10 +105,10 @@ Bake all three into every interactive layer; reduced motion means *gentler*, not
   .sheet { transition: opacity 200ms ease; transform: none !important; }  /* cross-fade, no travel */
 }
 @media (prefers-reduced-transparency: reduce) {
-  .glass { background: #fff; backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .glass { background: var(--surface); backdrop-filter: none; -webkit-backdrop-filter: none; }
 }
 @media (prefers-contrast: more) {
-  .glass { background: #fff; border: 1px solid rgba(0,0,0,.35); }
+  .glass { background: var(--surface); border: 1px solid rgba(0,0,0,.35); }
 }
 ```
 
@@ -115,6 +117,138 @@ Also: no full-viewport moving backgrounds; no slow loops near one cycle per 5s; 
 ## 9. Multimodal feedback (sparingly)
 
 Causality (feedback fires on the causal event), harmony (visual/sound/haptic on the same frame), utility (only meaningful moments: success, error, commit, snap). Over-feedback trains people to ignore all of it — this is the motion version of "restraint is luxury".
+
+## 10. Control-layer dynamic deformation
+
+Glass control surfaces (nav, toolbar, sidebar, tab bar, popover) are **dynamic materials** — they deform in response to user interaction and scroll position. This section covers the motion patterns that make glass feel alive, not static.
+
+### Glass state transitions (rest → active → scrolled)
+
+Each glass control surface transitions through token-driven states. The motion budget is small but perceptible — blur, saturation, and shadow shift together, never independently:
+
+```css
+.glass-control {
+  backdrop-filter: saturate(var(--glass-sat-rest)) blur(var(--glass-blur-rest));
+  -webkit-backdrop-filter: saturate(var(--glass-sat-rest)) blur(var(--glass-blur-rest));
+  box-shadow: var(--glass-shadow-rest);
+  transition: backdrop-filter .3s var(--ease-spring),
+              -webkit-backdrop-filter .3s var(--ease-spring),
+              box-shadow .3s var(--ease-spring);
+}
+.glass-control:active {
+  backdrop-filter: saturate(var(--glass-sat-active)) blur(var(--glass-blur-active));
+  -webkit-backdrop-filter: saturate(var(--glass-sat-active)) blur(var(--glass-blur-active));
+  box-shadow: var(--glass-shadow-active);
+}
+.glass-control.scrolled {
+  backdrop-filter: saturate(var(--glass-sat-scrolled)) blur(var(--glass-blur-scrolled));
+  -webkit-backdrop-filter: saturate(var(--glass-sat-scrolled)) blur(var(--glass-blur-scrolled));
+  box-shadow: var(--glass-shadow-scrolled);
+}
+```
+
+Key: the transition duration (`.3s`) and easing (`--ease-spring`) are shared across all three properties so the material deforms as one coherent unit — never a staggered "blur changes, then shadow catches up" effect.
+
+### Glass materialize extension
+
+Section 5 covers materialize for summoned layers (sheet, dialog). For **persistent** glass controls that toggle visibility (a collapsing sidebar, a toolbar that slides in), extend the materialize pattern with the glass state tokens:
+
+```css
+.glass-toolbar {
+  opacity: 0; transform: translateY(-8px);
+  backdrop-filter: blur(0px) saturate(var(--glass-sat-rest));
+  -webkit-backdrop-filter: blur(0px) saturate(var(--glass-sat-rest));
+  transition: opacity .4s var(--ease-spring), transform .4s var(--ease-spring),
+              backdrop-filter .4s var(--ease-spring),
+              -webkit-backdrop-filter .4s var(--ease-spring);
+}
+.glass-toolbar.visible {
+  opacity: 1; transform: none;
+  backdrop-filter: blur(var(--glass-blur-rest)) saturate(var(--glass-sat-rest));
+  -webkit-backdrop-filter: blur(var(--glass-blur-rest)) saturate(var(--glass-sat-rest));
+}
+```
+
+The blur animates from `0px` to the rest value — the glass "condenses" into existence, not just fades in. This is the materialize principle applied to persistent controls, not just summoned layers.
+
+### Sidebar refraction animation
+
+When a glass sidebar opens/closes, the content beneath it should shift, not just get covered. The sidebar's glass material refracts the content edge as it slides in:
+
+```css
+.glass-sidebar {
+  transform: translateX(-100%);
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+  transition: transform .4s var(--ease-spring),
+              backdrop-filter .4s var(--ease-spring) .1s,
+              -webkit-backdrop-filter .4s var(--ease-spring) .1s;
+}
+.glass-sidebar.open {
+  transform: translateX(0);
+  backdrop-filter: blur(var(--glass-blur-rest)) saturate(var(--glass-sat-rest));
+  -webkit-backdrop-filter: blur(var(--glass-blur-rest)) saturate(var(--glass-sat-rest));
+}
+/* Content shifts right, revealing the refraction */
+.content-shifted { transform: translateX(80px); transition: transform .4s var(--ease-spring); }
+```
+
+The `.1s` delay on `backdrop-filter` lets the panel start sliding before the glass materializes — the refraction effect reads as the content "bending" behind the arriving surface. On exit, reverse: blur collapses first, then the panel slides out.
+
+### rAF-throttled scroll handling
+
+Glass state transitions on scroll (rest → scrolled) fire on every scroll event. **Never attach a heavy class toggle directly to the scroll listener** — throttle with `requestAnimationFrame`:
+
+```js
+let ticking = false;
+const glassNav = document.querySelector('.glass-nav');
+addEventListener('scroll', () => {
+  if (!ticking) {
+    requestAnimationFrame(() => {
+      glassNav.classList.toggle('scrolled', scrollY > 8);
+      ticking = false;
+    });
+    ticking = true;
+  }
+}, { passive: true });
+```
+
+This ensures the class toggle fires at most once per frame — no layout thrash, no jank. The `passive: true` flag prevents the listener from blocking scroll. For multiple glass surfaces (nav + sidebar + toolbar), batch all toggles in the same rAF callback.
+
+### Reduced-motion state communication
+
+Under `prefers-reduced-motion: reduce`, glass state transitions still fire — but the *visual* change should be a cross-fade, not a travel or scale. The state itself (rest vs scrolled) is **semantic information**, not decoration: a scrolled nav tells the user "there is content above the fold." Keep the state communication, remove the motion:
+
+```css
+@media (prefers-reduced-motion: reduce) {
+  .glass-control, .glass-toolbar, .glass-sidebar {
+    transition: opacity 200ms ease !important;
+    transform: none !important;
+  }
+  /* Glass blur still transitions — it's the material, not the motion */
+  .glass-control { transition: backdrop-filter .2s ease, box-shadow .2s ease; }
+}
+```
+
+### ARIA for state controls
+
+Glass controls that change state must communicate that state to assistive technology:
+
+- **Scrolled nav**: no ARIA needed (visual-only state; screen readers don't need to know scroll position).
+- **Active tab**: `role="tab"`, `aria-selected="true/false"`, `aria-current="page"` on the current tab.
+- **Switch/slider**: `role="switch"` / `role="slider"`, `aria-checked` / `aria-valuenow`, and announce state change via `aria-live="polite"` on a status region if the change is non-obvious.
+- **Opened popover/sidebar**: `aria-expanded="true/false"` on the trigger; `aria-hidden="true/false"` on the surface; focus management on open/close.
+- **Context menu**: `role="menu"`, `role="menuitem"` on children, `aria-expanded` on the trigger.
+
+```html
+<!-- Example: glass sidebar trigger -->
+<button type="button" aria-expanded="false" aria-controls="sidebar1" aria-label="Toggle sidebar">
+  <svg ...><!-- sidebar icon --></svg>
+</button>
+<aside id="sidebar1" class="glass-sidebar" role="navigation" aria-hidden="true" ...>
+```
+
+Sync the `aria-expanded` / `aria-hidden` flip with the glass state transition in the same event handler — the accessibility state and the visual state must never desync.
 
 ---
 
@@ -125,6 +259,9 @@ Causality (feedback fires on the causal event), harmony (visual/sound/haptic on 
 - [ ] Easing is `--ease-spring` / `--ease-out-quart` (or a real spring) — no `linear`, no default `ease`.
 - [ ] Enter ~350–450ms, exit ~250–300ms; **no overshoot** unless the gesture carried momentum.
 - [ ] Glass surfaces **materialize** (blur+scale+opacity together), scrim fades slightly faster.
+- [ ] Glass control surfaces use **state tokens** (`var(--glass-blur-rest/active/scrolled)`, `var(--glass-shadow-*)`) — blur, saturation, and shadow transition as one unit, not staggered.
+- [ ] Scroll-driven glass state changes are **rAF-throttled** (no direct class toggle on scroll); `passive: true` on the listener.
+- [ ] Glass control state changes are **communicated via ARIA** (`aria-expanded`, `aria-selected`, `aria-checked`); accessibility state and visual state never desync.
 - [ ] Input is **never locked** during transitions; re-trigger mid-flight reverses smoothly (CSS transition, not keyframes).
 - [ ] Only `transform`/`opacity` animated.
 - [ ] All three media queries present: `prefers-reduced-motion`, `prefers-reduced-transparency`, `prefers-contrast`.

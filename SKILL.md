@@ -1,13 +1,13 @@
 ---
 name: apple-liquid-glass
-description: Build Apple-grade web UI — the "macOS Liquid Glass" aesthetic. Use when designing or building any page, component, or interface that should feel like the latest Apple (apple.com / Apple Newsroom / macOS): light grey-white ground, unified white surfaces with hairline dividers, restrained typography with negative tracking, frosted glass used only where layers overlap, and color reserved for accent. Covers fluid motion for interactive layers (springs, interruptibility, reduced-motion). Portable across projects (any stack) — ships tokens, copy-paste components, line icons, a reference page, and a self-check. Trigger on "Apple style", "liquid glass", "make it look like apple.com", "clean Apple UI", "苹果风", "液态玻璃".
+description: Build Apple-grade web UI — the "macOS Liquid Glass" aesthetic (WWDC 2025). Use when designing or building any page, component, or interface that should feel like the latest Apple (apple.com / Apple Newsroom / macOS): light grey-white ground, unified white content surfaces with hairline dividers, liquid glass as the main material on control surfaces (nav, toolbar, sidebar, modal, popover, tab bar, switches, FABs), restrained typography with negative tracking, and color reserved for accent. Covers a dual-track material model (solid white for content, liquid glass for controls), state-aware glass deformation, concentric corner radii, fluid motion for interactive layers (springs, interruptibility, reduced-motion). Portable across projects (any stack) — ships tokens, copy-paste components, line icons, a reference page, and a self-check. Trigger on "Apple style", "liquid glass", "make it look like apple.com", "clean Apple UI", "苹果风", "液态玻璃".
 ---
 
 # Apple Liquid Glass — Design Skill
 
 You are designing in the **latest Apple visual language**: calm, premium, restrained. The goal is that a user feels "this looks like Apple" within 1.5 seconds — not through gimmicks, but through the *sum of small correct decisions*.
 
-> One sentence: **Apple light grey-white ground + unified white surfaces + hairline dividers; glass only where layers truly overlap. Restraint is the luxury.**
+> One sentence: **Apple light grey-white ground + solid white content surfaces + hairline dividers; liquid glass is the main material on control surfaces (nav, toolbar, sidebar, modal, popover, tab bar, switches). Restraint is the luxury.**
 
 ## When to use
 - Building any web page / component / app screen meant to feel Apple-grade (App / iOS screens: also read `app.md` for the device frame + mobile shell).
@@ -17,10 +17,10 @@ You are designing in the **latest Apple visual language**: calm, premium, restra
 ## The 5 philosophy rules (decide by these, in order)
 
 1. **Unified surface > fragmented cards.** Many sibling items go on **one white panel with hairline dividers**, not a pile of separately-bordered, separately-tinted cards. Fragmentation is enemy #1.
-2. **Glass is seasoning, not the dish.** `backdrop-filter` frost only where **layers actually overlap**: sticky nav, modals/popovers, colored CTA blocks. Plain content areas get solid `#fff` + soft shadow — never glass. (Web has few overlapping layers; over-glassing reads as dirty.)
-3. **Restraint is luxury.** A thousand "no"s for one "yes". If whitespace and hierarchy can solve it, don't add a border, fill, icon, or number. Reject data-slop.
+2. **Glass is seasoning on content, but the main material on the control layer.** The dual-track model: **content surfaces** (articles, lists, form inputs, static text) stay solid `#fff` + soft shadow — never glass. **Control surfaces** (nav, toolbar, tab bar, sidebar, modal, popover/dropdown/tooltip, switches/sliders/segmented controls, floating buttons, checkboxes/radios, context menu) use liquid glass as their **main material** — dynamic, state-aware, content-adaptive. Web glass approximates native Liquid Glass with `backdrop-filter`; it cannot fully replicate the dynamic light refraction of native, but the state-aware blur/saturation/shadow system (rest → active → pressed → scrolled) comes close.
+3. **Restraint is luxury on content surfaces.** A thousand "no"s for one "yes". If whitespace and hierarchy can solve it, don't add a border, fill, icon, or number. Reject data-slop.
 4. **Hierarchy from weight + size + grayscale, not color.** The body world is black-white-grey. Color is only for *accent* (one blue), *heat* (one orange), *brand/live*. Never color to fill space.
-5. **Apple quality lives in details.** Negative letter-spacing on big titles, `tabular-nums` numbers, hairline dividers, gentle hover lift, 180%-saturation glass — the *total* of these small things is what reads as "Apple".
+5. **Apple quality lives in details.** Negative letter-spacing on big titles, `tabular-nums` numbers, hairline dividers, gentle hover lift, concentric corner radii (inner element radius = outer radius minus padding), state-aware glass deformation (blur/sat/shadow shift on rest→active→scrolled), and the 5-level degradation ladder — the *total* of these small things is what reads as "Apple".
 
 ## Interaction foundations (reason with these names, beyond the visual)
 
@@ -39,19 +39,19 @@ You are designing in the **latest Apple visual language**: calm, premium, restra
 
 1. **Read `design-system.md`** — the full spec (color, type, spacing, radius, shadow, glass recipe, components, responsive).
 2. **Drop in `tokens.css`** — the `:root` custom properties. Reference everything via `var(--…)`; never hard-code raw hex/px that a token already names.
-3. **Pick a page recipe from `patterns.md`** — container (720 read / 1080 grid), archetype (detail / index / home / form), and run its decision trees (panel vs cards, glass vs solid, color vs grayscale).
+3. **Pick a page recipe from `patterns.md`** — container (720 read / 1080 grid), archetype (detail / index / home / form), and run its decision trees (panel vs cards, content surface vs control surface, color vs grayscale).
 4. **Compose from `components.md`** — copy the proven snippets (nav, unified panel list, card/grid, segmented pill, tag, button, colored CTA, live dot). Adapt content, keep structure + tokens.
-5. **If it's an App / iOS screen** (mobile mockup, app 原型, anything inside a phone) — **read `app.md`** for the mobile shell the core files don't ship: device frame (exact iPhone spec — never hand-roll the island/status bar/home indicator), large-title-collapse nav, tab bar, edge-anchored bottom sheet, safe areas, touch targets. The *content* still comes from `components.md`; `app.md` is only the shell around it, and the same rules hold (unified panels, glass-on-overlap, grayscale + one accent, no color-by-status on list values). **Needs icons** (tab bar, object-type rows, actions)? Read `icons.md` — the line-icon layer (curated Lucide inline set, one 24-grid stroke, grayscale `currentColor`, accent only on action/active, and the restraint rules so icons earn their place — no grey squares, no emoji).
+5. **If it's an App / iOS screen** (mobile mockup, app 原型, anything inside a phone) — **read `app.md`** for the mobile shell the core files don't ship: device frame (exact iPhone spec — never hand-roll the island/status bar/home indicator), large-title-collapse nav, tab bar, edge-anchored bottom sheet, safe areas, touch targets. The *content* still comes from `components.md`; `app.md` is only the shell around it, and the same rules hold (unified panels, glass-on-control-surfaces, grayscale + one accent, no color-by-status on list values). **Needs icons** (tab bar, object-type rows, actions)? Read `icons.md` — the line-icon layer (curated Lucide inline set, one 24-grid stroke, grayscale `currentColor`, accent only on action/active, and the restraint rules so icons earn their place — no grey squares, no emoji).
 6. **If the UI has interactive layers** (dialog / sheet / popover / drawer / anything summoned & dismissed) — **read `motion.md`** and apply the fluid-motion treatment: pointer-down feedback, spring-like easing tokens, same-path enter/exit, materialize (blur+scale+opacity together), interruptibility, and the three reduced-* media queries. Static content keeps the tiny motion budget.
 7. **Check against `reference.html`** — open it; your output must look like it belongs on the same page. If a screenshot diverges, fix toward the reference.
 8. **Run the gate** — `checklist.md` (or the condensed self-check below) before claiming done; interactive layers also pass the motion self-check at the end of `motion.md`; App screens pass the App self-check at the end of `app.md`.
 
-> Portable: these files assume **no framework**. In React/Vue/etc., translate the CSS to your styling system but keep the *exact* token values, the panel-not-cards pattern, and the glass-only-on-overlap rule. Match the visual output; don't copy structure that doesn't fit.
+> Portable: these files assume **no framework**. In React/Vue/etc., translate the CSS to your styling system but keep the *exact* token values, the panel-not-cards pattern, and the dual-track glass rule (solid white for content, liquid glass for controls). Match the visual output; don't copy structure that doesn't fit.
 
 ## Anti-slop — what makes it NOT Apple (avoid every one)
 
 - ❌ **Fragmented cards**: each item with its own border + tint + colored left-bar. → one panel + hairlines.
-- ❌ **Glass everywhere**: blurring plain content blocks. → glass only on nav/overlay/CTA.
+- ❌ **Glass everywhere on content**: blurring articles, list rows, form inputs, or plain content blocks. → glass is for control surfaces only (nav, toolbar, sidebar, modal, popover, switches); content stays solid white + shadow.
 - ❌ **Color as decoration**: tinted backgrounds, multi-color, rainbow gradients washing the page. → grayscale body, one accent.
 - ❌ **Generic fonts** (Inter/Roboto/Arial as the brand face). → system SF / PingFang stack, negative tracking on titles.
 - ❌ **Warm cream / beige / kraft "paper"** ground — the over-used AI look. → cool `#f5f5f7`.
@@ -70,7 +70,7 @@ These rules apply to all generated code — the Agent must produce safe DOM patt
 ## Self-check (gate before "done")
 - [ ] Ground `#f5f5f7` (cool), content on `#fff` surfaces, container centered (`max-width` 720 reading / 1080 grid).
 - [ ] Sibling items use **one panel + hairline** (`rgba(0,0,0,0.07)`), not fragmented cards.
-- [ ] Glass appears **only** on nav / overlay / CTA. Plain blocks are solid white + soft shadow.
+- [ ] **Dual-track surfaces**: content surfaces (articles, lists, form inputs) are solid `#fff` + soft shadow — never glass. Control surfaces (nav, toolbar, sidebar, modal, popover, switches, tab bar, FAB) use liquid glass with `var(--glass-*)` tokens, state transitions (rest→active→scrolled), and `var(--z-*)` z-index.
 - [ ] Big titles have **negative letter-spacing**; long body line-height ≥ 1.85; numbers `tabular-nums`.
 - [ ] Radius + shadow taken from the **named token tiers**, not ad-hoc values.
 - [ ] Accent color is blue / heat-orange / brand only — everything else grayscale.

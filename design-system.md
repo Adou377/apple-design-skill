@@ -6,10 +6,10 @@ The full reference. `SKILL.md` is the workflow + philosophy; this is the detaile
 
 ## 0. Philosophy (priority order when deciding)
 1. **Unified surface > fragmented cards.** Group sibling content on one white panel + hairline dividers.
-2. **Glass is seasoning.** `backdrop-filter` only where layers overlap (nav / overlay / colored CTA).
-3. **Restraint is luxury.** Solve with whitespace + hierarchy before adding borders/fills/icons/numbers.
+2. **Dual-track materials: glass is seasoning on content, the main material on controls.** Content surfaces (articles, lists, form inputs, static text) = solid `#fff` + shadow. Control surfaces (nav, toolbar, sidebar, modal, popover, tab bar, switches, FAB) = liquid glass — dynamic, state-aware, content-adaptive.
+3. **Restraint is luxury on content surfaces.** Solve with whitespace + hierarchy before adding borders/fills/icons/numbers.
 4. **Hierarchy from weight + size + grayscale**, not color. Color = accent only.
-5. **Quality is in the details.** Negative tracking, tabular-nums, hairlines, gentle lift, 180% glass.
+5. **Quality is in the details.** Negative tracking, tabular-nums, hairlines, gentle lift, concentric corner radii, state-aware glass deformation, 5-level degradation ladder.
 
 ## 1. Color
 
@@ -84,48 +84,144 @@ Stack (always system; never Inter/Roboto):
 
 **Layout:** reading container `max-width:720px`; grid/dense `1080px`; side padding `22px`; section gap `clamp(34px,6vw,56px)`. Always flex/grid + `gap` (never inline + margin).
 
-## 4. Liquid-glass recipe (only these places)
+## 4. Liquid Glass recipe family
 
-**Sticky nav / overlay:**
-```css
-background: rgba(245,245,247,0.72);
-backdrop-filter: saturate(180%) blur(20px);
--webkit-backdrop-filter: saturate(180%) blur(20px);
-border-bottom: 1px solid rgba(0,0,0,0.07);
-```
-**Glass element on a colored ground (CTA):**
-```css
-background: rgba(255,255,255,0.16);
-border: 1px solid rgba(255,255,255,0.22);
-backdrop-filter: blur(8px);
-```
-Glass needs **something to refract**: place blurred light orbs (`filter:blur(46–50px)` translucent circles) behind glass elements on the CTA.
+Liquid Glass is the **main material for control surfaces** — dynamic, state-aware, content-adaptive. It is *not* applied to content surfaces (articles, lists, form inputs, static text remain solid `#fff`). All values below are token-driven; never hard-code a raw blur/sat/shadow that a `--glass-*` token already names.
 
-**Liquid Glass variants (regular vs clear).** Apple's HIG defines two variants — map them to web `backdrop-filter` strength:
-- **Regular** (default): blurs and adjusts luminosity to keep text legible. Use the `blur(20px) saturate(180%)` recipe above. Pick this when background content might hurt legibility, or the component carries significant text (nav, modal, popover, sidebar). Most components use regular.
-- **Clear**: highly translucent — prioritize seeing the content behind. Use a lighter `blur(8–12px)` with no luminosity shift. Reserve for components floating over visually rich media (photos, videos). If the underlying content is bright, add a `rgba(0,0,0,0.35)` dimming layer behind the clear element to preserve contrast.
+### Two base materials
+
+Apple's HIG defines two glass variants — map them to web `backdrop-filter` via tokens:
+
+| Material | Blur | Saturation | Use when |
+|---|---|---|---|
+| **Regular** | `var(--glass-regular-blur)` (20px) | `var(--glass-regular-sat)` (180%) | Text-bearing controls: nav, toolbar, sidebar, modal, popover, tab bar. Default when legibility matters. |
+| **Clear** | `var(--glass-clear-blur)` (10px) | `var(--glass-clear-sat)` (100%) | Floating over rich media (photos, video). Highly translucent — prioritize seeing the content behind. |
 
 On native Apple platforms these are `Glass.regular` / `Glass.clear` (SwiftUI); on the web we approximate with `backdrop-filter` — the dynamic light refraction of native Liquid Glass cannot be fully replicated.
 
-✅ Glass: nav, modal/popover, labels inside a colored CTA, source badge on hero art.
-❌ Not glass: plain content cards, list rows, between white blocks — solid `#fff` + shadow.
+**Regular (text-bearing control):**
+```css
+background: var(--glass-bg-regular-light);
+backdrop-filter: saturate(var(--glass-regular-sat)) blur(var(--glass-regular-blur));
+-webkit-backdrop-filter: saturate(var(--glass-regular-sat)) blur(var(--glass-regular-blur));
+border-bottom: 1px solid var(--hairline);
+box-shadow: var(--glass-shadow-rest);
+```
+
+**Clear (over rich media):**
+```css
+background: var(--glass-bg-clear-light);
+border: var(--glass-edge-light);
+backdrop-filter: blur(var(--glass-clear-blur));
+-webkit-backdrop-filter: blur(var(--glass-clear-blur));
+```
+If the underlying content is bright, add `var(--glass-dim)` as a dimming layer behind the clear element to preserve contrast.
+
+Glass needs **something to refract**: place blurred light orbs (`filter:blur(46–50px)` translucent circles) behind glass elements on a colored CTA.
+
+### State system (rest → active → pressed → scrolled)
+
+Glass is **state-aware** — blur, saturation, and shadow shift to communicate interaction. All four states use tokens:
+
+| State | Blur | Saturation | Shadow | Highlight |
+|---|---|---|---|---|
+| **Rest** | `var(--glass-blur-rest)` | `var(--glass-sat-rest)` | `var(--glass-shadow-rest)` | `var(--glass-highlight-light)` |
+| **Active** (pointer-down) | `var(--glass-blur-active)` | `var(--glass-sat-active)` | `var(--glass-shadow-active)` | `var(--glass-highlight-pressed)` |
+| **Pressed** (selected/commit) | `var(--glass-blur-rest)` | `var(--glass-sat-rest)` | `var(--glass-shadow-pressed)` | `var(--glass-highlight-pressed)` |
+| **Scrolled** (content beneath) | `var(--glass-blur-scrolled)` | `var(--glass-sat-scrolled)` | `var(--glass-shadow-scrolled)` | `var(--glass-highlight-light)` |
+
+```css
+.glass-control {
+  background: var(--glass-bg-regular-light);
+  backdrop-filter: saturate(var(--glass-sat-rest)) blur(var(--glass-blur-rest));
+  -webkit-backdrop-filter: saturate(var(--glass-sat-rest)) blur(var(--glass-blur-rest));
+  box-shadow: var(--glass-shadow-rest);
+  transition: backdrop-filter .3s var(--ease-spring), box-shadow .3s var(--ease-spring),
+              background .3s var(--ease-spring);
+}
+.glass-control:active {
+  backdrop-filter: saturate(var(--glass-sat-active)) blur(var(--glass-blur-active));
+  -webkit-backdrop-filter: saturate(var(--glass-sat-active)) blur(var(--glass-blur-active));
+  box-shadow: var(--glass-shadow-active);
+}
+```
+
+### Dark mode tuning
+
+Glass backgrounds, highlights, and edges are light/dark adaptive. In dark mode, backgrounds darken, highlights dim (white inset becomes near-invisible), and edges thin out. Each token has a `-light` / `-dark` pair:
+
+```css
+@media (prefers-color-scheme: dark) {
+  .glass-control {
+    background: var(--glass-bg-regular-dark);
+    box-shadow: var(--glass-shadow-rest);
+  }
+  .glass-clear {
+    background: var(--glass-bg-clear-dark);
+    border: var(--glass-edge-dark);
+  }
+}
+```
+Dark glass hairlines use `var(--glass-hairline-dark)`; highlights switch to `var(--glass-highlight-dark)`.
+
+### Degradation ladder (5 levels)
+
+Glass degrades gracefully through standard media queries — no hardware sniffing. The ladder in `tokens.css` covers every `.glass-*` class:
+
+| Level | Trigger | Behavior |
+|---|---|---|
+| 1 | `prefers-reduced-transparency: reduce` | Solid `var(--surface)`, no `backdrop-filter`, hairline border. |
+| 2 | `prefers-reduced-data: save` | Blur only (drop saturation) — lighter payload. |
+| 3 | `prefers-contrast: more` | Solid `var(--surface)`, no blur, stronger border (`rgba(0,0,0,0.35)`). |
+| 4 | `@supports not (backdrop-filter)` | Near-opaque fallback (`rgba(245,245,247,0.94)` / dark `0.94`). |
+| 5 | `@media print` | White background, no blur, no shadow, `#ccc` border. |
+
+Add the `.glass-perf` utility class to force Regular blur on a specific element when the full degradation chain isn't needed.
+
+### Concentric corner radii
+
+When a glass control surface contains nested elements (a glass popover with inner buttons, a glass toolbar with inner pills), use **concentric radii**: inner element radius = outer radius minus its inset padding. This creates the visually continuous curve Apple uses across nested materials.
+
+```
+outer radius 22px → inner padding 8px → inner radius 14px
+outer radius 18px → inner padding 6px → inner radius 12px
+```
+Always pull from the named tier set: `--r-pill 999 · --r-chip 6 · --r-thumb 12 · --r-sheet 16 · --r-card 18 · --r-panel 22 · --r-hero 26`. Never invent an in-between radius to "look right" — instead adjust the padding so the inner radius lands on a tier.
 
 ### Material depth grammar (how materials express hierarchy)
 - **Weight encodes hierarchy.** Heavier/darker materials separate *structural* regions (sidebars, sheets); lighter materials mark *interactive* elements (buttons, chips). **Never stack a light translucent surface on another** — legibility collapses.
-- **Bigger surface = thicker material.** A full sheet gets stronger blur + deeper shadow than a small chip. Context-aware shadow: heavier over busy/text content, lighter over plain ground.
-- **Dim to focus, separate to keep flow.** A *modal* task = surface + dimming scrim (background pushed back). A *parallel, non-blocking* panel = translucency + offset **without** a scrim, so flow isn't broken. Stacked sheets progressively dim/push back each parent.
+- **Bigger surface = thicker material.** A full sheet gets stronger blur + deeper shadow than a small chip. Context-aware shadow: `var(--glass-shadow-floating)` for FABs and floating islands; `var(--glass-shadow-active)` for engaged controls.
+- **Dim to focus, separate to keep flow.** A *modal* task = surface + dimming scrim (background pushed back via `var(--glass-dim)`). A *parallel, non-blocking* panel = translucency + offset **without** a scrim, so flow isn't broken. Stacked sheets progressively dim/push back each parent.
 - **Vibrancy for text on glass.** Over translucent surfaces don't use flat gray text — raise contrast, bump weight slightly, add a small letter-spacing increase. Put color on a solid layer, never on the glass foreground.
-- **Scroll edge, not hard divider.** Under sticky chrome, don't ship a permanent 1px border. Show the hairline/shadow **only once content actually scrolls beneath** (toggle a `.scrolled` class; at top the nav sits flush on the ground):
+- **Scroll edge, not hard divider.** Under sticky chrome, don't ship a permanent 1px border. Show the hairline/shadow **only once content actually scrolls beneath** (toggle a `.scrolled` class; at top the nav sits flush on the ground). Use `var(--glass-shadow-scrolled)` and `var(--glass-hairline-light)` / `var(--glass-hairline-dark)`:
 ```css
 .nav { border-bottom: 1px solid transparent; transition: border-color .3s, box-shadow .3s; }
-.nav.scrolled { border-bottom-color: rgba(0,0,0,0.07); box-shadow: 0 1px 12px rgba(0,0,0,0.04); }
+.nav.scrolled { border-bottom-color: var(--glass-hairline-light); box-shadow: var(--glass-shadow-scrolled); }
 ```
 ```js
 addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 8), { passive: true });
 ```
 
+### z-index hierarchy
+
+Control surfaces stack on a tokenized z-index ladder. Never hard-code a raw z-index — use `var(--z-*)`:
+
+| Token | Value | Surface |
+|---|---|---|
+| `--z-ground` | 0 | Page background |
+| `--z-content` | 10 | Normal content flow |
+| `--z-sticky` | 50 | Sticky nav, toolbar |
+| `--z-sidebar` | 60 | Sidebar |
+| `--z-fab` | 70 | Floating action button, floating island |
+| `--z-popover` | 80 | Dropdown, popover, tooltip |
+| `--z-modal` | 90 | Modal, full-screen scrim |
+| `--z-toast` | 100 | Global toast |
+
+✅ **Glass (control surfaces):** nav, toolbar, tab bar, sidebar, modal, popover/dropdown/tooltip, switches/sliders/segmented controls, floating buttons (FAB), checkboxes/radios, context menu, labels inside a colored CTA, source badge on hero art.
+❌ **Not glass (content surfaces):** articles, list rows, form inputs, static text, plain content cards, between white blocks — solid `#fff` + `var(--sh-card)` / `var(--sh-panel)`.
+
 ## 5. Components
-See `components.md` for paste-ready code. Core set: glass nav · page hero · **unified panel list** · card grid · segmented pill control · tags · buttons · colored CTA with orbs · live dot. Two segmented styles: black pill (strong filter) / white pill (light toggle).
+See `components.md` for paste-ready code. Core set: glass nav · page hero · **unified panel list** · card grid · segmented pill control · tags · buttons · colored CTA with orbs · live dot. Two segmented styles: black pill (strong filter) / white pill (light toggle). Glass control-layer set: glass toolbar · glass tab bar · glass sidebar · glass segmented control · glass switch · glass slider · glass popover/dropdown · glass tooltip · glass FAB · glass checkbox/radio · glass context menu — all using `var(--glass-*)` tokens with state transitions and dark mode.
 
 ## 6. Motion
 - **Static content — tiny budget**: hover lift (card `translateY(-2~-3px)` + deeper shadow, `0.15–0.25s var(--ease-out-quart)`), pulse dot, segmented slide. That's enough.
@@ -152,5 +248,10 @@ accent #0071e3 · indigo #5e5ce6 · X #1d9bf0 · heat #ff6b00 · live #30d158
 radius pill 999 · chip 6 · thumb 12 · sheet 16 · card 18 · panel 22 · hero 26
 shadow card / panel / lift / cta / overlay (all two-layer) · track #e8e8ed
 container 720 read / 1080 grid · pad 22 · section clamp(34,6vw,56)
-glass(nav) rgba(245,245,247,.72)+blur20 saturate180
+z-index ground(0) content(10) sticky(50) sidebar(60) fab(70) popover(80) modal(90) toast(100)
+glass Regular: blur20 sat180 · Clear: blur10 sat100
+glass states: blur rest/active(+4)/scrolled(+2) · sat rest/active(200)/scrolled(rest)
+glass bg: regular-light/dark · surface-light/dark · clear-light/dark
+glass highlights/edges/shadows(rest/active/pressed/scrolled/floating)/hairlines/dim
+glass degradation: reduced-transparency → reduced-data → contrast → @supports → print
 ```

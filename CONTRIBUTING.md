@@ -15,10 +15,10 @@ Thank you for your interest in improving this design skill! This guide covers ho
 This skill is built on five rules (see `SKILL.md`):
 
 1. **Unified surface > fragmented cards** — one panel + hairlines, not separate bordered cards.
-2. **Glass is seasoning, not the dish** — `backdrop-filter` only where layers overlap.
-3. **Restraint is luxury** — whitespace and hierarchy over decoration.
+2. **Dual-track materials: glass is seasoning on content, the main material on controls.** Content surfaces (articles, lists, form inputs, static text) = solid `#fff` + shadow. Control surfaces (nav, toolbar, sidebar, modal, popover, tab bar, switches, FAB) = liquid glass as their main material — dynamic, state-aware, content-adaptive. Use `var(--glass-*)` tokens for all glass properties; never hard-code blur/sat/shadow values.
+3. **Restraint is luxury on content surfaces** — whitespace and hierarchy over decoration.
 4. **Hierarchy from weight + size + grayscale, not color** — one accent blue, everything else grayscale.
-5. **Apple quality lives in details** — negative tracking, `tabular-nums`, hairline dividers.
+5. **Apple quality lives in details** — negative tracking, `tabular-nums`, hairline dividers, concentric corner radii, state-aware glass deformation, 5-level degradation ladder.
 
 Any contribution that violates these rules will be requested for changes.
 
@@ -36,15 +36,19 @@ Any contribution that violates these rules will be requested for changes.
 - Introducing color beyond the established accent/heat/brand palette.
 - Adding emoji as icons or decorative elements.
 - Fragmenting panels into separate cards.
+- **Glassifying content surfaces** — never apply `backdrop-filter` to articles, list rows, form inputs, or static text. These remain solid `#fff` + shadow.
+- **Rendering control surfaces as flat white** — nav, toolbar, sidebar, modal, popover, switches, and FABs must use liquid glass (`var(--glass-*)` tokens), not flat `#fff`. A flat-white tab bar or sidebar is as wrong as a glassified article.
+- Hard-coding z-index values — always use `var(--z-*)` tokens.
 - Using `innerHTML` to concatenate dynamic data (security red line — see `SKILL.md`).
 
 ## Code Style
 
 ### HTML/CSS
 - Reference all values via `var(--…)` tokens — never hard-code hex/px that a token already names.
+- Glass control surfaces use `var(--glass-*)` tokens (blur, saturation, background, shadow, highlight, edge, hairline, dim); z-index uses `var(--z-*)` tokens.
 - Use `clamp()` for responsive sizing; one design auto-adapts PC ↔ mobile.
 - Touch targets ≥ 44px.
-- Include `prefers-reduced-motion`, `prefers-reduced-transparency`, and `prefers-contrast` media queries for interactive layers.
+- Include `prefers-reduced-motion`, `prefers-reduced-transparency`, and `prefers-contrast` media queries for interactive layers. The 5-level degradation ladder in `tokens.css` handles these automatically for `.glass-*` classes.
 
 ### Markdown
 - Keep documentation concise and scannable.

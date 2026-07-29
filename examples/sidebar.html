@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Glass Sidebar · 玻璃侧栏</title>
+<link rel="stylesheet" href="../tokens.css">
+<style>
+  /* tokens.css supplies neutrals, motion curves, glass material tokens,
+     the z-index scale, and the degradation ladder (targets .glass-sidebar). */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { font-optical-sizing: auto; }
+  body {
+    background: var(--bg); color: var(--text); font-family: var(--font);
+    -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+    line-height: 1.6;
+  }
+
+  /* Focus-visible — single ring via token */
+  button:focus-visible, a:focus-visible, [tabindex]:focus-visible {
+    outline: none; box-shadow: var(--focus-ring); border-radius: var(--r-pill);
+  }
+
+  /* ════════════════════════════════════════════════════════════════
+     GLASS SIDEBAR — Regular material + state tokens (rest → hover → pressed)
+     Concentric corner radii: sidebar 26 → body 22 (26 − 4 padding) → pills.
+     ════════════════════════════════════════════════════════════════ */
+  .glass-sidebar {
+    background: var(--glass-bg-regular-light);
+    -webkit-backdrop-filter: saturate(var(--glass-sat-rest)) blur(var(--glass-blur-rest));
+    backdrop-filter: saturate(var(--glass-sat-rest)) blur(var(--glass-blur-rest));
+    box-shadow: var(--glass-shadow-rest);
+    border: 1px solid var(--glass-hairline-light);
+    transition: width .42s var(--ease-spring),
+                -webkit-backdrop-filter .28s var(--ease-out-quart),
+                backdrop-filter .28s var(--ease-out-quart),
+                box-shadow .28s var(--ease-out-quart);
+  }
+  .glass-sidebar:hover {
+    -webkit-backdrop-filter: saturate(var(--glass-sat-active)) blur(var(--glass-blur-active));
+    backdrop-filter: saturate(var(--glass-sat-active)) blur(var(--glass-blur-active));
+    box-shadow: var(--glass-shadow-active);
+  }
+  @media (prefers-color-scheme: dark) {
+    .glass-sidebar { background: var(--glass-bg-regular-dark); border-color: var(--glass-hairline-dark); }
+  }
+
+  /* Layout — fixed floating dock on the left */
+  .sidebar {
+    position: fixed; top: 16px; left: 16px; bottom: 16px;
+    z-index: var(--z-sidebar);
+    width: 260px;            /* expanded */
+    border-radius: var(--r-hero);   /* 26 — outer concentric radius */
+    padding: 4px;            /* → inner body radius = 26 − 4 = 22 */
+    display: flex; flex-direction: column;
+  }
+  .sidebar.is-collapsed { width: 72px; }
+
+  /* Concentric inner body */
+  .sb-body {
+    flex: 1; border-radius: var(--r-panel); /* 22 = outer − padding */
+    padding: 10px 8px; display: flex; flex-direction: column; gap: 4px;
+    overflow: hidden;
+  }
+
+  .sb-brand {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 8px 14px; min-height: 44px;
+  }
+  .sb-mark {
+    width: 32px; height: 32px; flex: none; border-radius: var(--r-chip);
+    background: var(--text); color: #fff; display: grid; place-items: center;
+    font-size: 15px; font-weight: 700; letter-spacing: -0.02em;
+  }
+  .sb-label {
+    font-size: 14px; font-weight: 650; letter-spacing: -0.01em; color: var(--text);
+    white-space: nowrap; opacity: 1;
+    transition: opacity .2s var(--ease-out-quart);
+  }
+  .is-collapsed .sb-label,
+  .is-collapsed .nav-text,
+  .is-collapsed .sb-section { opacity: 0; pointer-events: none; }
+
+  .sb-section {
+    font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em;
+    color: var(--text-3); padding: 12px 10px 4px;
+    transition: opacity .2s var(--ease-out-quart);
+  }
+
+  /* Nav items — the whole row is a 44px touch target */
+  .nav-item {
+    display: flex; align-items: center; gap: 12px;
+    min-height: 44px; padding: 0 10px; border-radius: var(--r-pill);
+    color: var(--text-2); text-decoration: none; font-size: 14px; font-weight: 550;
+    cursor: pointer; background: transparent; border: none; width: 100%; text-align: left;
+    transition: background .15s var(--ease-out-quart), color .15s var(--ease-out-quart);
+  }
+  .nav-item:hover { background: var(--btn-quiet-bg); color: var(--text); }
+  .nav-item[aria-current="page"] { background: var(--accent); color: #fff; }
+  .nav-ico {
+    width: 24px; height: 24px; flex: none; display: grid; place-items: center;
+    font-size: 16px; line-height: 1;
+  }
+  .nav-text { white-space: nowrap; transition: opacity .2s var(--ease-out-quart); }
+
+  /* Collapse toggle (bottom) */
+  .sb-foot { padding: 8px; border-top: 1px solid var(--hairline); }
+  .collapse-btn {
+    display: flex; align-items: center; gap: 12px; width: 100%; min-height: 44px;
+    padding: 0 10px; border-radius: var(--r-pill); border: none; cursor: pointer;
+    background: transparent; color: var(--text-2); font: 550 13px var(--font);
+    transition: background .15s var(--ease-out-quart), color .15s var(--ease-out-quart);
+  }
+  .collapse-btn:hover { background: var(--btn-quiet-bg); color: var(--text); }
+  .collapse-ico { width: 24px; flex: none; display: grid; place-items: center; font-size: 16px; transition: transform .42s var(--ease-spring); }
+  .is-collapsed .collapse-ico { transform: rotate(180deg); }
+  .collapse-text { white-space: nowrap; transition: opacity .2s var(--ease-out-quart); }
+
+  /* ── Content area (solid white — NEVER glass) — shifts with sidebar ── */
+  .content {
+    margin-left: 292px;            /* 260 + 16 + 16 */
+    padding: clamp(28px,5vw,48px) var(--pad-x) 64px;
+    transition: margin-left .42s var(--ease-spring);
+    max-width: 980px;
+  }
+  .content.is-collapsed { margin-left: 104px; } /* 72 + 16 + 16 */
+
+  .eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 0.14em; color: var(--text-3); }
+  .content h1 { margin-top: 12px; font-size: clamp(28px,5vw,44px); font-weight: 700; letter-spacing: -0.03em; line-height: 1.08; }
+  .content p.lede { margin-top: 14px; font-size: clamp(15px,2.5vw,18px); color: var(--text-2); max-width: 600px; }
+
+  .panel { background: var(--surface); border-radius: var(--r-panel); box-shadow: var(--sh-panel); overflow: hidden; margin-top: 22px; }
+  .panel-row { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding: 18px clamp(18px,3vw,26px); }
+  .panel-row + .panel-row { border-top: 1px solid var(--hairline); }
+  .panel-row h3 { font-size: 17px; font-weight: 600; letter-spacing: -0.01em; }
+  .panel-row p { margin-top: 4px; font-size: 13.5px; color: var(--text-2); }
+  .panel-row .meta { font-size: 12.5px; color: var(--text-3); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+  @media (max-width: 760px) {
+    /* On small screens keep the sidebar collapsed by default to preserve space */
+    .sidebar { width: 72px; }
+    .content { margin-left: 104px; }
+    .sb-label, .nav-text, .sb-section, .collapse-text { opacity: 0; pointer-events: none; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- ── Fixed glass sidebar (Regular glass, --z-sidebar) ── -->
+  <aside class="glass-sidebar sidebar" id="sidebar" aria-label="主导航">
+    <div class="sb-body">
+      <div class="sb-brand">
+        <span class="sb-mark" aria-hidden="true">A</span>
+        <span class="sb-label">Apple Liquid Glass</span>
+      </div>
+
+      <div class="sb-section">工作区</div>
+      <button class="nav-item" type="button" aria-current="page">
+        <span class="nav-ico" aria-hidden="true">◎</span><span class="nav-text">概览</span>
+      </button>
+      <button class="nav-item" type="button">
+        <span class="nav-ico" aria-hidden="true">▤</span><span class="nav-text">项目</span>
+      </button>
+      <button class="nav-item" type="button">
+        <span class="nav-ico" aria-hidden="true">⚐</span><span class="nav-text">任务</span>
+      </button>
+
+      <div class="sb-section">账户</div>
+      <button class="nav-item" type="button">
+        <span class="nav-ico" aria-hidden="true">☻</span><span class="nav-text">个人</span>
+      </button>
+      <button class="nav-item" type="button">
+        <span class="nav-ico" aria-hidden="true">⚙</span><span class="nav-text">设置</span>
+      </button>
+    </div>
+
+    <div class="sb-foot">
+      <button class="collapse-btn" id="collapseBtn" type="button" aria-expanded="true" aria-controls="sidebar">
+        <span class="collapse-ico" aria-hidden="true">‹</span>
+        <span class="collapse-text">收起侧栏</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ── Content: solid white panels ── -->
+  <main class="content" id="content">
+    <div class="eyebrow">EXAMPLE · GLASS SIDEBAR</div>
+    <h1>固定玻璃侧栏</h1>
+    <p class="lede">Regular 玻璃侧栏作为控制层，<code style="font-family:var(--mono);">--z-sidebar</code> 层级浮于内容之上。点击底部按钮在 260px ↔ 72px 间折叠 / 展开，宽度用 <code style="font-family:var(--mono);">--ease-spring</code> 过渡；同心圆角（外 26 → 内 22）。内容区永远是实色 <code style="font-family:var(--mono);">var(--surface)</code> 白面板。</p>
+
+    <div class="panel" role="list" aria-label="概览数据">
+      <div class="panel-row" role="listitem"><div><h3>同心圆角</h3><p>外层 26px，padding 4px，内层 22px——半径随嵌套递减。</p></div><span class="meta">--r-hero → --r-panel</span></div>
+      <div class="panel-row" role="listitem"><div><h3>弹簧折叠</h3><p>width 与 margin-left 同步用 --ease-spring 过渡。</p></div><span class="meta">~420ms</span></div>
+      <div class="panel-row" role="listitem"><div><h3>无障碍</h3><p>折叠按钮带 aria-expanded / aria-controls；触摸区 ≥ 44px。</p></div><span class="meta">a11y</span></div>
+      <div class="panel-row" role="listitem"><div><h3>深色模式</h3><p>玻璃自动切换 --glass-bg-regular-dark / --glass-hairline-dark。</p></div><span class="meta">auto</span></div>
+    </div>
+
+    <div class="panel" role="list" aria-label="更多内容">
+      <div class="panel-row" role="listitem"><div><h3>实色内容轨</h3><p>侧栏是玻璃，内容是实色白——双轨模型。</p></div><span class="meta">dual-track</span></div>
+      <div class="panel-row" role="listitem"><div><h3>降级自动套用</h3><p>tokens.css 的 prefers-reduced-* 已覆盖 .glass-sidebar。</p></div><span class="meta">robust</span></div>
+      <div class="panel-row" role="listitem"><div><h3>更多条目</h3><p>占位内容。</p></div><span class="meta">—</span></div>
+    </div>
+  </main>
+
+<script>
+(function () {
+  "use strict";
+  const sidebar = document.getElementById('sidebar');
+  const content = document.getElementById('content');
+  const collapseBtn = document.getElementById('collapseBtn');
+
+  function setCollapsed(collapsed) {
+    sidebar.classList.toggle('is-collapsed', collapsed);
+    content.classList.toggle('is-collapsed', collapsed);
+    collapseBtn.setAttribute('aria-expanded', String(!collapsed));
+    // Update the visible text + icon semantics
+    const text = collapseBtn.querySelector('.collapse-text');
+    if (text) text.textContent = collapsed ? '展开侧栏' : '收起侧栏';
+  }
+
+  collapseBtn.addEventListener('click', function () {
+    setCollapsed(!sidebar.classList.contains('is-collapsed'));
+  });
+
+  // Keep nav selection in sync (visual only)
+  sidebar.querySelectorAll('.nav-item').forEach(function (item) {
+    item.addEventListener('click', function () {
+      sidebar.querySelectorAll('.nav-item').forEach(function (n) {
+        n.removeAttribute('aria-current');
+      });
+      item.setAttribute('aria-current', 'page');
+    });
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Glass Toolbar · 玻璃工具栏</title>
+<link rel="stylesheet" href="../tokens.css">
+<style>
+  /* ── tokens.css provides neutrals, motion curves, glass material tokens,
+        the z-index scale, and the degradation ladder (which already targets
+        .glass-toolbar / .glass-seg / .glass-float, so it auto-applies). ── */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { font-optical-sizing: auto; }
+  body {
+    background: var(--bg); color: var(--text); font-family: var(--font);
+    -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+    line-height: 1.6; min-height: 200vh; /* give the page scroll length */
+  }
+
+  /* Focus-visible — single ring style via token */
+  button:focus-visible, a:focus-visible, input:focus-visible, [tabindex]:focus-visible {
+    outline: none; box-shadow: var(--focus-ring); border-radius: var(--r-pill);
+  }
+
+  /* ════════════════════════════════════════════════════════════════
+     GLASS CONTROL LAYER — Regular material + state tokens
+     rest → hover → pressed → scrolled. Never hard-coded rgba/blur.
+     ════════════════════════════════════════════════════════════════ */
+  .glass-toolbar,
+  .glass-seg,
+  .glass-float {
+    background: var(--glass-bg-regular-light);
+    -webkit-backdrop-filter: saturate(var(--glass-sat-rest)) blur(var(--glass-blur-rest));
+    backdrop-filter: saturate(var(--glass-sat-rest)) blur(var(--glass-blur-rest));
+    box-shadow: var(--glass-shadow-rest);
+    border: 1px solid var(--glass-hairline-light);
+    transition: -webkit-backdrop-filter .28s var(--ease-out-quart),
+                backdrop-filter .28s var(--ease-out-quart),
+                box-shadow .28s var(--ease-out-quart),
+                transform .18s var(--ease-out-quart),
+                border-color .28s var(--ease-out-quart);
+  }
+
+  /* SCROLLED — content has moved under the toolbar: stronger blur + shadow + hairline */
+  .glass-toolbar.is-scrolled {
+    -webkit-backdrop-filter: saturate(var(--glass-sat-scrolled)) blur(var(--glass-blur-scrolled));
+    backdrop-filter: saturate(var(--glass-sat-scrolled)) blur(var(--glass-blur-scrolled));
+    box-shadow: var(--glass-shadow-scrolled);
+    border-bottom-color: var(--hairline);
+  }
+
+  /* HOVER (active material) — interactive floats & segmented */
+  .glass-float:hover,
+  .glass-seg:hover {
+    -webkit-backdrop-filter: saturate(var(--glass-sat-active)) blur(var(--glass-blur-active));
+    backdrop-filter: saturate(var(--glass-sat-active)) blur(var(--glass-blur-active));
+    box-shadow: var(--glass-shadow-active);
+  }
+  /* PRESSED */
+  .glass-float:active,
+  .glass-seg button:active {
+    box-shadow: var(--glass-shadow-pressed);
+    transform: scale(0.96);
+  }
+
+  /* Dark-mode glass variants */
+  @media (prefers-color-scheme: dark) {
+    .glass-toolbar, .glass-seg, .glass-float {
+      background: var(--glass-bg-regular-dark);
+      border-color: var(--glass-hairline-dark);
+    }
+  }
+
+  /* ── Toolbar layout ── */
+  .toolbar {
+    position: sticky; top: 0; z-index: var(--z-sticky);
+    border-bottom: 1px solid transparent; /* revealed by .is-scrolled */
+    border-radius: 0;
+  }
+  .toolbar-inner {
+    max-width: var(--max-grid); margin: 0 auto; padding: 0 var(--pad-x);
+    height: 60px; display: flex; align-items: center; gap: 14px;
+  }
+  .toolbar-group { display: flex; align-items: center; gap: 6px; }
+  .tool-btn {
+    display: grid; place-items: center; width: 44px; height: 44px;
+    border-radius: var(--r-pill); cursor: pointer; color: var(--text);
+    font-size: 18px; line-height: 1; border: none; background: transparent;
+  }
+  .search {
+    flex: 1; max-width: 360px; height: 44px; padding: 0 16px;
+    border: 1px solid var(--hairline); border-radius: var(--r-pill);
+    background: var(--surface); color: var(--text); font: 400 14px var(--font);
+    outline: none; transition: border-color .2s var(--ease-out-quart), box-shadow .2s var(--ease-out-quart);
+  }
+  .search::placeholder { color: var(--text-4); }
+  .search:focus { border-color: var(--accent); box-shadow: var(--focus-ring); }
+
+  /* Segmented control inside the glass toolbar */
+  .seg { display: inline-flex; padding: 4px; gap: 2px; border-radius: var(--r-pill); }
+  .seg-btn {
+    border: none; cursor: pointer; font: 550 13px var(--font); color: var(--text-2);
+    background: transparent; padding: 0 16px; border-radius: var(--r-pill);
+    min-height: 44px; transition: background .2s var(--ease-out-quart), color .2s var(--ease-out-quart);
+  }
+  .seg-btn:hover { background: var(--btn-quiet-bg); }
+  .seg-btn[aria-selected="true"] {
+    background: var(--text); color: #fff; font-weight: 600;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.16);
+  }
+
+  /* ── Content (solid white panels — NEVER glass) ── */
+  .wrap { max-width: var(--max-grid); margin: 0 auto; padding: 0 var(--pad-x); }
+  .hero { padding: clamp(34px,6vw,58px) 0 clamp(18px,3vw,28px); }
+  .hero h1 { font-size: clamp(28px,5vw,44px); font-weight: 700; letter-spacing: -0.03em; line-height: 1.08; }
+  .hero p { margin-top: 14px; font-size: clamp(15px,2.5vw,18px); color: var(--text-2); max-width: 560px; line-height: 1.6; }
+
+  .panel { background: var(--surface); border-radius: var(--r-panel); box-shadow: var(--sh-panel); overflow: hidden; margin-top: 20px; }
+  .panel-row { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding: 18px clamp(18px,3vw,26px); }
+  .panel-row + .panel-row { border-top: 1px solid var(--hairline); }
+  .panel-row h3 { font-size: 17px; font-weight: 600; letter-spacing: -0.01em; }
+  .panel-row p { margin-top: 4px; font-size: 13.5px; color: var(--text-2); }
+  .panel-row .meta { font-size: 12.5px; color: var(--text-3); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+  .state-readout {
+    position: fixed; right: 18px; bottom: 18px; z-index: var(--z-popover);
+    background: var(--surface); border: 1px solid var(--hairline); border-radius: var(--r-card);
+    box-shadow: var(--sh-card); padding: 10px 14px; font: 600 12px var(--mono); color: var(--text-2);
+  }
+  .state-readout b { color: var(--accent); }
+
+  @media (max-width: 680px) {
+    .seg { display: none; } /* keep toolbar uncluttered on small screens */
+    .search { max-width: none; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- ── Sticky glass toolbar (Regular glass; rest → hover → scrolled) ── -->
+  <header class="glass-toolbar toolbar" id="toolbar" role="toolbar" aria-label="主工具栏">
+    <div class="toolbar-inner">
+      <div class="toolbar-group">
+        <button class="glass-float tool-btn" aria-label="后退" type="button">‹</button>
+        <button class="glass-float tool-btn" aria-label="前进" type="button">›</button>
+      </div>
+
+      <input class="search" id="search" type="search" placeholder="搜索文档、标签、作者…" aria-label="搜索">
+
+      <div class="glass-seg seg" role="tablist" aria-label="视图切换" id="seg">
+        <button class="seg-btn" role="tab" aria-selected="true" data-view="list" type="button">列表</button>
+        <button class="seg-btn" role="tab" aria-selected="false" data-view="grid" type="button">网格</button>
+        <button class="seg-btn" role="tab" aria-selected="false" data-view="gallery" type="button">图廊</button>
+      </div>
+
+      <div class="toolbar-group">
+        <button class="glass-float tool-btn" aria-label="新建" type="button">+</button>
+        <button class="glass-float tool-btn" aria-label="更多" type="button">⋯</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <section class="hero">
+      <div style="font-size:12px;font-weight:600;letter-spacing:0.14em;color:var(--text-3);">EXAMPLE · GLASS TOOLBAR</div>
+      <h1>吸顶玻璃工具栏</h1>
+      <p>Regular 玻璃作为控制层浮于内容之上。滚动时进入 <code style="font-family:var(--mono);">scrolled</code> 态（更强模糊 + 阴影 + 发丝线）；悬停按钮进入 <code style="font-family:var(--mono);">hover</code> 态；按下进入 <code style="font-family:var(--mono);">pressed</code> 态。下方内容永远是实色 <code style="font-family:var(--mono);">var(--surface)</code> 白面板。</p>
+    </section>
+
+    <!-- Solid white content panels (never glass) -->
+    <div class="panel" role="list" aria-label="文档列表">
+      <div class="panel-row" role="listitem">
+        <div><h3>液态玻璃控制层规范</h3><p>双轨模型：内容实色，控制层玻璃。</p></div>
+        <span class="meta">v2.0</span>
+      </div>
+      <div class="panel-row" role="listitem">
+        <div><h3>工具栏状态机</h3><p>rest → hover → pressed → scrolled 四态切换。</p></div>
+        <span class="meta">更新于 07-29</span>
+      </div>
+      <div class="panel-row" role="listitem">
+        <div><h3>rAF 节流滚动</h3><p>requestAnimationFrame 合并滚动事件，避免抖动。</p></div>
+        <span class="meta">性能</span>
+      </div>
+      <div class="panel-row" role="listitem">
+        <div><h3>深色模式玻璃变体</h3><p>使用 --glass-bg-regular-dark 与 --glass-hairline-dark。</p></div>
+        <span class="meta">a11y</span>
+      </div>
+      <div class="panel-row" role="listitem">
+        <div><h3>降级阶梯自动套用</h3><p>tokens.css 的 prefers-reduced-* / @supports 已覆盖 .glass-toolbar。</p></div>
+        <span class="meta">稳健</span>
+      </div>
+    </div>
+
+    <div class="panel" role="list" aria-label="更多文档">
+      <div class="panel-row" role="listitem"><div><h3>继续向下滚动</h3><p>观察顶部工具栏在内容滑入下方时的材质变化。</p></div><span class="meta">↓</span></div>
+      <div class="panel-row" role="listitem"><div><h3>更多条目</h3><p>占位内容以提供滚动长度。</p></div><span class="meta">—</span></div>
+      <div class="panel-row" role="listitem"><div><h3>更多条目</h3><p>占位内容以提供滚动长度。</p></div><span class="meta">—</span></div>
+      <div class="panel-row" role="listitem"><div><h3>更多条目</h3><p>占位内容以提供滚动长度。</p></div><span class="meta">—</span></div>
+    </div>
+  </div>
+
+  <!-- Live state readout (helper to see the current material state) -->
+  <div class="state-readout" aria-live="polite">toolbar state: <b id="stateLabel">rest</b></div>
+
+<script>
+(function () {
+  "use strict";
+  const toolbar = document.getElementById('toolbar');
+  const stateLabel = document.getElementById('stateLabel');
+  const seg = document.getElementById('seg');
+
+  // rAF-throttled scroll → toggle scrolled state
+  let ticking = false;
+  function onScroll() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(function () {
+      const scrolled = window.scrollY > 8;
+      toolbar.classList.toggle('is-scrolled', scrolled);
+      stateLabel.textContent = scrolled ? 'scrolled' : 'rest';
+      ticking = false;
+    });
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // Segmented control — click + keyboard arrows (event delegation, no inline handlers)
+  seg.addEventListener('click', function (e) {
+    const btn = e.target.closest('[data-view]');
+    if (!btn) return;
+    seg.querySelectorAll('[data-view]').forEach(function (b) {
+      b.setAttribute('aria-selected', 'false');
+    });
+    btn.setAttribute('aria-selected', 'true');
+  });
+  seg.addEventListener('keydown', function (e) {
+    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+    const buttons = Array.from(seg.querySelectorAll('[data-view]'));
+    const current = buttons.findIndex(function (b) {
+      return b.getAttribute('aria-selected') === 'true';
+    });
+    const next = e.key === 'ArrowRight'
+      ? (current + 1) % buttons.length
+      : (current - 1 + buttons.length) % buttons.length;
+    buttons.forEach(function (b) { b.setAttribute('aria-selected', 'false'); });
+    buttons[next].setAttribute('aria-selected', 'true');
+    buttons[next].focus();
+  });
+})();
+</script>
+</body>
+</html>

@@ -47,6 +47,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Security red-line rule in `SKILL.md` prohibiting `innerHTML` concatenation with dynamic data
 - `CHANGELOG.md`
 
+## [2.0.0] - 2026-07-29
+
+### Changed — Breaking: dual-track glass philosophy
+- **Philosophy shift**: from "glass as seasoning" to "liquid glass as the control layer material" (WWDC 2025 Liquid Glass)
+- Content surfaces (articles, lists, form inputs) = solid #fff + shadow, NO glass
+- Control surfaces (nav, toolbar, tab bar, sidebar, modal, popover, switches/sliders/segmented, floating buttons, checkboxes/radios, context menu) = liquid glass as MAIN material
+- `patterns.md`: "Glass vs solid" decision tree → "Content surface vs Control surface" decision tree
+- `SKILL.md`: philosophy rule 2, 3, 5 updated; anti-slop and self-check updated
+- `design-system.md` Section 4: completely rewritten as "Liquid Glass recipe family" with two base materials, state system, dark-mode tuning, degradation ladder, concentric corner radii
+- `review.md`: added "Control-layer glass audit" section with surface classification table and audit checklist
+- `checklist.md`: Glass section replaced with "Glass (dual-track model)"; added ARIA & state controls section
+- `app.md`: all control surfaces (nav, tab bar, sidebar, sheet) upgraded to glass state tokens; new Sidebar section; z-index tokens
+- `README.md` / `README.zh-CN.md`: tagline, philosophy, file table, self-check updated for dual-track model
+- `CONTRIBUTING.md`: dual-track philosophy with explicit prohibitions
+
+### Added
+- `tokens.css`: z-index hierarchy (--z-ground through --z-toast), glass material tiers (Regular/Clear), glass state variables (rest/active/pressed/scrolled), glass backgrounds (light/dark variants for regular/surface/clear), glass highlights/edges/shadows/hairlines/dim, 5-level performance degradation ladder
+- `components.md`: 11 new liquid glass control-layer components (glass toolbar, tab bar, sidebar, segmented control, switch, slider, popover/dropdown, tooltip, FAB, checkbox/radio, context menu)
+- `icons.md`: 5 new icons (bookmark, more-horizontal, more-vertical, sidebar, panel-right); glass-surface icon rules section
+- `motion.md`: "Control-layer dynamic deformation" section (glass state transitions, materialize extension, sidebar refraction, rAF scroll handling, reduced-motion state communication, ARIA)
+- `reference.html`: expanded Section 05 with control-layer glass showcase, state system demo, degradation ladder demo
+- `examples/toolbar.html`: new — glass toolbar with rest/hover/scrolled states
+- `examples/sidebar.html`: new — glass sidebar with collapse/expand and concentric radii
+- `examples/liquid-controls.html`: new — all glass control components showcase
+
+### Fixed
+- `examples/account.html` and `examples/wallet.html`: hard-coded glass values replaced with var(--glass-*) tokens; z-index replaced with var(--z-*) tokens; glass state transitions added
+
 ## [0.1.0] - 2026-07-25
 
 ### Initial Release

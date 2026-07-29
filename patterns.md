@@ -56,9 +56,11 @@ Key: same panel-not-cards rule; controls right-aligned; generous row height (≥
 - Genuinely independent objects, each with its own image/thumb, meant to be picked → **card grid** (`auto-fill, minmax(290px,1fr)`, gap 14px, hover lift).
 - When unsure → unified panel. Fragmentation is the bigger sin.
 
-**Glass vs solid**
-- Do layers overlap here? (sticky nav over scroll, modal over page, label over a colored CTA) → **glass**.
-- Flat content on the page ground? → **solid `#fff` + soft shadow**. Never glass.
+**Content surface vs Control surface (dual-track)**
+- Is this a **content surface** — something the user *reads or scans*: articles, list rows, form inputs, static text, cards, panels? → **solid `#fff` + soft shadow**. Never glass. Content must stay crisp and opaque.
+- Is this a **control surface** — something the user *interacts with* or that *floats over content*: nav, toolbar, tab bar, sidebar, modal, popover/dropdown/tooltip, switches/sliders/segmented controls, floating buttons, checkboxes/radios, context menu? → **liquid glass** as the main material — dynamic, state-aware, content-adaptive.
+- **Glass material pick:** text-bearing control (nav, toolbar, sidebar, modal, popover) → **Regular** (`var(--glass-regular-blur)` + `var(--glass-regular-sat)`). Floating over rich media (photos, video) → **Clear** (`var(--glass-clear-blur)` + `var(--glass-clear-sat)`).
+- When unsure, ask: *"Does the user read this, or control with this?"* Reading → solid white; controlling → glass.
 
 **Color vs grayscale**
 - Is this an *accent* (primary action/link), *heat* (hottest), *brand/platform*, or *live*? → use that one token.

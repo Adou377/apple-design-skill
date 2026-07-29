@@ -2,7 +2,7 @@
 
 [English](./README.md) · [中文](./README.zh-CN.md)
 
-> **Apple light grey-white ground + unified white surfaces + hairline dividers; glass only where layers truly overlap. Restraint is the luxury.**
+> **Apple light grey-white ground + solid white content surfaces + hairline dividers; liquid glass is the main material on control surfaces (nav, toolbar, sidebar, modal, popover, tab bar, switches). Restraint is the luxury.**
 
 A portable, markdown-based **skill** that teaches an AI coding agent (Claude Code, and any agent that reads skill files) to produce **Apple-grade web UI** — the calm, premium "macOS Liquid Glass" look of apple.com / Apple Newsroom / the latest macOS. Not a component library you import; a **design system + decision discipline** the agent reasons with, so the output feels like Apple *by the sum of small correct decisions* — not by one gimmick.
 
@@ -19,10 +19,10 @@ Ask any model for a "clean, Apple-style page" and you usually get the **AI defau
 This skill encodes *why* that's wrong and *what* Apple actually does, as executable rules:
 
 - **Unified surface > fragmented cards.** Many sibling items go on **one** white panel with hairline dividers — fragmentation is enemy #1.
-- **Glass is seasoning, not the dish.** Frost only where layers truly overlap (sticky nav, modal, colored CTA). Plain content = solid white + soft shadow.
+- **Dual-track materials: glass is seasoning on content, the main material on controls.** Content surfaces (articles, lists, form inputs) stay solid white + soft shadow. Control surfaces (nav, toolbar, sidebar, modal, popover, tab bar, switches, FAB) use liquid glass as their main material — dynamic, state-aware, content-adaptive.
 - **Hierarchy from weight + size + grayscale, not color.** Body is black-white-grey; color is *accent only* (one blue).
-- **Restraint is luxury.** A thousand "no"s for one "yes." Whitespace and hierarchy before any border/fill/icon.
-- **Quality lives in details.** Negative tracking on titles, `tabular-nums`, hairlines, gentle hover lift, 180%-saturation glass, scroll-edge nav.
+- **Restraint is luxury on content surfaces.** A thousand "no"s for one "yes." Whitespace and hierarchy before any border/fill/icon.
+- **Quality lives in details.** Negative tracking on titles, `tabular-nums`, hairlines, gentle hover lift, concentric corner radii, state-aware glass deformation (rest→active→scrolled), 5-level degradation ladder.
 
 ---
 
@@ -48,7 +48,7 @@ Two modes:
 - **Build** — new UI. The agent follows a fixed workflow: read `design-system.md` → drop in `tokens.css` → pick a page recipe from `patterns.md` → compose from `components.md` → (if there's an interactive layer) apply `motion.md` → check against `reference.html` → run the `checklist.md` gate.
 - **Review** — audit existing CSS/pages for "is this Apple / make it consistent." `review.md` finds the real visual surface, scores against the system, and returns a prioritized, `file:line`-cited fix list mapped back to tokens.
 
-The whole thing is **framework-agnostic**: the files assume plain HTML/CSS. In React/Vue/Svelte you translate the CSS to your styling system but keep the *exact token values*, the panel-not-cards pattern, and the glass-only-on-overlap rule.
+The whole thing is **framework-agnostic**: the files assume plain HTML/CSS. In React/Vue/Svelte you translate the CSS to your styling system but keep the *exact token values*, the panel-not-cards pattern, and the dual-track glass rule (solid white for content, liquid glass for controls).
 
 ---
 
@@ -57,9 +57,9 @@ The whole thing is **framework-agnostic**: the files assume plain HTML/CSS. In R
 | File | Role |
 |---|---|
 | `SKILL.md` | Entry point — philosophy, workflow, anti-slop list, self-check. The agent reads this first. |
-| `design-system.md` | Full spec: color, type scale, spacing/radius/shadow tiers, glass recipe, material depth grammar, responsive. |
-| `tokens.css` | `:root` custom properties — drop into any project, reference via `var(--…)`. |
-| `components.md` | Copy-paste HTML+CSS: glass nav, unified panel list, card grid, segmented control, tags, buttons, colored CTA, toggle, live dot. |
+| `design-system.md` | Full spec: color, type scale, spacing/radius/shadow tiers, Liquid Glass recipe family (two base materials, state system, dark mode, degradation ladder, concentric radii, z-index), responsive. |
+| `tokens.css` | `:root` custom properties — drop into any project, reference via `var(--…)`. Includes `--glass-*` material/state tokens and `--z-*` z-index ladder. |
+| `components.md` | Copy-paste HTML+CSS: glass nav, unified panel list, card grid, segmented control, tags, buttons, colored CTA, toggle, live dot, plus glass control-layer set (toolbar, tab bar, sidebar, switch, slider, popover, tooltip, FAB, checkbox/radio, context menu). |
 | `patterns.md` | Page-level recipes (reading 720 / grid 1080 containers · detail / index / home / form archetypes) + the decision trees. |
 | `motion.md` | Fluid interaction layer for summoned/dismissed surfaces: springs, interruptibility, same-path enter/exit, materialize, reduced-motion. |
 | `app.md` | **App / iOS shell layer** — device frame (exact iPhone spec), status bar, large-title-collapse nav, tab bar, edge-anchored bottom sheet, safe areas, mobile-first rules. Read it when the task is a phone screen. |
@@ -107,7 +107,7 @@ Before claiming "done," the output passes a checklist (excerpt):
 
 - Ground `#f5f5f7` (cool), content on `#fff`, container centered.
 - Sibling items → **one panel + hairline**, not fragmented cards.
-- Glass **only** on nav / overlay / CTA; plain blocks solid white + soft shadow.
+- **Dual-track surfaces**: content (articles, lists, form inputs) is solid white + shadow; control surfaces (nav, toolbar, sidebar, modal, popover, switches) use liquid glass with `var(--glass-*)` tokens + `var(--z-*)` z-index.
 - Big titles negative-tracked; numbers `tabular-nums`; radius + shadow from named token tiers.
 - Accent is one blue (heat-orange / brand only when meaningful); everything else grayscale.
 - Visually matches `reference.html`.

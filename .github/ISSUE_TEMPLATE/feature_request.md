@@ -19,7 +19,7 @@ Describe what you'd like to see. Include code snippets or sketches if possible.
 Any alternative approaches you've thought about.
 
 ## Checks
-- [ ] Follows the 5 philosophy rules (unified surfaces, glass-on-overlap, restraint, grayscale+accent, detail).
+- [ ] Follows the 5 philosophy rules (unified surfaces, dual-track glass on control surfaces, restraint on content, grayscale+accent, detail).
 - [ ] Uses existing `tokens.css` custom properties.
 - [ ] Includes accessibility support (ARIA, keyboard, reduced-motion).
 - [ ] No `innerHTML` with dynamic data (security red line).

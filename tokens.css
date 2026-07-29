@@ -75,6 +75,60 @@
   --max-read: 720px;   /* reading column */
   --max-grid: 1080px;  /* grid / dense column */
   --pad-x:    22px;    /* container side padding */
+
+  /* ── z-index hierarchy (layered stacking for control surfaces) ── */
+  --z-ground:  0;    /* page background */
+  --z-content: 10;   /* normal content flow */
+  --z-sticky:  50;   /* sticky nav, toolbar */
+  --z-sidebar: 60;   /* sidebar */
+  --z-fab:     70;   /* floating action button, floating island */
+  --z-popover: 80;   /* dropdown, popover bubble */
+  --z-modal:   90;   /* modal, full-screen scrim */
+  --z-toast:   100;  /* global toast */
+
+  /* ── Liquid Glass material tiers (two base materials) ── */
+  --glass-regular-blur: 20px;
+  --glass-regular-sat:  180%;
+  --glass-clear-blur:   10px;
+  --glass-clear-sat:    100%;
+
+  /* ── Glass state variables (applied to Regular material, not independent tiers) ── */
+  --glass-blur-rest:     var(--glass-regular-blur);
+  --glass-blur-active:   calc(var(--glass-regular-blur) + 4px);
+  --glass-blur-scrolled: calc(var(--glass-regular-blur) + 2px);
+  --glass-sat-rest:      var(--glass-regular-sat);
+  --glass-sat-active:    200%;
+  --glass-sat-scrolled:  var(--glass-regular-sat);
+
+  /* ── Light/dark adaptive glass backgrounds ── */
+  --glass-bg-regular-light: rgba(245,245,247,0.72);
+  --glass-bg-regular-dark:  rgba(28,28,30,0.72);
+  --glass-bg-surface-light: rgba(255,255,255,0.78);
+  --glass-bg-surface-dark:  rgba(44,44,46,0.78);
+  --glass-bg-clear-light:   rgba(255,255,255,0.16);
+  --glass-bg-clear-dark:    rgba(255,255,255,0.12);
+
+  /* ── Highlights & edges ── */
+  --glass-highlight-light:        inset 0 1px 0 rgba(255,255,255,0.3);
+  --glass-highlight-dark:         inset 0 1px 0 rgba(255,255,255,0.12);
+  --glass-highlight-pressed:      inset 0 1px 0 rgba(255,255,255,0.15);
+  --glass-highlight-pressed-dark: inset 0 1px 0 rgba(255,255,255,0.08);
+  --glass-edge-light: 1px solid rgba(255,255,255,0.22);
+  --glass-edge-dark: 1px solid rgba(255,255,255,0.10);
+
+  /* ── Glass shadows (state-aware) ── */
+  --glass-shadow-rest:     0 1px 3px rgba(0,0,0,0.05), 0 8px 24px rgba(0,0,0,0.08);
+  --glass-shadow-active:   0 2px 8px rgba(0,0,0,0.08), 0 16px 40px rgba(0,0,0,0.12);
+  --glass-shadow-pressed:  0 0 1px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.06);
+  --glass-shadow-scrolled: 0 1px 3px rgba(0,0,0,0.06), 0 10px 30px rgba(0,0,0,0.10);
+  --glass-shadow-floating: 0 4px 16px rgba(0,0,0,0.12), 0 24px 60px rgba(0,0,0,0.16);
+
+  /* ── Dimming layer (Clear glass fallback, not content-aware) ── */
+  --glass-dim: rgba(0,0,0,0.35);
+
+  /* ── Glass hairlines ── */
+  --glass-hairline-light: rgba(0,0,0,0.06);
+  --glass-hairline-dark:  rgba(255,255,255,0.08);
 }
 
 /* Dark mode tokens */
@@ -105,7 +159,9 @@
     --danger-fg:   #ff453a;
 
     --track:       #3a3a3c;
-    --btn-quiet-bg: rgba(255,255,255,0.08);  /* dark-mode quiet button background — light overlay on dark surface */
+    --btn-quiet-bg: rgba(255,255,255,0.08);
+
+    --focus-ring: 0 0 0 4px rgba(10,132,255,0.22);
   }
 }
 
@@ -119,18 +175,31 @@ body {
 }
 */
 
-/* Liquid-glass frost — ONLY on sticky nav / overlay / colored-CTA labels */
+/* Liquid-glass — control surface materials (nav, toolbar, sidebar, modal, popover, etc.) */
 .glass-nav {
-  background: rgba(245,245,247,0.72);
-  backdrop-filter: saturate(180%) blur(20px);
-  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  background: var(--glass-bg-regular-light);
+  backdrop-filter: saturate(var(--glass-regular-sat)) blur(var(--glass-regular-blur));
+  -webkit-backdrop-filter: saturate(var(--glass-regular-sat)) blur(var(--glass-regular-blur));
   border-bottom: 1px solid var(--hairline);
 }
-.glass-chip {            /* glass element ON a colored ground (needs blur orbs behind) */
-  background: rgba(255,255,255,0.16);
-  border: 1px solid rgba(255,255,255,0.22);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+@media (prefers-color-scheme: dark) {
+  .glass-nav {
+    background: var(--glass-bg-regular-dark);
+    border-bottom-color: var(--hairline);
+  }
+}
+
+.glass-chip {
+  background: var(--glass-bg-clear-light);
+  border: var(--glass-edge-light);
+  backdrop-filter: blur(var(--glass-clear-blur));
+  -webkit-backdrop-filter: blur(var(--glass-clear-blur));
+}
+@media (prefers-color-scheme: dark) {
+  .glass-chip {
+    background: var(--glass-bg-clear-dark);
+    border: var(--glass-edge-dark);
+  }
 }
 
 /* Live/online pulsing dot */
@@ -142,7 +211,90 @@ body {
 
 /* Motion easing (see motion.md) — spring-like curves, CSS-first */
 :root {
-  --ease-spring: cubic-bezier(0.32, 0.72, 0, 1);   /* enter: sheets/dialogs/popovers (~400ms) */
-  --ease-spring-reverse: cubic-bezier(1, 0, 0.68, 0.28); /* exit: mirror easing on reversible transitions */
-  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1); /* small moves: hover, segmented slide (~200ms) */
+  --ease-spring: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-spring-reverse: cubic-bezier(1, 0, 0.68, 0.28);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   Performance degradation ladder for liquid glass
+   No hardware sniffing — relies on standard media queries + manual class.
+   Order: reduced-transparency > reduced-data > contrast > @supports > print
+   ════════════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-transparency: reduce) {
+  .glass-nav, .glass-chip,
+  .glass-toolbar, .glass-sidebar, .glass-tabbar,
+  .glass-modal, .glass-popover, .glass-tooltip,
+  .glass-seg, .glass-switch, .glass-fab, .glass-float {
+    background: var(--surface) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: 1px solid var(--hairline) !important;
+  }
+}
+
+@media (prefers-reduced-data: save) {
+  .glass-nav, .glass-chip,
+  .glass-toolbar, .glass-sidebar, .glass-tabbar,
+  .glass-modal, .glass-popover, .glass-tooltip,
+  .glass-seg, .glass-switch, .glass-fab, .glass-float {
+    backdrop-filter: blur(var(--glass-regular-blur)) !important;
+    -webkit-backdrop-filter: blur(var(--glass-regular-blur)) !important;
+  }
+}
+
+@media (prefers-contrast: more) {
+  .glass-nav, .glass-chip,
+  .glass-toolbar, .glass-sidebar, .glass-tabbar,
+  .glass-modal, .glass-popover, .glass-tooltip,
+  .glass-seg, .glass-switch, .glass-fab, .glass-float {
+    background: var(--surface) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: 1px solid rgba(0,0,0,0.35) !important;
+  }
+  @media (prefers-color-scheme: dark) {
+    .glass-nav, .glass-chip,
+    .glass-toolbar, .glass-sidebar, .glass-tabbar,
+    .glass-modal, .glass-popover, .glass-tooltip,
+    .glass-seg, .glass-switch, .glass-fab, .glass-float {
+      border: 1px solid rgba(255,255,255,0.35) !important;
+    }
+  }
+}
+
+@supports not (backdrop-filter: blur(1px)) {
+  .glass-nav, .glass-chip,
+  .glass-toolbar, .glass-sidebar, .glass-tabbar,
+  .glass-modal, .glass-popover, .glass-tooltip,
+  .glass-seg, .glass-switch, .glass-fab, .glass-float {
+    background: rgba(245,245,247,0.94) !important;
+  }
+  @media (prefers-color-scheme: dark) {
+    .glass-nav, .glass-chip,
+    .glass-toolbar, .glass-sidebar, .glass-tabbar,
+    .glass-modal, .glass-popover, .glass-tooltip,
+    .glass-seg, .glass-switch, .glass-fab, .glass-float {
+      background: rgba(28,28,30,0.94) !important;
+    }
+  }
+}
+
+@media print {
+  .glass-nav, .glass-chip,
+  .glass-toolbar, .glass-sidebar, .glass-tabbar,
+  .glass-modal, .glass-popover, .glass-tooltip,
+  .glass-seg, .glass-switch, .glass-fab, .glass-float {
+    background: #fff !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+    border: 1px solid #ccc !important;
+  }
+}
+
+.glass-perf {
+  backdrop-filter: blur(var(--glass-regular-blur)) !important;
+  -webkit-backdrop-filter: blur(var(--glass-regular-blur)) !important;
 }

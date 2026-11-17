@@ -21,7 +21,7 @@
 - 共 **3 类规则、10 次规则命中、75 个违规节点**：其中 **71 个颜色对比度**、**1 个严重（critical）ARIA 引用错误**、**3 个 `aria-hidden` 内含可聚焦元素**。
 - CI 的 axe 门禁只覆盖 3/6 页面，且带 `--exit`；按当前代码，**该 job 必然失败**。
 - `--text-3` 被定义为“仅限大号文字”，却在页面中被用于 **34 处 10–14px 文本**，对比度仅 3.33–3.62:1（AA 要求 4.5:1）。
-- 触控目标 ≥44px 的承诺，在 `components.md` 与 `account.html` 中至少 **10 处**不成立（最小 24×24）。
+- 触控目标 ≥44px 的承诺，在 `components.md` 与 `account.html` 中至少 **9 处**不成立（最小 24×24）。
 - 声称“覆盖所有 `.glass-*` 类”的 5 级降级阶梯，实际漏掉 **4 个在用的 glass 类**（另有 2 个基类未纳入）；`tokens.css` 与 3 个示例**完全没有 `prefers-reduced-motion`**。
 - 规范与实现存在可直接复现的漂移：z-index、安全区、行高、图标体系、ARIA 模式、Tab 键盘可达性。
 
@@ -41,7 +41,7 @@
 | 无障碍（WCAG AA） | 3.0 | 6/6 页面失败，71 个对比度节点，3 个隐藏焦点问题 |
 | 组件可用性 | 5.0 | 触控目标、焦点可见性、状态同步均有硬伤 |
 | 工程质量与 CI | 4.5 | 仅测 3/6 页面，无本地脚本，依赖未锁定 |
-| 性能 | 5.5 | 110 处 `backdrop-filter`，动画 blur，无预算约束 |
+| 性能 | 5.5 | 6 页 82 条 `backdrop-filter` 声明，动画 blur，无预算约束 |
 | 可维护性 | 5.5 | `tokens.css`、`components.md`、`reference.html` 三份数据源并存 |
 | **综合** | **5.5** | 理念优秀，交付质量未达自身标准 |
 
@@ -171,7 +171,6 @@ function setSheet(open) {
 | --- | --- | ---: | ---: |
 | [account.html:105](examples/account.html#L105) | 开关 `.tg` | 44×26 | ≥44×44 |
 | [account.html:79](examples/account.html#L79) | 套餐 CTA | 高 40 | ≥44 |
-| [account.html:167](examples/account.html#L167) | 弹层“保持方案” | 高 40 | ≥44 |
 | [account.html:122](examples/account.html#L122) | “取消订阅”文字链 | 81×22 | ≥44×44 |
 | [components.md:361](components.md#L361) | glass switch | 51×31 | ≥44 |
 | [components.md:388](components.md#L388) | glass slider | 高 31 | ≥44 |
@@ -314,7 +313,7 @@ left=640, right=1120（正确应为 left=400, right=880）
 ### P1-10 玻璃叠玻璃 + 动画 blur 的性能与可读性风险
 
 - `liquid-controls.html` 的 `.ctl` 是玻璃卡片（[92-100](examples/liquid-controls.html#L92-L100)），内部又放玻璃 `.switch` / `.check-face`（[76-77](examples/liquid-controls.html#L76-L77)、[149-150](examples/liquid-controls.html#L149-L150)），直接违反 [design-system.md:192](design-system.md#L192) “Never stack a light translucent surface on another”。
-- 全项目 **110 处 `backdrop-filter`**（含重复声明），其中 **10 处 transition 显式动画 blur/saturation**（如 [liquid-controls.html:38-39](examples/liquid-controls.html#L38-L39)、[reference.html:65-66](reference.html#L65-L66)）。`will-change` 为 0，也没有 `@media (hover:hover)` 限制。
+- 6 个页面合计 **82 条 `backdrop-filter` 声明**（41 组无前缀 + `-webkit-` 前缀对），`tokens.css` 另有 15 条；其中 **13 处 transition 显式动画 blur/saturation**（如 [liquid-controls.html:38-39](examples/liquid-controls.html#L38-L39)、[reference.html:65-66](reference.html#L65-L66)）。`will-change` 为 0，也没有 `@media (hover:hover)` 限制。
 - [checklist.md:65](checklist.md#L65) 同时写着“blur+scale+opacity 一起”与“只动画 transform/opacity”——**自相矛盾**。实现选择了动画 blur，代价是低端移动设备上的持续重绘。
 - Lighthouse 性能阈值只有 `warn 0.7`（[.lighthouserc.json](.lighthouserc.json)），这类回退不会让 CI 变红。
 
@@ -328,20 +327,20 @@ left=640, right=1120（正确应为 left=400, right=880）
 | --- | --- | --- | --- |
 | 1 | 行高铁律与实现冲突 | 规范要求长正文 ≥1.85（[design-system.md:57,62](design-system.md#L57)、[checklist.md:27](checklist.md#L27)），所有组件与示例均为 1.6（[components.md:26](components.md#L26)、[109](components.md#L109)） | 自检清单永远无法通过 |
 | 2 | CONTRIBUTING 过期 | [CONTRIBUTING.md:10](CONTRIBUTING.md#L10) 仍写 “both examples”，实际 5 个 | 贡献者不知道新页面存在 |
-| 3 | CHANGELOG 事实错误 | [CHANGELOG.md:11](CHANGELOG.md#L11) 称把 `--text-4` 换成 `--text-3` “修复 WCAG”，但 3.5:1 仍不达 4.5:1；[19](CHANGELOG.md#L19) 称 axe 覆盖 “all three pages”，同版本却新增了 3 页 | 误导维护者与用户 |
+| 3 | CHANGELOG 事实错误 | [CHANGELOG.md:11](CHANGELOG.md#L11) 标题写 “Fixed WCAG contrast violation”，但同一行括号里自认换成 `--text-3` 后只有 ~3.5:1，仍不达 4.5:1；[19](CHANGELOG.md#L19) 称 axe 覆盖 “all three pages”，同版本却新增了 3 页 | 误导维护者与用户 |
 | 4 | 图标数量自相矛盾 | `icons.md:41` 写明 20 枚，CHANGELOG 两处仍写 “~15”（[39](CHANGELOG.md#L39)、[88](CHANGELOG.md#L88)） | 文档可信度下降 |
 | 5 | README 未收录新示例 | README 仅介绍 account / wallet，未提 toolbar / sidebar / liquid-controls；截图也只有 6 张旧图 | 新能力不可发现 |
 | 6 | 无本地校验入口 | 无 `package.json`、无 scripts、无 lockfile；只能靠 CI | 贡献者无法本地复现门禁 |
 | 7 | CI 依赖未锁定 | `npm install -g @axe-core/cli` 无版本；无缓存、无 timeout、无 `permissions` 最小化 | 构建不可复现，存在供应链风险 |
-| 8 | CI 不校验 HTML/CSS | 没有 html-validate、链接检查、token 一致性检查、视觉回归 | 本次发现的 59 条 HTML 问题无人拦截 |
+| 8 | CI 不校验 HTML/CSS | 没有 html-validate、链接检查、token 一致性检查、视觉回归 | 本次发现 59 条结构问题（另有 195 条内联样式告警）无人拦截 |
 | 9 | Token 双份数据源 | `reference.html` 的 `DATA` 又硬编码了颜色、字号、圆角、阴影（[reference.html](reference.html)）；CHANGELOG 却称 “eliminates token drift” | 已存在漂移风险，且会继续扩大 |
 | 10 | 原生语义使用不足 | html-validate 报 44 条 `prefer-native-element`（`div role=list`、`span role=button` 等） | 键盘/读屏行为依赖手写补丁 |
 | 11 | 假按钮不可操作 | `reference.html:271-272` 的 `span role="button" tabindex="0"` 无 Enter/Space 处理 | 键盘用户点不动 |
-| 12 | 钱包小屏横向溢出 | `.device` 393px + `body` 40px 内边距，在 <473px 视口溢出（无媒体查询） | 手机直接打开示例会裁切/横滚 |
-| 13 | 硬编码绕过 token | `#e2e2e7` 头像（[account:50](examples/account.html#L50)）、`rgba(0,0,0,0.12)` 开关轨道（[liquid:104](examples/liquid-controls.html#L104)）、多处 `999px` / `26px`；sheet 用 `22px`（应为 `--r-sheet 16`，22 是 `--r-panel`） | 主题切换与全局调整失效 |
+| 12 | 钱包小屏横向溢出 | `.device` 393px + `body` 40px 内边距，在 ≤432px 视口首次横向溢出（390px 实测 `scrollWidth=433`，无媒体查询） | 手机直接打开示例会裁切/横滚 |
+| 13 | 硬编码绕过 token | `#e2e2e7` 头像（[account:50](examples/account.html#L50)）、`rgba(0,0,0,0.12)` 开关轨道（[liquid:104](examples/liquid-controls.html#L104)）、多处 `999px` / `26px` | 主题切换与全局调整失效 |
 | 14 | `--success-fg` / `--danger` 语义误用 | `success-fg` 在 success 浅底 4.14:1；`danger` 在 14px 文本上 3.55:1 | 状态文字不可读 |
 | 15 | “materialize” 演示未动画 blur | [reference.html:465](reference.html#L465) 的 transition 只有 opacity/transform/box-shadow | 与 motion.md 的材质化定义不符 |
-| 16 | `prefers-reduced-data` 无主流稳定浏览器支持 | 被当作 5 级中的一级（[design-system.md:173](design-system.md#L173)） | “5 级”实际约等于 4 级 |
+| 16 | `prefers-reduced-data` 无主流稳定浏览器支持 | 被当作 5 级中的一级（[design-system.md:174](design-system.md#L174)） | “5 级”实际约等于 4 级 |
 | 17 | HTML 小问题 | `lang="zh"`（其余为 zh-CN）、`title` 中的裸 `&`、reference 多处 `<button>/<input>` 缺 `type` | 规范性瑕疵 |
 | 18 | 缺少视觉回归/键盘测试 | 无 Playwright/Cypress，无截图对比 | 本次多个视觉 bug 只能靠人眼发现 |
 
@@ -409,7 +408,7 @@ left=640, right=1120（正确应为 left=400, right=880）
 
 - Node.js 24.1.0；axe-core **4.14.1**；html-validate **11.4.0**；Google Chrome for Testing **155.0.8059.39**（headless）。
 - axe：把 axe-core 4.14.1 注入真实 Chrome 155，`axe.run(document, { runOnly: { type: 'tag', values: ['wcag2a','wcag2aa','wcag21a','wcag21aa'] } })`，6 个页面、1280×900。
-- 静态：`html-validate --formatter=json reference.html examples/*.html`（59 条）。
+- 静态：`html-validate --formatter=json reference.html examples/*.html`（原始 254 条；排除 195 条 `no-inline-style` 后为 59 条结构问题）。
 - CSS：`css-tree` 解析 `tokens.css` 通过，无语法错误。
 - ARIA：脚本比对 `aria-controls/labelledby/describedby` 与 `id` 集合。
 - 运行时：Puppeteer 断言侧边栏折叠、reduced-motion 弹层矩形、钱包选项点击、开关命中区。
@@ -434,6 +433,90 @@ npx html-validate reference.html examples/*.html
 - 未在真机测 GPU 性能；性能结论来自代码与层数分析。
 - 颜色对比度以纯色合成计算，玻璃叠加区域的实际对比度可能更低（只会更差，不会更好）。
 - 截图仅做存在性与尺寸检查，未做像素级视觉回归。
+
+---
+
+## 10. 回测验证（独立复跑）
+
+本节是对上文结论的二次验证，不复用上一轮结论：重新启动静态服务器，重新注入 axe-core，重新执行 Puppeteer 断言，并用脚本重算所有计数类指标。
+
+### 10.1 复核结果总览
+
+| 验证对象 | 复核方式 | 结果 |
+| --- | --- | --- |
+| 6/6 页面 axe 失败 | 真实 Chrome 155 + axe-core 4.14.1 重跑 | **成立**，每页违规数完全一致 |
+| 75 个违规节点 | 逐页节点计数 | **成立**：22+24+11+5+6+7=75 |
+| 71 个对比度 + 4 个 ARIA | 规则拆分 | **成立**：21+23+9+5+6+7=71；ARIA 1+1+2=4 |
+| CI 必然红 | 检查被扫 3 页的违规 | **成立**：3 页共 57 节点（53 对比度 + 4 ARIA），`--exit` 必失败 |
+| 关闭态弹层可聚焦 | axe + html-validate + DOM 检查 | **成立**：3 页各 1 个 `aria-hidden-focus`，7 条 `hidden-focusable` |
+| wallet ARIA 引用 critical | axe + id 集合比对 | **成立**：`walletPanel/cardsPanel/profilePanel` 均不存在 |
+| `--text-3` 系统性误用 | 逐行检查 6 页 | **成立**：6 页共 34 次引用；19 条 `color:var(--text-3)` 规则中 17 条显式写有 <18.66px 字号，其余 2 条继承小字上下文 |
+| 降级阶梯漏类 | 对比阶梯选择器与组件类名 | **成立**：缺 `glass-check/radio/slider/context` 与 `base/clear-base` |
+| 侧边栏移动端不可展开 | 375px 实跑点击 | **成立**：宽度恒为 72px，`aria-expanded` 在 true/false 间切换 |
+| reduced-motion 弹层错位 | 模拟 reduce 后测量矩形 | **成立**：`left=640, right=1120`（应为 400–880） |
+| wallet 弹层无关闭路径 | 点击选项后读 `aria-hidden` | **成立**：点击后仍为 `false`，可点元素仅 3 个选项 |
+| toast 不播报 | 检查 `role/aria-live` 与文本 | **成立**：文本前后完全相同，仅 opacity/transform 变化 |
+| 触控目标不足 | 实测命中区 | **成立 9 处**（见 10.3 的修正说明） |
+| 横向溢出 | 多宽度扫描 | **成立**，临界值为 **432px**（原写 473px，已修正） |
+| 行号引用 | 解析 71 个行号锚点并打印目标行 | **成立**：71 个引用均指向声称内容，仅 1 处需下移 1 行 |
+
+### 10.2 关键运行时证据（本轮重跑原样输出）
+
+```
+SIDEBAR-MOBILE {"before":{"w":"72px","exp":"true"},"after1":{"w":"72px","exp":"false"},"after2":{"w":"72px","exp":"true"}}
+REF-REDUCED-MOTION-SHEET {"left":640,"right":1120,"vw":1280,"transform":"none"}
+WALLET-SHEET {"before":"false","after":"false","clickable":["添加银行卡","发起转账","扫码收款"]}
+ACCOUNT-SWITCH-HITBOX {"w":44,"h":26}
+WALLET-390 {"scrollW":433,"innerW":390}
+```
+
+对比度重算也与正文一致：`--text-3` 白底 3.62:1、`--bg` 3.33:1、暗色 4.27:1；`--text-4` 2.21:1；`--focus-ring` 合成 `#d1e5fa` 仅 1.29:1；`--success-fg` 在 success 浅底 4.14:1；`--danger` 白底 3.55:1。
+
+### 10.3 本轮修正的报告自身问题
+
+回测发现 5 处统计或表述不准确，已在上文直接修正：
+
+1. **`backdrop-filter` 数量**：原写“110 处”。该数字能复现，但口径是 6 页中字符串出现次数（含 `-webkit-` 前缀重复计数）；按声明对去重后为 **82 条声明 / 41 组**。已改用不重复的口径，避免把前缀重复读成“110 个玻璃层”。
+2. **动画 blur 数量**：原写“10 处”。逐条统计 transition 声明后为 **13 处**（reference 2、account 2、liquid 4、sidebar 1、toolbar 1、wallet 3）。
+3. **触控目标数量**：原写“至少 10 处”，其中 `account.html` 弹层“保持方案”一行是**误报**——`.sheet .acts button` 的 46px 规则优先级高于 `.sheet .destroy` 的 40px，实测三个弹层按钮均为 45–46px。删除该行后为 **9 处**。
+4. **钱包溢出临界值**：原写 `<473px`。实测 433px 不溢出、432px 溢出，正确阈值为 **≤432px**（`scrollWidth=433`）。
+5. **html-validate 条数**：原直接写“59 条”。实际原始输出 **254 条**，其中 195 条是 `no-inline-style`；排除后才是 59 条结构问题。附录已改为两个口径并列。
+
+另外修正两处措辞/引用：
+
+- 删除“sheet 用 22px 应为 `--r-sheet 16`”这一判断：`tokens.css` 对 `--r-sheet` 的注释明确是“sheet/modal 内部按钮”，而 `app.md` 规定 iOS bottom sheet 就是 22px，使用 22px 并非漂移。
+- `prefers-reduced-data` 的引用行号从 `design-system.md:173` 修正为 `:174`。
+
+### 10.4 未能独立验证的项
+
+- **`prefers-reduced-data` 的浏览器支持面**：离线环境无法核对 2026 年各浏览器稳定版的实际支持情况。该条应保留为“待核”，不宜作为硬结论；但它不影响“5 级中有一级不可依赖”的工程判断。
+- **真实读屏与真机 GPU 性能**：仍与 9.C 的检测局限一致，本轮未补做。
+
+### 10.5 迭代方向合理性评估
+
+| 建议 | 评估 | 说明 |
+| --- | --- | --- |
+| 小字号 `--text-3` → `--text-2` | **合理，但需限定范围** | 5.07:1 / 4.66:1 可过 AA；但不应无差别替换全部 34 处，否则三级层次被抹平。建议新增 `--text-caption` 专用于 12–13px。 |
+| 弹层关闭用 `inert`/`hidden` | **方向正确，代码需调整** | 文中示例同时设置 `hidden` 会立即中断退场动画，与 `motion.md` 的“同路径退场”冲突。应使用 `inert` + `aria-hidden`，退场结束后再 `hidden`，并管理焦点归还。 |
+| 焦点环改为 2px `--accent` | **合理且已验证** | `#0071e3` 对白底 4.7:1，满足 3:1；`outline-offset` 也能避开玻璃背景。 |
+| axe 扩到 6 页、0 容忍 | **合理** | 当前 6 页全红，0 容忍是唯一能阻止回归的门禁；但 axe 不覆盖键盘行为，需同时补 Playwright。 |
+| 44px 命中区 | **合理** | WCAG 2.5.8 AA 的下限是 24px，44px 是项目自己承诺的更高标准；修复应与文档一致，而非降低文档。 |
+| `[data-glass]` 统一降级 | **合理，可分两步** | 近期先把 4 个在用类补进阶梯；中期再换统一属性，避免一次性重构引入新漏网。 |
+| 新增 `--z-system` 并统一层级 | **合理** | 当前 `app.md` 把 modal 放在 fab(70)、popover 在 80，确实存在 popover 盖 modal 的语义漏洞；系统层需要独立 token。 |
+| 性能阈值 `error 0.85` | **方向合理，阈值需谨慎** | 共享 CI 上 Lighthouse 性能分数波动大，建议取 3 次中位数或改为 warn + 明确的 blur 层数/字节预算，避免 flaky。 |
+| `--success-fg` 调深 | **合理且已验证** | 建议值 `#1a7f37` 在 success 浅底为 4.77:1；现有 `--danger-fg #c4342b` 白底 5.42:1，可直接用于 14px 文本。 |
+| 行高拆成 UI 1.6 / 长文 1.85 | **合理** | 冲突真实存在；关键是给“长正文”下可执行定义（如 ≥2 行、≥40 字），否则仍无法自动检查。 |
+| token JSON 生成 `DATA` | **合理但属中期** | 能根治双数据源；短期至少应加一条“`DATA` 中的 hex 必须存在于 `tokens.css`”的校验。 |
+| `prefers-reduced-data` 保留为一级 | **需降级为增强项** | 不应计入“5 级保证”；文档可写“4 级保证 + 1 级渐进增强”。 |
+
+### 10.6 回测结论
+
+- **P0：4/4 成立。** 无障碍门禁失效、隐藏焦点、wallet ARIA 错误、降级覆盖不实，均可独立复现。
+- **P1：10/10 方向成立。** 其中 P1-1 的 10 行证据有 1 行误报，已删除；剩余 9 行全部实测复现。
+- **P2：18 条中 17 条成立或成立但需限定措辞，1 条（`prefers-reduced-data` 支持面）无法离线验证。**
+- **迭代路线：方向整体合理，无需推翻。** 需要调整的是三处执行细节：弹层不要用 `hidden` 截断动画、`--text-3` 不要无差别全局替换、Lighthouse 性能阈值避免单次硬门禁。
+
+因此，本报告的主要结论可信：问题不是“报告写重了”，而是项目确实未通过自己设定的验收线；修正后的问题清单更适合直接作为修复工单使用。
 
 ---
 

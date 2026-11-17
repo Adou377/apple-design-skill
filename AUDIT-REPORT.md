@@ -521,3 +521,27 @@ WALLET-390 {"scrollW":433,"innerW":390}
 ---
 
 **最终判定：** 项目具备成为高质量设计系统的骨架，但当前版本不应以“WCAG AA / 自动化无障碍门禁 / 全类降级覆盖”对外发布。优先修复 P0 与 P1-1/P1-2/P1-3/P1-4，即可把综合分从 5.5 提升到 7.5 左右；再完成短期项，才配得上文档里已经写下的标准。
+
+---
+
+## 11. 修复状态（2026-11-18 迭代）
+
+按第 8 节“立即”+“短期”清单执行；原检测结论与回测证据保留不改。
+
+| 项 | 状态 | 落地内容 |
+| --- | --- | --- |
+| 小字号对比度 | 已修复 | 6 页所有 <18.66px 的 `--text-3`/`--text-4` 改为 `--text-2`/新增 `--text-caption`；`--success-fg` → `#146c2e`；heat 文本用 `--heat-ink`；14px 破坏性文字用 `--danger-fg` |
+| axe 门禁 | 已修复 | 全 6 页 `axe-core 4.14.1` 复跑：**0 violations / 0 nodes**（原 75） |
+| 关闭态弹层 | 已修复 | `#mSheet` / `#sheet`（account、wallet）关闭时 `inert` + `aria-hidden` 同步，打开移除 `inert`，焦点归还触发按钮；html-validate `hidden-focusable` = 0 |
+| wallet ARIA | 已修复 | 移除无效 `aria-controls`；tab 改为原生 `<button>` + `aria-current`；“添加”带 `aria-haspopup="dialog"`；新增“取消”按钮与 `role="status"` 反馈；z-index 归位 |
+| 焦点可见性 | 已修复 | 全站 `:focus-visible` 改为 2px `--accent` 实线 + 2px offset（约 4.7:1） |
+| reduced-motion 居中 | 已修复 | `reference.html` 弹层保留 `translateX(-50%)`；1280 视口实测 left=400 / right=880 |
+| sidebar 移动端 | 已修复 | ≤760px 隐藏 `#collapseBtn`，JS 用 `matchMedia` 守卫；375px 下宽度 72、`aria-expanded` 不再翻转 |
+| 44px 命中区 | 已修复 | switch/checkbox/radio/slider/menu row/toolbar/文字链加 44px 有效命中区，视觉尺寸不变；components.md 同步 |
+| 玻璃降级阶梯 | 已修复 | 5 个媒体块补齐 `glass-base`、`glass-clear-base`、`glass-check`、`glass-radio`、`glass-slider`、`glass-context`；tokens.css 增加全局 reduced-motion 兜底 |
+| z-index 契约 | 已修复 | 新增 `--z-scrim:85`、`--z-system:110`；app.md / wallet.html / tokens.css 对齐 |
+| 文档与 CI | 已修复 | README/CONTRIBUTING/CHANGELOG/checklist/design-system/app/components 同步；CI axe 扩到 6 页，Lighthouse 性能保持 warn |
+
+运行时复核：wallet 选项点击 → 关闭 + toast；弹层打开时焦点在内部、Esc 可关；无页面 JS 错误；375px wallet `scrollWidth = innerWidth`。
+
+未执行（第 8 节“中期”）：Playwright 视觉回归、token JSON 单一数据源、对比度单测。

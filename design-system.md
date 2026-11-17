@@ -59,7 +59,7 @@ Stack (always system; never Inter/Roboto):
 | meta / byline | `12–13.5px` | 400–550 | — | 1.6 |
 | Tag / chip | `11–12px` | 500–650 | — | — |
 
-**Iron rules:** titles negative tracking (bigger = more negative); long body line-height ≥ 1.85; numbers `font-variant-numeric: tabular-nums`; multiline clamp via `-webkit-line-clamp`.
+**Type rules:** titles negative tracking (bigger = more negative); **UI text uses 1.6**, long-form body (≥2 lines / ≥40 chars) uses 1.85–1.9; numbers `font-variant-numeric: tabular-nums`; multiline clamp via `-webkit-line-clamp`.
 
 **Refinements (from Apple's typography practice):**
 - `font-optical-sizing: auto` on the root — SF ships optical size tables; one line, free quality.
@@ -166,7 +166,7 @@ Dark glass hairlines use `var(--glass-hairline-dark)`; highlights switch to `var
 
 ### Degradation ladder (5 levels)
 
-Glass degrades gracefully through standard media queries — no hardware sniffing. The ladder in `tokens.css` covers every `.glass-*` class:
+Glass degrades gracefully through standard media queries — no hardware sniffing. The ladder in `tokens.css` enumerates every `.glass-*` class shipped in `components.md` (including `glass-base`, `glass-check`, `glass-radio`, `glass-slider`, `glass-context`). It is an **explicit list, not a wildcard** — a new glass class must be added to all five blocks:
 
 | Level | Trigger | Behavior |
 |---|---|---|

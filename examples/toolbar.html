@@ -17,9 +17,9 @@
     line-height: 1.6; min-height: 200vh; /* give the page scroll length */
   }
 
-  /* Focus-visible — single ring style via token */
-  button:focus-visible, a:focus-visible, input:focus-visible, [tabindex]:focus-visible {
-    outline: none; box-shadow: var(--focus-ring); border-radius: var(--r-pill);
+  /* Focus-visible — single opaque ring (WCAG 1.4.11) */
+  :where(button, a, input, [tabindex]):focus-visible {
+    outline: 2px solid var(--accent); outline-offset: 2px;
   }
 
   /* ════════════════════════════════════════════════════════════════
@@ -91,10 +91,10 @@
     flex: 1; max-width: 360px; height: 44px; padding: 0 16px;
     border: 1px solid var(--hairline); border-radius: var(--r-pill);
     background: var(--surface); color: var(--text); font: 400 14px var(--font);
-    outline: none; transition: border-color .2s var(--ease-out-quart), box-shadow .2s var(--ease-out-quart);
+    transition: border-color .2s var(--ease-out-quart);
   }
-  .search::placeholder { color: var(--text-4); }
-  .search:focus { border-color: var(--accent); box-shadow: var(--focus-ring); }
+  .search::placeholder { color: var(--text-2); opacity: 1; }
+  .search:focus-visible { border-color: var(--accent); }
 
   /* Segmented control inside the glass toolbar */
   .seg { display: inline-flex; padding: 4px; gap: 2px; border-radius: var(--r-pill); }
@@ -120,7 +120,7 @@
   .panel-row + .panel-row { border-top: 1px solid var(--hairline); }
   .panel-row h3 { font-size: 17px; font-weight: 600; letter-spacing: -0.01em; }
   .panel-row p { margin-top: 4px; font-size: 13.5px; color: var(--text-2); }
-  .panel-row .meta { font-size: 12.5px; color: var(--text-3); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .panel-row .meta { font-size: 12.5px; color: var(--text-2); font-variant-numeric: tabular-nums; white-space: nowrap; }
 
   .state-readout {
     position: fixed; right: 18px; bottom: 18px; z-index: var(--z-popover);
@@ -128,6 +128,23 @@
     box-shadow: var(--sh-card); padding: 10px 14px; font: 600 12px var(--mono); color: var(--text-2);
   }
   .state-readout b { color: var(--accent); }
+
+  /* Degradation — page-local classes on top of the tokens.css ladder */
+  @media (prefers-reduced-motion: reduce) {
+    .glass-toolbar, .glass-seg, .glass-float,
+    .seg-btn, .tool-btn { transition: none !important; }
+  }
+  @media (prefers-reduced-transparency: reduce) {
+    .glass-toolbar, .glass-seg, .glass-float {
+      background: var(--surface) !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
+    }
+  }
+  @media (prefers-contrast: more) {
+    .glass-toolbar, .glass-seg, .glass-float {
+      background: var(--surface) !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
+      border-color: rgba(0,0,0,0.35) !important;
+    }
+  }
 
   @media (max-width: 680px) {
     .seg { display: none; } /* keep toolbar uncluttered on small screens */
@@ -162,7 +179,7 @@
 
   <div class="wrap">
     <section class="hero">
-      <div style="font-size:12px;font-weight:600;letter-spacing:0.14em;color:var(--text-3);">EXAMPLE · GLASS TOOLBAR</div>
+      <div style="font-size:12px;font-weight:600;letter-spacing:0.14em;color:var(--text-2);">EXAMPLE · GLASS TOOLBAR</div>
       <h1>吸顶玻璃工具栏</h1>
       <p>Regular 玻璃作为控制层浮于内容之上。滚动时进入 <code style="font-family:var(--mono);">scrolled</code> 态（更强模糊 + 阴影 + 发丝线）；悬停按钮进入 <code style="font-family:var(--mono);">hover</code> 态；按下进入 <code style="font-family:var(--mono);">pressed</code> 态。下方内容永远是实色 <code style="font-family:var(--mono);">var(--surface)</code> 白面板。</p>
     </section>

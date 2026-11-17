@@ -8,7 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Fixed
-- Fixed WCAG contrast violation: `account.html` tier feature bullet marks used `--text-4` (decorative-only, ~2.2:1) for functional content — changed to `--text-3` (~3.5:1)
+- Fixed WCAG contrast violation: `account.html` tier feature bullet marks used `--text-4` (decorative-only, ~2.2:1) for functional content — raised to `--text-2` (~5.1:1)
+- Fixed all remaining small-text contrast failures (71 axe nodes across 6 pages): 10–14px `--text-3`/`--text-4` text now uses `--text-2` / new `--text-caption`; heat tags use `--heat-ink`; `--success-fg` darkened to `#146c2e`; destructive text uses `--danger-fg`
+- Replaced closed-sheet `aria-hidden`-only hiding with `inert` + focus return in `reference.html`, `account.html`, and `wallet.html` — no more keyboard focus traps behind invisible overlays
+- `wallet.html` tab bar rewritten as native `<button>`s with `aria-current="page"`; removed invalid `aria-controls` references; added a visible “取消” button and a `role="status"` confirmation when an option is chosen
+- Touch targets raised to 44px effective (switch, checkbox/radio, slider, menu rows, toolbar buttons, text links) without changing their visual size
+- Focus indicator changed from the 1.29:1 translucent halo to a 2px solid `--accent` ring with 2px offset across every page
+- Added the missing `glass-base`, `glass-clear-base`, `glass-check`, `glass-radio`, `glass-slider`, and `glass-context` classes to all five degradation blocks; added a global `prefers-reduced-motion` fallback
+- Added `--z-scrim` (85) and `--z-system` (110); home indicator and toasts now use them instead of borrowing popover/toast tiers
 - Fixed `.manage-link.danger` in `account.html` using `--text-2` (indistinguishable from normal link) — changed to `--danger-fg` to visually mark destructive action
 - Fixed `tokens.css` `--grad-green` missing space after colon (formatting inconsistency)
 - Fixed hardcoded `rgba(0,0,0,0.05)` backgrounds in `account.html` (`.btn-quiet`, `.sheet .ghost`) — now uses new `--btn-quiet-bg` token with dark-mode variant (fixes invisible quiet buttons in dark mode)
@@ -16,7 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed scroll event listeners in `account.html` and `wallet.html` lacking rAF throttling — added `requestAnimationFrame` debounce
 - Renamed `$()` helper in `reference.html` to `byId()` to avoid global namespace collision with jQuery/Prototype
 - Added missing `reference.html` to mobile Lighthouse CI job (desktop tested 3 pages, mobile only tested 2)
-- Replaced non-existent `dequelabs/axe-api-action@v1` with `@axe-core/cli` in CI — axe scan now covers all three pages (account, wallet, reference) and requires no API key
+- Replaced non-existent `dequelabs/axe-api-action@v1` with `@axe-core/cli` in CI — axe scan now covers all six pages (reference, account, wallet, toolbar, sidebar, liquid-controls) and requires no API key
 - Fixed `reference.html` four-level grey swatch from `#6e6e73` to `#aeaeb2` to match `tokens.css --text-4`
 - Fixed invalid font shorthand `font: 700 18px/-apple-system` in `reference.html` sheet title (line-height was parsed as font-family, declaration dropped)
 - Added focus trap and `aria-hidden` toggling to `reference.html` modal sheet (aligned with `account.html` and `wallet.html` implementations)
@@ -27,7 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed mixed Chinese in English documentation: `app.md` ("原型" → "prototype") and `icons.md` (rule 1 Chinese clause translated to English)
 - Corrected `--link #2997ff` comment in `tokens.css` — now accurately documents as "LARGE TEXT / non-text AA only (3.0:1)" instead of misleading "WCAG AA compliant"
 - Added ARIA dialog roles, focus trap, and keyboard navigation to `examples/wallet.html` (aligned with `account.html`)
-- Added `role="tablist"`, `role="tab"`, `aria-selected` to wallet tab bar
+- Added tab-bar ARIA to `wallet.html` — later superseded by native buttons + `aria-current` (see above), because `role="tab"` without real tabpanels made `aria-controls` invalid
 - Converted wallet glass-chip links to semantic `<button>` elements
 
 ### Changed
@@ -36,7 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Raised Lighthouse accessibility threshold from 0.85 to 0.9 and best-practices threshold from 0.85 to 0.9 in `.lighthouserc.json`
 - Added dark-mode, `prefers-reduced-motion`, and `prefers-reduced-transparency` support to `reference.html`
 - `components.md` inline styles extracted to reusable CSS classes while preserving copy-paste usability
-- `icons.md` icon count description corrected to reflect actual curated set (~15 core icons)
+- `icons.md` icon count description corrected to reflect the actual curated set (20 core icons)
 
 ### Added
 - New `--btn-quiet-bg` design token in `tokens.css` (light + dark mode) for quiet/ghost button backgrounds
@@ -85,7 +92,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - iOS app patterns (Dynamic Island, safe areas, tab bars, bottom sheets)
 - Live reference HTML (living style guide)
 - Two full HTML examples (account page, wallet app)
-- Line-icon system (Lucide-based, ~15 curated icons)
+- Line-icon system (Lucide-based, 20 curated icons)
 - Review & checklist modes for auditing existing UIs
 - Accessibility fixes over upstream: WCAG AA contrast, focus-visible, ARIA roles, keyboard nav
 - Security fixes over upstream: replaced innerHTML with safe DOM methods

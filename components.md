@@ -20,7 +20,7 @@ All snippets use the `tokens.css` custom properties (`var(--…)`). Paste the **
 /* Hero */
 .c-hero{max-width:var(--max-read);margin:0 auto;padding:clamp(36px,6vw,64px) var(--pad-x) clamp(20px,4vw,32px);}
 .c-eyebrow{display:flex;align-items:center;gap:9px;font-size:12px;font-weight:600;
-  letter-spacing:0.14em;color:var(--text-3);}
+  letter-spacing:0.14em;color:var(--text-2);}
 .c-eyebrow-dot{width:7px;height:7px;border-radius:50%;background:var(--live);animation:pulse-dot 2.2s infinite;}
 .c-hero h1{margin-top:15px;font-size:clamp(32px,6vw,52px);font-weight:700;letter-spacing:-0.03em;line-height:1.06;}
 .c-hero p{margin-top:16px;font-size:clamp(15px,2.5vw,18px);color:var(--text-2);line-height:1.6;max-width:560px;}
@@ -99,7 +99,7 @@ A control surface that overlaps scrolling content — Regular glass is mandatory
 ```html
 <section style="max-width:var(--max-read); margin:0 auto; padding:clamp(36px,6vw,64px) var(--pad-x) clamp(20px,4vw,32px);">
   <div style="display:flex; align-items:center; gap:9px; font-size:12px; font-weight:600;
-              letter-spacing:0.14em; color:var(--text-3);">
+              letter-spacing:0.14em; color:var(--text-2);">
     <span style="width:7px; height:7px; border-radius:50%; background:var(--live); animation:pulse-dot 2.2s infinite;"></span>
     EYEBROW · LIVE
   </div>
@@ -231,7 +231,7 @@ Glass needs *something to refract* — put blurred light orbs behind the glass e
 
 ## 10. Glass control-layer components
 
-Liquid Glass is the **main material for control surfaces**. Every component below uses `var(--glass-*)` tokens — never hard-coded blur/sat/shadow. Each carries state transitions (rest → active → pressed → scrolled), dark-mode tuning, ARIA attributes, and `var(--z-*)` z-index. The 5-level degradation ladder in `tokens.css` covers all `.glass-*` classes automatically.
+Liquid Glass is the **main material for control surfaces**. Every component below uses `var(--glass-*)` tokens — never hard-coded blur/sat/shadow. Each carries state transitions (rest → active → pressed → scrolled), dark-mode tuning, ARIA attributes, and `var(--z-*)` z-index. The 5-level degradation ladder in `tokens.css` enumerates every `.glass-*` class shipped here (including `glass-base`, `glass-check`, `glass-radio`, `glass-slider`, `glass-context`) — **a new glass class must be added to all five blocks.**
 
 ### Glass shared CSS (paste once with the block above)
 
@@ -282,12 +282,12 @@ A horizontal control bar (actions, search, title) that floats above content. Reg
 <div class="glass-toolbar glass-base" role="toolbar" aria-label="Document actions"
      style="position:sticky;top:0;z-index:var(--z-sticky);border-radius:var(--r-pill);
             padding:6px 10px;display:flex;align-items:center;gap:8px;margin:0 22px;">
-  <button type="button" aria-label="Back" style="height:36px;width:36px;border:none;border-radius:var(--r-pill);
+  <button type="button" aria-label="Back" style="height:44px;width:44px;border:none;border-radius:var(--r-pill);
           background:transparent;color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;">
     <svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
   </button>
   <span style="font-size:15px;font-weight:600;letter-spacing:-0.01em;color:var(--text);flex:1;">Document</span>
-  <button type="button" aria-label="Share" style="height:36px;width:36px;border:none;border-radius:var(--r-pill);
+  <button type="button" aria-label="Share" style="height:44px;width:44px;border:none;border-radius:var(--r-pill);
           background:transparent;color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;">
     <svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M8 7l4-4 4 4"/><path d="M6 12v6a1.5 1.5 0 0 0 1.5 1.5h9A1.5 1.5 0 0 0 18 18v-6"/></svg>
   </button>
@@ -299,20 +299,20 @@ A horizontal control bar (actions, search, title) that floats above content. Reg
 Bottom navigation with real line icons. One accent on the active tab; the rest grey.
 
 ```html
-<nav class="glass-tabbar glass-base" role="tablist" aria-label="Main navigation"
+<nav class="glass-tabbar glass-base" aria-label="Main navigation"
      style="position:fixed;bottom:0;left:0;right:0;z-index:var(--z-sticky);
-            border-radius:var(--r-pill) var(--r-pill) 0 0;padding:8px 0 max(8px,env(safe-area-inset-bottom));
+            border-radius:var(--r-pill) var(--r-pill) 0 0;padding:8px 0 34px;
             display:flex;justify-content:space-around;align-items:flex-start;border-top:1px solid var(--glass-hairline-light);">
-  <a class="tab on" role="tab" aria-selected="true" aria-current="page"
-     style="display:flex;flex-direction:column;align-items:center;gap:3px;width:64px;font-size:10px;
-            font-weight:500;color:var(--accent);text-decoration:none;">
-    <svg class="ic" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10.5h18"/><circle cx="17" cy="14.5" r="1.25"/></svg>Wallet
-  </a>
-  <a class="tab" role="tab" aria-selected="false"
-     style="display:flex;flex-direction:column;align-items:center;gap:3px;width:64px;font-size:10px;
-            font-weight:500;color:var(--text-3);text-decoration:none;">
-    <svg class="ic" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0 1 16 0"/></svg>Me
-  </a>
+  <button type="button" class="tab on" aria-current="page"
+     style="display:flex;flex-direction:column;align-items:center;gap:3px;min-height:44px;width:64px;
+            font:inherit;font-size:10px;font-weight:500;color:var(--accent);background:none;border:none;cursor:pointer;">
+    <svg class="ic" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10.5h18"/><circle cx="17" cy="14.5" r="1.25"/></svg>Wallet
+  </button>
+  <button type="button" class="tab"
+     style="display:flex;flex-direction:column;align-items:center;gap:3px;min-height:44px;width:64px;
+            font:inherit;font-size:10px;font-weight:500;color:var(--text-2);background:none;border:none;cursor:pointer;">
+    <svg class="ic" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0 1 16 0"/></svg>Me
+  </button>
 </nav>
 ```
 
@@ -370,6 +370,10 @@ An iOS-style toggle. Glass track + accent thumb. `role="switch"` + `aria-checked
 </button>
 ```
 ```css
+/* visual track 51×31, hit area 44px high (pointer + touch) */
+.glass-switch{position:relative;}
+.glass-switch::before{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:max(44px,100%);height:44px;border-radius:var(--r-pill);}
 .glass-switch[aria-checked="true"]{background:var(--accent);border-color:transparent;}
 .glass-switch[aria-checked="true"] .glass-switch-thumb{transform:translateX(20px);}
 .glass-switch:active .glass-switch-thumb{transform:scale(1.05);}
@@ -385,17 +389,18 @@ A range input with glass track and accent fill. State-aware shadow on the thumb.
 ```html
 <input type="range" class="glass-slider" min="0" max="100" value="40"
        aria-label="Volume" role="slider"
-       style="-webkit-appearance:none;appearance:none;width:100%;height:31px;background:transparent;cursor:pointer;">
+       style="-webkit-appearance:none;appearance:none;width:100%;height:44px;background:transparent;cursor:pointer;">
 ```
 ```css
-.glass-slider{
-  background:var(--glass-bg-clear-light);
-  backdrop-filter:blur(var(--glass-clear-blur));
+/* input box is 44px high (touch target); the visible track stays 6px */
+.glass-slider{background:transparent;border:none;height:44px;margin:0;}
+.glass-slider::-webkit-slider-runnable-track{
+  height:6px;border-radius:var(--r-pill);background:var(--glass-bg-clear-light);
+  border:var(--glass-edge-light);backdrop-filter:blur(var(--glass-clear-blur));
   -webkit-backdrop-filter:blur(var(--glass-clear-blur));
-  border-radius:var(--r-pill);border:var(--glass-edge-light);height:6px;margin:12px 0;
 }
 .glass-slider::-webkit-slider-thumb{
-  -webkit-appearance:none;width:27px;height:27px;border-radius:50%;background:#fff;
+  -webkit-appearance:none;width:27px;height:27px;margin-top:-10.5px;border-radius:50%;background:#fff;
   box-shadow:var(--glass-shadow-rest);border:none;transition:box-shadow .2s var(--ease-spring);
 }
 .glass-slider::-webkit-slider-thumb:active{box-shadow:var(--glass-shadow-active);transform:scale(1.1);}
@@ -403,8 +408,12 @@ A range input with glass track and accent fill. State-aware shadow on the thumb.
   width:27px;height:27px;border-radius:50%;background:#fff;border:none;
   box-shadow:var(--glass-shadow-rest);transition:box-shadow .2s var(--ease-spring);
 }
+.glass-slider::-moz-range-track{
+  height:6px;border-radius:var(--r-pill);background:var(--glass-bg-clear-light);border:var(--glass-edge-light);
+}
 @media (prefers-color-scheme:dark){
-  .glass-slider{background:var(--glass-bg-clear-dark);border:var(--glass-edge-dark);}
+  .glass-slider::-webkit-slider-runnable-track,
+  .glass-slider::-moz-range-track{background:var(--glass-bg-clear-dark);border-color:var(--glass-edge-dark);}
 }
 ```
 
@@ -417,16 +426,16 @@ A floating menu anchored to a trigger. Clear glass if over media; Regular if ove
      style="position:absolute;z-index:var(--z-popover);border-radius:var(--r-panel);
             padding:6px;min-width:200px;">
   <button type="button" role="menuitem"
-          style="width:100%;height:40px;padding:0 14px;border:none;border-radius:var(--r-pill);
+          style="width:100%;height:44px;padding:0 14px;border:none;border-radius:var(--r-pill);
                  background:transparent;color:var(--text);font-size:14px;font-weight:500;
                  text-align:left;cursor:pointer;">Edit</button>
   <button type="button" role="menuitem"
-          style="width:100%;height:40px;padding:0 14px;border:none;border-radius:var(--r-pill);
+          style="width:100%;height:44px;padding:0 14px;border:none;border-radius:var(--r-pill);
                  background:transparent;color:var(--text);font-size:14px;font-weight:500;
                  text-align:left;cursor:pointer;">Duplicate</button>
   <button type="button" role="menuitem" aria-disabled="false"
-          style="width:100%;height:40px;padding:0 14px;border:none;border-radius:var(--r-pill);
-                 background:transparent;color:var(--danger);font-size:14px;font-weight:500;
+          style="width:100%;height:44px;padding:0 14px;border:none;border-radius:var(--r-pill);
+                 background:transparent;color:var(--danger-fg);font-size:14px;font-weight:500;
                  text-align:left;cursor:pointer;">Delete</button>
 </div>
 ```
@@ -501,6 +510,10 @@ Glass-backed check controls with accent fill on checked state. `role="checkbox"`
 </button>
 ```
 ```css
+/* visual box 24×24, hit area 44×44 (no visual resize) */
+.glass-check,.glass-radio{position:relative;}
+.glass-check::before,.glass-radio::before{content:"";position:absolute;left:50%;top:50%;
+  transform:translate(-50%,-50%);width:44px;height:44px;border-radius:50%;}
 .glass-check[aria-checked="true"]{background:var(--accent);border-color:transparent;}
 .glass-radio[aria-checked="true"]::after{content:'';position:absolute;top:50%;left:50%;
   transform:translate(-50%,-50%);width:10px;height:10px;border-radius:50%;background:var(--accent);}
@@ -517,17 +530,17 @@ A right-click / long-press menu. Regular glass (carries text). `role="menu"` + `
 <div class="glass-context glass-base" role="menu" aria-label="Context actions"
      style="position:fixed;z-index:var(--z-popover);border-radius:var(--r-panel);padding:6px;min-width:180px;">
   <button type="button" role="menuitem"
-          style="width:100%;height:40px;padding:0 14px;border:none;border-radius:var(--r-pill);
+          style="width:100%;height:44px;padding:0 14px;border:none;border-radius:var(--r-pill);
                  background:transparent;color:var(--text);font-size:14px;font-weight:500;
                  text-align:left;cursor:pointer;">Copy</button>
   <button type="button" role="menuitem"
-          style="width:100%;height:40px;padding:0 14px;border:none;border-radius:var(--r-pill);
+          style="width:100%;height:44px;padding:0 14px;border:none;border-radius:var(--r-pill);
                  background:transparent;color:var(--text);font-size:14px;font-weight:500;
                  text-align:left;cursor:pointer;">Paste</button>
   <div style="height:1px;margin:4px 8px;background:var(--glass-hairline-light);"></div>
   <button type="button" role="menuitem"
-          style="width:100%;height:40px;padding:0 14px;border:none;border-radius:var(--r-pill);
-                 background:transparent;color:var(--danger);font-size:14px;font-weight:500;
+          style="width:100%;height:44px;padding:0 14px;border:none;border-radius:var(--r-pill);
+                 background:transparent;color:var(--danger-fg);font-size:14px;font-weight:500;
                  text-align:left;cursor:pointer;">Delete</button>
 </div>
 ```

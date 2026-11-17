@@ -11,7 +11,8 @@
   --hover:     #fbfbfd;   /* row hover tint */
   --text:      #1d1d1f;   /* primary text / titles */
   --text-body: #424245;   /* long-form body */
-  --text-2:    #6e6e73;   /* secondary / summary / meta */
+  --text-2:    #6e6e73;   /* secondary / summary / meta (5.07:1 on white, 4.66:1 on --bg) */
+  --text-caption: #6e6e73; /* 12–13px captions / labels — AA-safe; never use --text-3 for small text */
   --text-3:    #86868b;   /* tertiary / captions — LARGE TEXT ONLY (WCAG AA requires 18pt+) */
   --text-4:    #aeaeb2;   /* placeholder / quaternary — DECORATIVE ONLY (contrast ~2.2:1, NOT for readable text) */
   --faint:     #d2d2d7;   /* index numbers, arrows, dividers (very light) */
@@ -28,14 +29,15 @@
   --accent-link: #0066cc;  /* link/tag text on tinted ground */
   --indigo:      #5e5ce6;  /* gradient 2nd stop / supporting */
   --x-blue:      #1d9bf0;  /* platform / brand mark (e.g. X) */
-  --heat:        #ff6b00;  /* heat / "hottest" accent */
+  --heat:        #ff6b00;  /* heat / "hottest" accent — FILL only */
+  --heat-ink:    #8a3d00;  /* heat text on --heat-bg (6.9:1) */
   --heat-bg:     rgba(255,107,0,0.1);
   --live:        #30d158;  /* live / online (pulsing dot) */
 
   /* ── Semantic status (do/don't callouts, form validation) ── */
   --success:     #30d158;
   --success-bg:  rgba(48,209,88,0.08);
-  --success-fg:  #1f8a3b;
+  --success-fg:  #146c2e;
   --danger:      #ff3b30;
   --danger-bg:   rgba(255,59,48,0.06);
   --danger-fg:   #c4342b;
@@ -83,8 +85,10 @@
   --z-sidebar: 60;   /* sidebar */
   --z-fab:     70;   /* floating action button, floating island */
   --z-popover: 80;   /* dropdown, popover bubble */
-  --z-modal:   90;   /* modal, full-screen scrim */
+  --z-scrim:   85;   /* dimming scrim — below the sheet it darkens */
+  --z-modal:   90;   /* modal / sheet */
   --z-toast:   100;  /* global toast */
+  --z-system:  110;  /* OS chrome: home indicator, status overlays */
 
   /* ── Liquid Glass material tiers (two base materials) ── */
   --glass-regular-blur: 20px;
@@ -140,6 +144,7 @@
     --text:      #f5f5f7;
     --text-body: #e5e5e7;
     --text-2:    #a1a1a6;
+    --text-caption: #a1a1a6;
     --text-3:    #8e8e93;
     --text-4:    #636366;
     --faint:     #48484a;
@@ -149,6 +154,7 @@
     --accent-link: #2997ff;
     --link:        #2997ff;
     --heat:        #ff9f0a;
+    --heat-ink:    #ff9f0a;
     --live:        #30d158;
 
     --success:     #30d158;
@@ -223,10 +229,11 @@ body {
    ════════════════════════════════════════════════════════════════ */
 
 @media (prefers-reduced-transparency: reduce) {
-  .glass-nav, .glass-chip,
-  .glass-toolbar, .glass-sidebar, .glass-tabbar,
-  .glass-modal, .glass-popover, .glass-tooltip,
-  .glass-seg, .glass-switch, .glass-fab, .glass-float {
+  .glass-base, .glass-clear-base,
+  .glass-nav, .glass-chip, .glass-toolbar, .glass-sidebar,
+  .glass-tabbar, .glass-modal, .glass-popover, .glass-tooltip,
+  .glass-seg, .glass-switch, .glass-fab, .glass-float,
+  .glass-check, .glass-radio, .glass-slider, .glass-context {
     background: var(--surface) !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
@@ -235,57 +242,63 @@ body {
 }
 
 @media (prefers-reduced-data: save) {
-  .glass-nav, .glass-chip,
-  .glass-toolbar, .glass-sidebar, .glass-tabbar,
-  .glass-modal, .glass-popover, .glass-tooltip,
-  .glass-seg, .glass-switch, .glass-fab, .glass-float {
+  .glass-base, .glass-clear-base,
+  .glass-nav, .glass-chip, .glass-toolbar, .glass-sidebar,
+  .glass-tabbar, .glass-modal, .glass-popover, .glass-tooltip,
+  .glass-seg, .glass-switch, .glass-fab, .glass-float,
+  .glass-check, .glass-radio, .glass-slider, .glass-context {
     backdrop-filter: blur(var(--glass-regular-blur)) !important;
     -webkit-backdrop-filter: blur(var(--glass-regular-blur)) !important;
   }
 }
 
 @media (prefers-contrast: more) {
-  .glass-nav, .glass-chip,
-  .glass-toolbar, .glass-sidebar, .glass-tabbar,
-  .glass-modal, .glass-popover, .glass-tooltip,
-  .glass-seg, .glass-switch, .glass-fab, .glass-float {
+  .glass-base, .glass-clear-base,
+  .glass-nav, .glass-chip, .glass-toolbar, .glass-sidebar,
+  .glass-tabbar, .glass-modal, .glass-popover, .glass-tooltip,
+  .glass-seg, .glass-switch, .glass-fab, .glass-float,
+  .glass-check, .glass-radio, .glass-slider, .glass-context {
     background: var(--surface) !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
     border: 1px solid rgba(0,0,0,0.35) !important;
   }
   @media (prefers-color-scheme: dark) {
-    .glass-nav, .glass-chip,
-    .glass-toolbar, .glass-sidebar, .glass-tabbar,
-    .glass-modal, .glass-popover, .glass-tooltip,
-    .glass-seg, .glass-switch, .glass-fab, .glass-float {
+    .glass-base, .glass-clear-base,
+    .glass-nav, .glass-chip, .glass-toolbar, .glass-sidebar,
+    .glass-tabbar, .glass-modal, .glass-popover, .glass-tooltip,
+    .glass-seg, .glass-switch, .glass-fab, .glass-float,
+    .glass-check, .glass-radio, .glass-slider, .glass-context {
       border: 1px solid rgba(255,255,255,0.35) !important;
     }
   }
 }
 
 @supports not (backdrop-filter: blur(1px)) {
-  .glass-nav, .glass-chip,
-  .glass-toolbar, .glass-sidebar, .glass-tabbar,
-  .glass-modal, .glass-popover, .glass-tooltip,
-  .glass-seg, .glass-switch, .glass-fab, .glass-float {
+  .glass-base, .glass-clear-base,
+  .glass-nav, .glass-chip, .glass-toolbar, .glass-sidebar,
+  .glass-tabbar, .glass-modal, .glass-popover, .glass-tooltip,
+  .glass-seg, .glass-switch, .glass-fab, .glass-float,
+  .glass-check, .glass-radio, .glass-slider, .glass-context {
     background: rgba(245,245,247,0.94) !important;
   }
   @media (prefers-color-scheme: dark) {
-    .glass-nav, .glass-chip,
-    .glass-toolbar, .glass-sidebar, .glass-tabbar,
-    .glass-modal, .glass-popover, .glass-tooltip,
-    .glass-seg, .glass-switch, .glass-fab, .glass-float {
+    .glass-base, .glass-clear-base,
+    .glass-nav, .glass-chip, .glass-toolbar, .glass-sidebar,
+    .glass-tabbar, .glass-modal, .glass-popover, .glass-tooltip,
+    .glass-seg, .glass-switch, .glass-fab, .glass-float,
+    .glass-check, .glass-radio, .glass-slider, .glass-context {
       background: rgba(28,28,30,0.94) !important;
     }
   }
 }
 
 @media print {
-  .glass-nav, .glass-chip,
-  .glass-toolbar, .glass-sidebar, .glass-tabbar,
-  .glass-modal, .glass-popover, .glass-tooltip,
-  .glass-seg, .glass-switch, .glass-fab, .glass-float {
+  .glass-base, .glass-clear-base,
+  .glass-nav, .glass-chip, .glass-toolbar, .glass-sidebar,
+  .glass-tabbar, .glass-modal, .glass-popover, .glass-tooltip,
+  .glass-seg, .glass-switch, .glass-fab, .glass-float,
+  .glass-check, .glass-radio, .glass-slider, .glass-context {
     background: #fff !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
@@ -297,4 +310,18 @@ body {
 .glass-perf {
   backdrop-filter: blur(var(--glass-regular-blur)) !important;
   -webkit-backdrop-filter: blur(var(--glass-regular-blur)) !important;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   Reduced motion — global safety net.
+   Pages may opt into a gentler fade; this guarantees no page ships
+   unscoped movement when the user asks for less.
+   ════════════════════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

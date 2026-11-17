@@ -7,7 +7,7 @@ Thank you for your interest in improving this design skill! This guide covers ho
 1. **Fork** the repository and clone your fork locally.
 2. Create a feature branch: `git checkout -b fix/your-fix-name`
 3. Make your changes following the guidelines below.
-4. Test by opening `reference.html` and both examples in a browser — your changes must look like they belong on the same page.
+4. Test by opening `reference.html` and all five examples (`account`, `wallet`, `toolbar`, `sidebar`, `liquid-controls`) in a browser — your changes must look like they belong on the same page.
 5. Submit a pull request to `main`.
 
 ## Design Philosophy (read before editing)
@@ -48,7 +48,7 @@ Any contribution that violates these rules will be requested for changes.
 - Glass control surfaces use `var(--glass-*)` tokens (blur, saturation, background, shadow, highlight, edge, hairline, dim); z-index uses `var(--z-*)` tokens.
 - Use `clamp()` for responsive sizing; one design auto-adapts PC ↔ mobile.
 - Touch targets ≥ 44px.
-- Include `prefers-reduced-motion`, `prefers-reduced-transparency`, and `prefers-contrast` media queries for interactive layers. The 5-level degradation ladder in `tokens.css` handles these automatically for `.glass-*` classes.
+- Include `prefers-reduced-motion`, `prefers-reduced-transparency`, and `prefers-contrast` media queries for interactive layers. The 5-level degradation ladder in `tokens.css` enumerates every `.glass-*` class — if you add a new one, add it to all five blocks.
 
 ### Markdown
 - Keep documentation concise and scannable.

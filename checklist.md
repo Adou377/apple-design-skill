@@ -16,15 +16,15 @@ Run this on any page/component before claiming it's finished. Every box must be 
 - [ ] **Glass recipe matching**: text-bearing controls use Regular (`var(--glass-regular-blur)` + `var(--glass-regular-sat)`); controls over rich media use Clear (`var(--glass-clear-blur)` + `var(--glass-clear-sat)`).
 - [ ] **State functions**: glass control surfaces have rest → active → pressed → scrolled transitions wired to `var(--glass-blur-*)`, `var(--glass-sat-*)`, `var(--glass-shadow-*)`. Blur, saturation, and shadow transition as one unit (same duration + easing).
 - [ ] **Dark-mode vibrancy**: each glass surface has a `prefers-color-scheme: dark` override using `-dark` token variants (`var(--glass-bg-regular-dark)`, `var(--glass-edge-dark)`, `var(--glass-hairline-dark)`, `var(--glass-highlight-dark)`).
-- [ ] **Degradation ladder**: all `.glass-*` classes covered by the 5-level ladder in `tokens.css` (reduced-transparency → reduced-data → contrast → @supports → print).
+- [ ] **Degradation ladder**: every `.glass-*` class used on the page appears in all five blocks of `tokens.css` (reduced-transparency → reduced-data → contrast → @supports → print). The list is explicit — adding a new glass class means editing all five.
 - [ ] **Concentric radii**: nested glass controls use inner radius = outer radius minus padding, pulled from named tiers (no invented in-between values).
-- [ ] **z-index tokens**: all z-index uses `var(--z-*)` (ground 0, content 10, sticky 50, sidebar 60, fab 70, popover 80, modal 90, toast 100) — no hard-coded values.
+- [ ] **z-index tokens**: all z-index uses `var(--z-*)` (ground 0, content 10, sticky 50, sidebar 60, fab 70, popover 80, scrim 85, modal 90, toast 100, system 110) — no hard-coded values.
 - [ ] Glass-on-color (CTA) has blurred light orbs behind it (something to refract).
 
 ## Type
 - [ ] System font stack (SF / PingFang) — no Inter/Roboto/Arial as the brand face.
 - [ ] Big titles have **negative letter-spacing** (bigger → more negative).
-- [ ] Long body line-height ≥ 1.85.
+- [ ] Line-height: UI text 1.6; long-form body (≥2 lines / ≥40 chars) 1.85–1.9.
 - [ ] Numbers use `tabular-nums`.
 - [ ] CJK↔Latin have a half-width space between them.
 
@@ -46,10 +46,10 @@ Run this on any page/component before claiming it's finished. Every box must be 
 - [ ] Glass control state transitions use `var(--ease-spring)`; scroll-driven changes rAF-throttled with `passive: true`.
 
 ## ARIA & state controls
-- [ ] Glass controls with state carry correct ARIA: `role="tab"` + `aria-selected` on tab bar; `role="switch"` + `aria-checked` on switches; `role="slider"` + `aria-valuenow` on sliders; `aria-expanded` on popover/sidebar triggers; `role="menu"` + `role="menuitem"` on context menus.
+- [ ] Glass controls with state carry correct ARIA: native `<button>` + `aria-current="page"` on tab-bar navigation (not `role="tab"` without panels); `role="switch"` + `aria-checked` on switches; `role="slider"` + `aria-valuenow` on sliders; `aria-expanded` on popover/sidebar triggers; `role="menu"` + `role="menuitem"` on context menus.
 - [ ] Accessibility state and visual state never desync — `aria-expanded`/`aria-hidden` flip in the same handler as the glass state transition.
 - [ ] Dialogs/sheets have `role="dialog"`, `aria-modal="true"`, focus trap, and Escape to close.
-- [ ] Text contrast ≥ 4.5:1 for body text on glass; bump to `--text-2` over Clear glass on bright media (vibrancy).
+- [ ] Text contrast ≥ 4.5:1. `--text-3` is **large-text only** (≥18.66px); small text uses `--text-2`/`--text-caption` (5.07:1). `--text-4` is decorative — never readable text or placeholders.
 - [ ] `prefers-reduced-motion` respected on glass state transitions (cross-fade, no travel).
 
 ## Restraint

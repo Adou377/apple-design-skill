@@ -17,16 +17,12 @@
     line-height: 1.6;
   }
 
-  /* Focus-visible — one ring style, everywhere */
-  button:focus-visible,
-  a:focus-visible,
-  input:focus-visible,
-  [role="switch"]:focus-visible,
-  [role="tab"]:focus-visible,
-  [tabindex="0"]:focus-visible {
-    outline: none;
-    box-shadow: var(--focus-ring);
-    border-radius: var(--r-pill);
+  /* Focus-visible — one ring style, everywhere.
+     2px solid accent (#0071e3, 4.7:1 on white) clears WCAG 1.4.11 (3:1). */
+  :where(button, a, input, [role="switch"], [role="tab"], [tabindex]):focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    box-shadow: none;
   }
 
   .ds-row + .ds-row { border-top: 1px solid var(--hairline); }
@@ -188,7 +184,8 @@
 
   /* Reduced motion */
   @media (prefers-reduced-motion: reduce) {
-    #mSheet { transition: opacity .2s ease !important; transform: none !important; }
+    /* Keep the horizontal centering transform — only the motion is removed. */
+    #mSheet { transform: translateX(-50%) !important; }
   }
 </style>
 </head>
@@ -202,7 +199,7 @@
         <span style="width: 26px; height: 26px; border-radius: var(--r-chip); background: var(--text); color: #fff; display: grid; place-items: center; font-size: 13px; font-weight: 700; letter-spacing: -0.02em;" aria-hidden="true">A</span>
         <span style="font-size: 15px; font-weight: 650; letter-spacing: -0.01em;">Apple Liquid Glass</span><span style="font-size:15px;font-weight:650;letter-spacing:-0.01em;"> · 设计系统</span>
       </div>
-      <span style="font-size: 12.5px; color: var(--text-3);">液态玻璃 · v2</span>
+      <span style="font-size: 12.5px; color: var(--text-2);">液态玻璃 · v2</span>
     </div>
   </header>
 
@@ -210,7 +207,7 @@
 
     <!-- ── Intro: dual-track model ── -->
     <section style="padding: clamp(36px,6vw,64px) 0 clamp(20px,4vw,32px);">
-      <div style="display: flex; align-items: center; gap: 9px; font-size: 12px; font-weight: 600; letter-spacing: 0.14em; color: var(--text-3);">
+      <div style="display: flex; align-items: center; gap: 9px; font-size: 12px; font-weight: 600; letter-spacing: 0.14em; color: var(--text-2);">
         <span style="width: 7px; height: 7px; border-radius: 50%; background: var(--live); animation: pulse-dot 2.2s infinite;" aria-hidden="true"></span>
         样板间 · LIVING STYLE GUIDE
       </div>
@@ -222,11 +219,11 @@
     <section style="margin-top: 18px;" aria-labelledby="color-section-title">
       <div id="color-section-title" style="font-size: 12px; font-weight: 650; letter-spacing: 0.14em; color: var(--text-2); margin-bottom: 16px;">01 — 颜色</div>
       <div style="background: var(--surface); border-radius: var(--r-panel); padding: clamp(20px,3vw,30px); box-shadow: var(--sh-panel);">
-        <h3 style="font-size: 13px; font-weight: 600; color: var(--text-3); margin-bottom: 14px;">中性 · 界面骨架</h3>
+        <h3 style="font-size: 13px; font-weight: 600; color: var(--text-2); margin-bottom: 14px;">中性 · 界面骨架</h3>
         <div id="ds-neutrals" role="list" aria-label="中性色板" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(116px, 1fr)); gap: 12px;"></div>
-        <h3 style="font-size: 13px; font-weight: 600; color: var(--text-3); margin: 26px 0 14px;">强调 · 仅用于重点</h3>
+        <h3 style="font-size: 13px; font-weight: 600; color: var(--text-2); margin: 26px 0 14px;">强调 · 仅用于重点</h3>
         <div id="ds-accents" role="list" aria-label="强调色板" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(116px, 1fr)); gap: 12px;"></div>
-        <h3 style="font-size: 13px; font-weight: 600; color: var(--text-3); margin: 26px 0 14px;">标志性渐变 · hero / CTA / 题图</h3>
+        <h3 style="font-size: 13px; font-weight: 600; color: var(--text-2); margin: 26px 0 14px;">标志性渐变 · hero / CTA / 题图</h3>
         <div id="ds-gradients" role="list" aria-label="渐变色板" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px;"></div>
       </div>
     </section>
@@ -244,11 +241,11 @@
       <div id="radius-shadow-title" style="font-size: 12px; font-weight: 650; letter-spacing: 0.14em; color: var(--text-2); margin-bottom: 16px;">03 — 圆角 · 阴影</div>
       <div class="ds-2col" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
         <div style="background: var(--surface); border-radius: var(--r-panel); padding: clamp(20px,3vw,28px); box-shadow: var(--sh-panel);">
-          <h3 style="font-size: 13px; font-weight: 600; color: var(--text-3); margin-bottom: 16px;">圆角档位</h3>
+          <h3 style="font-size: 13px; font-weight: 600; color: var(--text-2); margin-bottom: 16px;">圆角档位</h3>
           <div id="ds-radii" role="list" aria-label="圆角档位" style="display: flex; flex-wrap: wrap; gap: 14px;"></div>
         </div>
         <div style="background: var(--surface); border-radius: var(--r-panel); padding: clamp(20px,3vw,28px); box-shadow: var(--sh-panel);">
-          <h3 style="font-size: 13px; font-weight: 600; color: var(--text-3); margin-bottom: 20px;">阴影档位</h3>
+          <h3 style="font-size: 13px; font-weight: 600; color: var(--text-2); margin-bottom: 20px;">阴影档位</h3>
           <div id="ds-shadows" role="list" aria-label="阴影档位" style="display: flex; flex-wrap: wrap; gap: 22px; padding: 6px;"></div>
         </div>
       </div>
@@ -260,32 +257,32 @@
       <div class="ds-2col" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
 
         <div style="background: var(--surface); border-radius: var(--r-panel); padding: clamp(20px,3vw,28px); box-shadow: var(--sh-panel);">
-          <h3 style="font-size: 13px; font-weight: 600; color: var(--text-3); margin-bottom: 16px;">胶囊分段控件</h3>
+          <h3 style="font-size: 13px; font-weight: 600; color: var(--text-2); margin-bottom: 16px;">胶囊分段控件</h3>
           <div id="ds-seg" role="tablist" aria-label="分段控件示例" style="display: inline-flex; background: var(--btn-quiet-bg); border-radius: var(--r-pill); padding: 3px; gap: 2px; margin-bottom: 14px;"></div>
           <p style="font-size: 12.5px; color: var(--text-2);">点一下试试选中态切换。</p>
         </div>
 
         <div style="background: var(--surface); border-radius: var(--r-panel); padding: clamp(20px,3vw,28px); box-shadow: var(--sh-panel);">
-          <h3 style="font-size: 13px; font-weight: 600; color: var(--text-3); margin-bottom: 16px;">按钮</h3>
+          <h3 style="font-size: 13px; font-weight: 600; color: var(--text-2); margin-bottom: 16px;">按钮</h3>
           <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
-            <span class="btn-primary" role="button" tabindex="0" style="display: inline-flex; align-items: center; height: 44px; padding: 0 22px; border-radius: var(--r-pill); background: var(--accent); color: #fff; font-size: 15px; font-weight: 600; cursor: pointer;">主按钮 →</span>
-            <span class="btn-secondary" role="button" tabindex="0" style="display: inline-flex; align-items: center; height: 44px; padding: 0 19px; border-radius: var(--r-pill); background: rgba(255,255,255,0.8); border: 1px solid rgba(0,0,0,0.08); box-shadow: 0 1px 2px rgba(0,0,0,0.05); font-size: 14px; color: var(--text); font-weight: 550; cursor: pointer;">次按钮</span>
+            <button type="button" class="btn-primary" style="display: inline-flex; align-items: center; height: 44px; padding: 0 22px; border: none; border-radius: var(--r-pill); background: var(--accent); color: #fff; font-size: 15px; font-weight: 600; font-family: inherit; cursor: pointer;">主按钮 →</button>
+            <button type="button" class="btn-secondary" style="display: inline-flex; align-items: center; height: 44px; padding: 0 19px; border-radius: var(--r-pill); background: rgba(255,255,255,0.8); border: 1px solid rgba(0,0,0,0.08); box-shadow: 0 1px 2px rgba(0,0,0,0.05); font-size: 14px; color: var(--text); font-weight: 550; font-family: inherit; cursor: pointer;">次按钮</button>
           </div>
         </div>
 
         <div style="background: var(--surface); border-radius: var(--r-panel); padding: clamp(20px,3vw,28px); box-shadow: var(--sh-panel);">
-          <h3 style="font-size: 13px; font-weight: 600; color: var(--text-3); margin-bottom: 16px;">标签 / 胶囊徽标</h3>
+          <h3 style="font-size: 13px; font-weight: 600; color: var(--text-2); margin-bottom: 16px;">标签 / 胶囊徽标</h3>
           <div style="display: flex; flex-wrap: wrap; gap: 8px;">
             <span style="font-family: var(--mono); font-size: 10.5px; font-weight: 700; color: #fff; background: var(--x-blue); padding: 2px 7px; border-radius: var(--r-chip);">X</span>
             <span style="font-size: 11.5px; color: var(--text-2); background: rgba(0,0,0,0.05); padding: 3px 10px; border-radius: var(--r-pill);">普通标签</span>
             <span style="font-size: 11.5px; color: var(--accent-link); background: rgba(0,113,227,0.08); padding: 3px 10px; border-radius: var(--r-pill); font-weight: 550;">强调标签</span>
-            <span style="font-size: 11.5px; font-weight: 650; color: var(--heat); background: var(--heat-bg); padding: 3px 10px; border-radius: var(--r-pill);">最热</span>
-            <span style="font-size: 11.5px; font-weight: 650; color: var(--accent); background: rgba(0,113,227,0.1); padding: 3px 10px; border-radius: var(--r-pill);">热议</span>
+            <span style="font-size: 11.5px; font-weight: 650; color: var(--heat-ink); background: var(--heat-bg); padding: 3px 10px; border-radius: var(--r-pill);">最热</span>
+            <span style="font-size: 11.5px; font-weight: 650; color: var(--accent-link); background: rgba(0,113,227,0.1); padding: 3px 10px; border-radius: var(--r-pill);">热议</span>
           </div>
         </div>
 
         <div style="background: var(--surface); border-radius: var(--r-panel); padding: clamp(20px,3vw,28px); box-shadow: var(--sh-panel);">
-          <h3 style="font-size: 13px; font-weight: 600; color: var(--text-3); margin-bottom: 16px;">统一列表 + 发丝线</h3>
+          <h3 style="font-size: 13px; font-weight: 600; color: var(--text-2); margin-bottom: 16px;">统一列表 + 发丝线</h3>
           <div role="list" aria-label="示例列表" style="border-radius: var(--r-card); border: 1px solid rgba(0,0,0,0.06); overflow: hidden;">
             <div class="ds-row" role="listitem" style="padding: 13px 16px;"><div style="font-size: 14px; font-weight: 600;">条目一</div><div style="font-size: 12px; color: var(--text-2); margin-top: 2px;">发丝线分隔，连续表面</div></div>
             <div class="ds-row" role="listitem" style="padding: 13px 16px;"><div style="font-size: 14px; font-weight: 600;">条目二</div><div style="font-size: 12px; color: var(--text-2); margin-top: 2px;">而非碎片卡片</div></div>
@@ -423,17 +420,17 @@
       <div class="ds-2col" style="margin-top: 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
         <div style="background: var(--success-bg); border: 1px solid color-mix(in srgb, var(--success) 25%, transparent); border-radius: var(--r-thumb); padding: 16px 18px;">
           <div style="font-size: 13px; font-weight: 650; color: var(--success-fg); margin-bottom: 6px;">✓ 玻璃用于控制层</div>
-          <div style="font-size: 12.5px; color: var(--text-2); line-height: 1.6;">吸顶导航、工具栏、标签栏、侧栏、模态浮层、浮岛 / FAB、控件——图层重叠处的控制表面。</div>
+          <div style="font-size: 12.5px; color: var(--text-body); line-height: 1.6;">吸顶导航、工具栏、标签栏、侧栏、模态浮层、浮岛 / FAB、控件——图层重叠处的控制表面。</div>
         </div>
         <div style="background: var(--danger-bg); border: 1px solid color-mix(in srgb, var(--danger) 25%, transparent); border-radius: var(--r-thumb); padding: 16px 18px;">
           <div style="font-size: 13px; font-weight: 650; color: var(--danger-fg); margin-bottom: 6px;">✕ 内容不用玻璃</div>
-          <div style="font-size: 12.5px; color: var(--text-2); line-height: 1.6;">普通内容卡片、列表行、阅读区块之间——实色 <code style="font-family: var(--mono);">var(--surface)</code> + 阴影即可。</div>
+          <div style="font-size: 12.5px; color: var(--text-body); line-height: 1.6;">普通内容卡片、列表行、阅读区块之间——实色 <code style="font-family: var(--mono);">var(--surface)</code> + 阴影即可。</div>
         </div>
       </div>
 
       <!-- (b) Degradation ladder — 5 levels -->
       <div style="margin-top: 18px; background: var(--surface); border-radius: var(--r-panel); padding: clamp(20px,3vw,28px); box-shadow: var(--sh-panel);">
-        <h3 style="font-size: 13px; font-weight: 600; color: var(--text-3); margin-bottom: 6px;">C · 性能降级阶梯 · 5 级</h3>
+        <h3 style="font-size: 13px; font-weight: 600; color: var(--text-2); margin-bottom: 6px;">C · 性能降级阶梯 · 5 级</h3>
         <p style="font-size: 12.5px; color: var(--text-2); line-height: 1.6; margin-bottom: 16px; max-width: 620px;">下方为各降级层的<strong>视觉示意</strong>；真实阶梯写在 <code style="font-family: var(--mono);">tokens.css</code>，按 <code style="font-family: var(--mono);">prefers-reduced-transparency</code> → <code style="font-family: var(--mono);">reduced-data</code> → <code style="font-family: var(--mono);">contrast</code> → <code style="font-family: var(--mono);">@supports</code> → <code style="font-family: var(--mono);">print</code> 顺序自动套用，无需嗅探硬件。</p>
 
         <div class="stage" style="padding: 18px;">
@@ -454,15 +451,15 @@
         <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
           <button id="mSheetBtn" aria-haspopup="dialog" style="height: 44px; padding: 0 22px; border: none; border-radius: var(--r-pill); background: var(--accent); color: #fff; font: 600 14.5px/1 var(--font); cursor: pointer; transition: background .2s var(--ease-out-quart), transform .1s ease-out;">召出 Sheet(材质化入场)</button>
           <button id="mFeedbackBtn" style="height: 44px; padding: 0 20px; border-radius: var(--r-pill); background: rgba(255,255,255,0.8); border: 1px solid rgba(0,0,0,0.1); box-shadow: 0 1px 2px rgba(0,0,0,0.05); font: 600 14.5px/1 var(--font); color: var(--text); cursor: pointer; transition: transform .1s ease-out;">按下反馈(pointer-down)</button>
-          <input id="mFocusInput" placeholder="焦点环 200ms 过渡" aria-label="焦点环测试输入框" style="height: 44px; padding: 0 16px; border: 1px solid rgba(0,0,0,0.1); border-radius: var(--r-pill); font: 400 14px var(--font); outline: none; transition: border-color .2s var(--ease-out-quart), box-shadow .2s var(--ease-out-quart);">
+          <input id="mFocusInput" placeholder="焦点环 200ms 过渡" aria-label="焦点环测试输入框" style="height: 44px; padding: 0 16px; border: 1px solid rgba(0,0,0,0.1); border-radius: var(--r-pill); font: 400 14px var(--font); transition: border-color .2s var(--ease-out-quart);">
         </div>
-        <p style="margin-top: 14px; font-size: 13px; color: var(--text-3); line-height: 1.6;">规则:反馈在按下瞬间(不等松开);入场 ~400ms <code style="font-family: var(--mono);">--ease-spring</code>、退场同路径 ~260ms;玻璃面 opacity+scale+shadow 同动(材质化);CSS transition 可中途反向(不用 keyframes);三条 <code style="font-family: var(--mono);">prefers-reduced-*</code> 必备。</p>
+        <p style="margin-top: 14px; font-size: 13px; color: var(--text-2); line-height: 1.6;">规则:反馈在按下瞬间(不等松开);入场 ~400ms <code style="font-family: var(--mono);">--ease-spring</code>、退场同路径 ~260ms;玻璃面 opacity+scale+shadow 同动(材质化);CSS transition 可中途反向(不用 keyframes);三条 <code style="font-family: var(--mono);">prefers-reduced-*</code> 必备。</p>
       </div>
     </section>
 
     <!-- Sheet demo:同路径进出 + 材质化 + scrim (glass-modal tokens) -->
-    <div id="mScrim" aria-hidden="true" style="position: fixed; inset: 0; background: var(--glass-dim); opacity: 0; pointer-events: none; transition: opacity .25s ease; z-index: var(--z-modal);"></div>
-    <div id="mSheet" class="glass-modal" role="dialog" aria-modal="true" aria-labelledby="mSheetTitle" aria-hidden="true" style="position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%) translateY(24px) scale(0.98); width: min(480px, calc(100vw - 32px)); padding: 26px; border-radius: var(--r-hero); opacity: 0; pointer-events: none; transform-origin: 50% 100%; transition: opacity .4s var(--ease-spring), transform .4s var(--ease-spring), box-shadow .4s var(--ease-spring); z-index: var(--z-toast);">
+    <div id="mScrim" aria-hidden="true" style="position: fixed; inset: 0; background: var(--glass-dim); opacity: 0; pointer-events: none; transition: opacity .25s ease; z-index: var(--z-scrim);"></div>
+    <div id="mSheet" class="glass-modal" role="dialog" aria-modal="true" aria-labelledby="mSheetTitle" aria-hidden="true" inert style="position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%) translateY(24px) scale(0.98); width: min(480px, calc(100vw - 32px)); padding: 26px; border-radius: var(--r-hero); opacity: 0; pointer-events: none; transform-origin: 50% 100%; transition: opacity .4s var(--ease-spring), transform .4s var(--ease-spring), box-shadow .4s var(--ease-spring); z-index: var(--z-modal);">
       <h3 id="mSheetTitle" style="font: 700 18px/1.2 var(--font); letter-spacing: -0.02em; color: var(--text);">材质化 Sheet</h3>
       <p style="margin-top: 8px; font: 400 14px/1.65 var(--font); color: var(--text-body);">opacity + 位移 + 缩放同动,从触发方向(底部)升起,退场原路返回。玻璃使用 <code style="font-family: var(--mono);">--glass-*</code> 令牌保持全程一致。连点按钮试试中途反向——transition 天然可打断。</p>
       <button id="mSheetClose" style="margin-top: 16px; height: 44px; padding: 0 18px; border: none; border-radius: var(--r-pill); background: var(--accent); color: #fff; font: 600 13.5px/1 var(--font); cursor: pointer;">收回</button>
@@ -692,6 +689,7 @@ function mToggle(want) {
   mSheet.style.transform = on ? 'translateX(-50%) translateY(0) scale(1)' : 'translateX(-50%) translateY(24px) scale(0.98)';
   mSheet.style.boxShadow = on ? 'var(--glass-shadow-active)' : 'var(--glass-shadow-rest)';
   mSheet.style.pointerEvents = on ? 'auto' : 'none';
+  mSheet.inert = !on;
   mSheet.setAttribute('aria-hidden', String(!on));
   mScrim.style.opacity = on ? '1' : '0';
   mScrim.style.pointerEvents = on ? 'auto' : 'none';
@@ -714,18 +712,13 @@ mFeedbackBtn.addEventListener('pointerup', function() { this.style.transform = '
 mFeedbackBtn.addEventListener('pointerleave', function() { this.style.transform = ''; });
 mFocusInput.addEventListener('focus', function() {
   this.style.borderColor = 'var(--accent)';
-  this.style.boxShadow = 'var(--focus-ring)';
 });
 mFocusInput.addEventListener('blur', function() {
   this.style.borderColor = 'rgba(0,0,0,0.1)';
-  this.style.boxShadow = 'none';
 });
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape' && mOpen) mToggle(false);
 });
-if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
-  mSheet.style.transition = 'opacity .2s ease';
-}
 </script>
 </body>
 </html>

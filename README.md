@@ -99,6 +99,10 @@ For phone screens, `app.md` adds the mobile shell the web system doesn't ship: a
   <img src="examples/screenshots/06-app-sheet.png" width="300" alt="Bottom sheet rising from the edge">
 </p>
 
+### Control-layer demos
+
+`examples/toolbar.html`, `examples/sidebar.html`, and `examples/liquid-controls.html` isolate the glass control surfaces — toolbar, sidebar, segmented control, switch, slider, checkbox/radio, popover, tooltip and FAB — including their `prefers-reduced-motion` / `prefers-reduced-transparency` / `prefers-contrast` fallbacks.
+
 ---
 
 ## Self-check gate

@@ -75,6 +75,9 @@ jobs:
           axe \
             http://localhost:8080/examples/account.html \
             http://localhost:8080/examples/wallet.html \
+            http://localhost:8080/examples/toolbar.html \
+            http://localhost:8080/examples/sidebar.html \
+            http://localhost:8080/examples/liquid-controls.html \
             http://localhost:8080/reference.html \
             --tags wcag2a,wcag2aa,wcag21a,wcag21aa \
             --exit \

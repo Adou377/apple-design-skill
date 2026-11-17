@@ -544,4 +544,20 @@ WALLET-390 {"scrollW":433,"innerW":390}
 
 运行时复核：wallet 选项点击 → 关闭 + toast；弹层打开时焦点在内部、Esc 可关；无页面 JS 错误；375px wallet `scrollWidth = innerWidth`。
 
-未执行（第 8 节“中期”）：Playwright 视觉回归、token JSON 单一数据源、对比度单测。
+中期项进度见第 12 节。
+
+---
+
+## 12. 中期项状态（2026-11-18 第二轮）
+
+| 中期项 | 状态 | 落地内容 |
+| --- | --- | --- |
+| `package.json` + scripts | 已完成 | `validate:html` / `test:a11y` / `test:contrast` / `test:links` / `test:visual` / `test` |
+| token JSON 单一数据源 | 已完成 | 新增 `tokens.json`；`scripts/sync-tokens.js` 校验 `tokens.css` 并由 JSON 重新生成 `reference.html` 的 DATA；`tokens:check` 进入 CI |
+| 对比度单测 | 已完成 | `scripts/test-contrast.js` 覆盖明暗 36 组文本/表面组合；顺带修正暗色 `--danger-fg` 至 `#ff6b61`（5.0:1） |
+| Playwright 视觉回归 | 已接入 | `playwright.config.js` + `tests/visual/pages.spec.js`（6 页桌面 + wallet/sidebar 375）；基线需 `npm run test:visual:update` 首次生成后提交，本轮环境无浏览器包，未生成基线 |
+| Lighthouse 门槛 | 已完成 | 桌面/移动 a11y `error 1.0`；performance 保持 `warn 0.7`，避免共享 runner 抖动 |
+| CI 整合 | 已完成 | 原 `@axe-core/cli` job 改为 `quality`：tokens → HTML → 对比度 → 链接 → axe 六页 0 违规 |
+| 减少玻璃嵌套 / blur 动画 | 未执行 | 属性能优化，需真机 GPU 测量后再动，避免无依据重构 |
+
+本地复跑结果：`tokens:check` 通过、`html-validate` 0 条、对比度 36/36、链接 14 条 0 断链、axe 6/6 页 0 违规。

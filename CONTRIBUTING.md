@@ -8,7 +8,8 @@ Thank you for your interest in improving this design skill! This guide covers ho
 2. Create a feature branch: `git checkout -b fix/your-fix-name`
 3. Make your changes following the guidelines below.
 4. Test by opening `reference.html` and all five examples (`account`, `wallet`, `toolbar`, `sidebar`, `liquid-controls`) in a browser — your changes must look like they belong on the same page.
-5. Submit a pull request to `main`.
+5. Run `npm install && npm test`. This checks token single-source sync, HTML structure, WCAG contrast pairs, local links and axe-core (zero violations) on all six pages. For pixel changes, run `npm run test:visual:update` once and commit the new baselines.
+6. Submit a pull request to `main`.
 
 ## Design Philosophy (read before editing)
 

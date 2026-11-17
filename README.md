@@ -118,6 +118,18 @@ Before claiming "done," the output passes a checklist (excerpt):
 
 ---
 
+## Local quality gates
+
+```bash
+npm install
+npm test          # tokens + HTML + contrast + links + axe (0 violations)
+npm run test:visual          # Playwright screenshots (baselines first: npm run test:visual:update)
+```
+
+`tokens.json` is the single source of truth. After changing a token, run `npm run tokens:sync`, which updates the `reference.html` DATA block and fails if `tokens.css` disagrees. CI runs the same gates on every push and PR.
+
+---
+
 ## Credits & license
 
 - **Motion layer** (`motion.md`) is adapted from [emilkowalski/skills](https://github.com/emilkowalski/skills) `apple-design` (MIT © Emil Kowalski), itself distilled from Apple's WWDC talks on fluid interfaces and typography.

@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- `tokens.json` as the single source of truth for palette, radii, shadows and type scale; `scripts/sync-tokens.js` checks `tokens.css` and regenerates the `reference.html` DATA block (`npm run tokens:check` / `tokens:sync`)
+- Automated gates: `test:contrast` (36 light/dark WCAG pairs), `test:a11y` (axe-core in real Chrome, six pages, zero-violation gate), `test:links` (local files + anchors), `validate:html` (html-validate with a project config)
+- Playwright visual-regression setup (`playwright.config.js`, `tests/visual/pages.spec.js`) covering six desktop pages plus wallet/sidebar at 375px; baselines are generated with `npm run test:visual:update`
+- CI `quality` job runs token/HTML/contrast/link/axe checks on every push and PR
+
+### Changed
+- Lighthouse accessibility assertion tightened from 0.9 to 1.0 (desktop and mobile); performance stays a warning to avoid flaky shared-runner failures
+- Dark-mode `--danger-fg` raised from `#ff453a` to `#ff6b61` so 14px destructive text reaches 5.0:1 on `--surface`
+
 ### Fixed
 - Fixed WCAG contrast violation: `account.html` tier feature bullet marks used `--text-4` (decorative-only, ~2.2:1) for functional content — raised to `--text-2` (~5.1:1)
 - Fixed all remaining small-text contrast failures (71 axe nodes across 6 pages): 10–14px `--text-3`/`--text-4` text now uses `--text-2` / new `--text-caption`; heat tags use `--heat-ink`; `--success-fg` darkened to `#146c2e`; destructive text uses `--danger-fg`

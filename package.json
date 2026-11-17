@@ -1,0 +1,24 @@
+{
+  "name": "apple-liquid-glass-design",
+  "version": "2.1.0",
+  "private": true,
+  "description": "Apple Liquid Glass design skill — tokens, reference UI, examples and automated checks",
+  "scripts": {
+    "serve": "python3 -m http.server 8080",
+    "tokens:sync": "node scripts/sync-tokens.js",
+    "tokens:check": "node scripts/sync-tokens.js --check",
+    "validate:html": "html-validate reference.html examples/*.html",
+    "test:a11y": "node scripts/test-a11y.js",
+    "test:contrast": "node scripts/test-contrast.js",
+    "test:links": "node scripts/test-links.js",
+    "test:visual": "playwright test",
+    "test:visual:update": "playwright test --update-snapshots",
+    "test": "npm run tokens:check && npm run validate:html && npm run test:contrast && npm run test:links && npm run test:a11y"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.0",
+    "axe-core": "^4.14.1",
+    "html-validate": "^11.4.0",
+    "puppeteer-core": "^25.18.0"
+  }
+}

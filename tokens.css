@@ -162,7 +162,7 @@
     --success-fg:  #30d158;
     --danger:      #ff453a;
     --danger-bg:   rgba(255,69,58,0.10);
-    --danger-fg:   #ff453a;
+    --danger-fg:   #ff6b61;  /* dark destructive text — 5.0:1 on --surface */
 
     --track:       #3a3a3c;
     --btn-quiet-bg: rgba(255,255,255,0.08);

@@ -16,7 +16,7 @@ Run this on any page/component before claiming it's finished. Every box must be 
 - [ ] **Glass recipe matching**: text-bearing controls use Regular (`var(--glass-regular-blur)` + `var(--glass-regular-sat)`); controls over rich media use Clear (`var(--glass-clear-blur)` + `var(--glass-clear-sat)`).
 - [ ] **State functions**: glass control surfaces have rest → active → pressed → scrolled transitions wired to `var(--glass-blur-*)`, `var(--glass-sat-*)`, `var(--glass-shadow-*)`. Blur, saturation, and shadow transition as one unit (same duration + easing).
 - [ ] **Dark-mode vibrancy**: each glass surface has a `prefers-color-scheme: dark` override using `-dark` token variants (`var(--glass-bg-regular-dark)`, `var(--glass-edge-dark)`, `var(--glass-hairline-dark)`, `var(--glass-highlight-dark)`).
-- [ ] **Degradation ladder**: all `.glass-*` classes covered by the 5-level ladder in `tokens.css` (reduced-transparency → reduced-data → contrast → @supports → print).
+- [ ] **Degradation ladder**: every glass class covered by the 4-level ladder in `tokens.css` (reduced-transparency → contrast → @supports → print). `prefers-reduced-data` is not a level (no stable implementation).
 - [ ] **Concentric radii**: nested glass controls use inner radius = outer radius minus padding, pulled from named tiers (no invented in-between values).
 - [ ] **z-index tokens**: all z-index uses `var(--z-*)` (ground 0, content 10, sticky 50, sidebar 60, fab 70, popover 80, modal 90, toast 100) — no hard-coded values.
 - [ ] Glass-on-color (CTA) has blurred light orbs behind it (something to refract).
@@ -48,8 +48,8 @@ Run this on any page/component before claiming it's finished. Every box must be 
 ## ARIA & state controls
 - [ ] Glass controls with state carry correct ARIA: `role="tab"` + `aria-selected` on tab bar; `role="switch"` + `aria-checked` on switches; `role="slider"` + `aria-valuenow` on sliders; `aria-expanded` on popover/sidebar triggers; `role="menu"` + `role="menuitem"` on context menus.
 - [ ] Accessibility state and visual state never desync — `aria-expanded`/`aria-hidden` flip in the same handler as the glass state transition.
-- [ ] Dialogs/sheets have `role="dialog"`, `aria-modal="true"`, focus trap, and Escape to close.
-- [ ] Text contrast ≥ 4.5:1 for body text on glass; bump to `--text-2` over Clear glass on bright media (vibrancy).
+- [ ] Dialogs/sheets have `role="dialog"`, `aria-modal="true"`, focus trap, Escape to close, and `inert` while closed (no focusable elements inside `aria-hidden`).
+- [ ] Text contrast ≥ 4.5:1 for body text on glass; bump to `--text-2` over Clear glass on bright media (vibrancy). `--text-3` (#86868b, 3.6:1) is **never** used below 24px regular / 18.66px bold.
 - [ ] `prefers-reduced-motion` respected on glass state transitions (cross-fade, no travel).
 
 ## Restraint
@@ -62,10 +62,10 @@ Run this on any page/component before claiming it's finished. Every box must be 
 ## Motion (only if the UI has interactive layers — full list in motion.md)
 - [ ] Press feedback on pointer-down; enter/exit same path, origin anchored to trigger.
 - [ ] `--ease-spring`/`--ease-out-quart` (no `linear`/default `ease`); no overshoot without momentum.
-- [ ] Glass materializes (blur+scale+opacity together); only `transform`/`opacity` animated.
-- [ ] Glass control surfaces use state tokens (`var(--glass-blur-rest/active/scrolled)`, `var(--glass-shadow-*)`) — blur, saturation, and shadow transition as one unit.
+- [ ] Glass materializes (blur+scale+opacity together); *travel* animates only `transform`/`opacity` (blur/saturate/shadow are material-state exceptions).
+- [ ] Glass control surfaces use state tokens (`var(--glass-blur-rest)`, `var(--glass-blur-active)`, `var(--glass-blur-scrolled)`, `var(--glass-shadow-*)`) — blur, saturation, and shadow transition as one unit.
 - [ ] Scroll-driven glass state changes are rAF-throttled; `passive: true` on the listener.
-- [ ] `prefers-reduced-motion` / `prefers-reduced-transparency` / `prefers-contrast` all handled (5-level degradation ladder).
+- [ ] `prefers-reduced-motion` / `prefers-reduced-transparency` / `prefers-contrast` all handled (4-level ladder plus the motion-reduce block in `tokens.css`).
 
 ## Interaction foundations
 - [ ] Every screen answers: where am I / where can I go / what's there / how out.

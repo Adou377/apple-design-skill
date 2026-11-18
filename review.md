@@ -66,7 +66,7 @@ After the general review, run a focused audit on every surface to verify the **d
 - [ ] Dark-mode glass tuning present: each glass surface has a `prefers-color-scheme: dark` override using the `-dark` token variants.
 - [ ] Z-index values use `var(--z-*)` tokens — no hard-coded `z-index: 50`, `z-index: 80`, etc.
 - [ ] Concentric corner radii on nested glass controls (popover → inner items; toolbar → inner pills).
-- [ ] The 5-level degradation ladder in `tokens.css` covers all `.glass-*` classes used on the page.
+- [ ] The 4-level degradation ladder in `tokens.css` covers all `.glass-*` classes used on the page.
 - [ ] ARIA attributes present on stateful glass controls (`aria-expanded`, `aria-selected`, `aria-checked`, `role="tablist"`/`"tab"`).
 
 ## Worked example (real)

@@ -7,8 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed — accessibility & consistency remediation (2026-11-18)
+- Contrast: removed every 12–13.5px use of `--text-3`; gradient overlays now use solid `#fff`. Measured 3.1–3.9:1 → ≥4.5:1.
+- Closed sheets are now `inert` + `aria-hidden` (no focusable elements in the accessibility tree); removed invalid `aria-controls` references.
+- Degradation ladder covers every glass class through one `:is(...)` list; `account`/`wallet` gained `prefers-contrast` and `@supports` fallbacks.
+- Added a global `prefers-reduced-motion` animation stop and per-page transition reduction; removed the motion.md staggered-blur contradiction.
+- `reference.html` showcase now uses real buttons, `role="switch"`, `role="slider"`, keyboard-operable segmented control and tab bar.
+- Unified H1 to `clamp(28px,5vw,44px)` / 1.08, hero measure to 600px, glass transitions to `.3s var(--ease-spring)`, and z-index usage to the documented ladder.
+- Replaced Unicode/emoji glyphs, ad-hoc SVG stroke widths, raw shadows/greys and 22px radius literals with tokens.
+- Fixed invalid `var(--glass-blur-rest/active/scrolled)` snippets, non-throttled scroll example, 40px touch targets, and silent mobile sidebar state.
+- Added `<meta name="description">`, unified `lang="zh-CN"`, fixed heading order and 5-column responsive grids, added `<noscript>` fallback.
+- Fixed tag-chip contrast (`最热` 2.9:1, `热议` 4.1:1, `普通标签` 4.5:1 borderline) with new `--heat-fg` / `--x-blue-strong` tokens; corrected `reference.html` sheet z-index to `--z-modal` and its title to `h2`.
+
 ### Fixed
-- Fixed WCAG contrast violation: `account.html` tier feature bullet marks used `--text-4` (decorative-only, ~2.2:1) for functional content — changed to `--text-3` (~3.5:1)
+- Corrected contrast audit: `--text-3` (#86868b) is **3.6:1**, below AA for body text. It is now documented and enforced as large-text-only; all small functional text uses `--text-2` (#6e6e73, 5.07:1).
 - Fixed `.manage-link.danger` in `account.html` using `--text-2` (indistinguishable from normal link) — changed to `--danger-fg` to visually mark destructive action
 - Fixed `tokens.css` `--grad-green` missing space after colon (formatting inconsistency)
 - Fixed hardcoded `rgba(0,0,0,0.05)` backgrounds in `account.html` (`.btn-quiet`, `.sheet .ghost`) — now uses new `--btn-quiet-bg` token with dark-mode variant (fixes invisible quiet buttons in dark mode)
@@ -31,12 +43,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Converted wallet glass-chip links to semantic `<button>` elements
 
 ### Changed
-- `reference.html` now links `tokens.css` via `<link>` and uses `var(--…)` throughout — eliminates token drift between the living style guide and the token source
+- `reference.html` now links `tokens.css` via `<link>` and reads color/radius/shadow swatches live from CSS custom properties — the remaining self-declared values are gone
 - Upgraded `treosh/lighthouse-ci-action` from v11 to v12 in CI
 - Raised Lighthouse accessibility threshold from 0.85 to 0.9 and best-practices threshold from 0.85 to 0.9 in `.lighthouserc.json`
-- Added dark-mode, `prefers-reduced-motion`, and `prefers-reduced-transparency` support to `reference.html`
+- Added dark mode to `reference.html`; reduced-motion now covers the sheet (cross-fade, no travel) and decorative loops
 - `components.md` inline styles extracted to reusable CSS classes while preserving copy-paste usability
-- `icons.md` icon count description corrected to reflect actual curated set (~15 core icons)
+- `icons.md` icon count description corrected to reflect the actual curated set (21 icons)
 
 ### Added
 - New `--btn-quiet-bg` design token in `tokens.css` (light + dark mode) for quiet/ghost button backgrounds
@@ -63,9 +75,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `CONTRIBUTING.md`: dual-track philosophy with explicit prohibitions
 
 ### Added
-- `tokens.css`: z-index hierarchy (--z-ground through --z-toast), glass material tiers (Regular/Clear), glass state variables (rest/active/pressed/scrolled), glass backgrounds (light/dark variants for regular/surface/clear), glass highlights/edges/shadows/hairlines/dim, 5-level performance degradation ladder
+- `tokens.css`: z-index hierarchy (--z-ground through --z-toast), glass material tiers (Regular/Clear), glass state variables (rest/active/pressed/scrolled), glass backgrounds (light/dark variants for regular/surface/clear), glass highlights/edges/shadows/hairlines/dim, 4-level performance degradation ladder
 - `components.md`: 11 new liquid glass control-layer components (glass toolbar, tab bar, sidebar, segmented control, switch, slider, popover/dropdown, tooltip, FAB, checkbox/radio, context menu)
-- `icons.md`: 5 new icons (bookmark, more-horizontal, more-vertical, sidebar, panel-right); glass-surface icon rules section
+- `icons.md`: 5 new icons (scan added later in Unreleased) (bookmark, more-horizontal, more-vertical, sidebar, panel-right); glass-surface icon rules section
 - `motion.md`: "Control-layer dynamic deformation" section (glass state transitions, materialize extension, sidebar refraction, rAF scroll handling, reduced-motion state communication, ARIA)
 - `reference.html`: expanded Section 05 with control-layer glass showcase, state system demo, degradation ladder demo
 - `examples/toolbar.html`: new — glass toolbar with rest/hover/scrolled states

@@ -12,18 +12,18 @@ All snippets use the `tokens.css` custom properties (`var(--…)`). Paste the **
 .c-nav-inner{max-width:var(--max-grid);margin:0 auto;padding:0 var(--pad-x);height:54px;
   display:flex;align-items:center;justify-content:space-between;gap:16px;}
 .c-brand{display:flex;align-items:center;gap:9px;text-decoration:none;color:var(--text);}
-.c-brand-name{font-size:15px;font-weight:650;letter-spacing:-0.01em;}
+.c-brand-name{font-size:15px;font-weight:700;letter-spacing:-0.01em;}
 .c-nav-search{display:inline-flex;align-items:center;height:32px;padding:0 14px;
-  border-radius:var(--r-pill);background:rgba(0,0,0,0.05);color:var(--text);font-size:13px;
-  font-weight:550;text-decoration:none;}
+  border-radius:var(--r-pill);background:var(--btn-quiet-bg);color:var(--text);font-size:13px;
+  font-weight:600;text-decoration:none;}
 
 /* Hero */
 .c-hero{max-width:var(--max-read);margin:0 auto;padding:clamp(36px,6vw,64px) var(--pad-x) clamp(20px,4vw,32px);}
 .c-eyebrow{display:flex;align-items:center;gap:9px;font-size:12px;font-weight:600;
-  letter-spacing:0.14em;color:var(--text-3);}
+  letter-spacing:0.14em;color:var(--text-2);}
 .c-eyebrow-dot{width:7px;height:7px;border-radius:50%;background:var(--live);animation:pulse-dot 2.2s infinite;}
-.c-hero h1{margin-top:15px;font-size:clamp(32px,6vw,52px);font-weight:700;letter-spacing:-0.03em;line-height:1.06;}
-.c-hero p{margin-top:16px;font-size:clamp(15px,2.5vw,18px);color:var(--text-2);line-height:1.6;max-width:560px;}
+.c-hero h1{margin-top:15px;font-size:clamp(28px,5vw,44px);font-weight:700;letter-spacing:-0.03em;line-height:1.08;}
+.c-hero p{margin-top:16px;font-size:clamp(15px,2.5vw,18px);color:var(--text-2);line-height:1.6;max-width:600px;}
 
 /* Unified panel list */
 .c-panel{background:var(--surface);border-radius:var(--r-panel);box-shadow:var(--sh-panel);overflow:hidden;}
@@ -43,23 +43,23 @@ All snippets use the `tokens.css` custom properties (`var(--…)`). Paste the **
 .c-card p{margin-top:6px;font-size:13.5px;color:var(--text-2);line-height:1.5;}
 
 /* Segmented control */
-.c-seg{display:inline-flex;background:rgba(0,0,0,0.05);border-radius:var(--r-pill);padding:3px;gap:2px;}
+.c-seg{display:inline-flex;background:var(--btn-quiet-bg);border-radius:var(--r-pill);padding:3px;gap:2px;}
 .c-seg button{border:none;cursor:pointer;font-size:13px;font-weight:500;padding:7px 15px;
-  border-radius:var(--r-pill);background:transparent;color:var(--text-2);transition:all .25s cubic-bezier(.25,.1,.25,1);}
-.c-seg button.active{background:var(--surface);color:var(--text);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,0.12);}
+  border-radius:var(--r-pill);background:transparent;color:var(--text-2);transition:all .25s var(--ease-out-quart);}
+.c-seg button.active{background:var(--surface);color:var(--text);font-weight:600;box-shadow:var(--sh-seg-active);}
 
 /* Tags */
 .c-tag-mono{font-family:var(--mono);font-size:10.5px;font-weight:700;color:#fff;background:var(--x-blue);padding:2px 7px;border-radius:var(--r-chip);}
-.c-tag-plain{font-size:11.5px;color:var(--text-2);background:rgba(0,0,0,0.05);padding:3px 10px;border-radius:var(--r-pill);}
-.c-tag-accent{font-size:11.5px;color:var(--accent-link);background:rgba(0,113,227,0.08);padding:3px 10px;border-radius:var(--r-pill);font-weight:550;}
-.c-tag-heat{font-size:11.5px;font-weight:650;color:var(--heat);background:var(--heat-bg);padding:3px 10px;border-radius:var(--r-pill);}
+.c-tag-plain{font-size:11.5px;color:var(--text-2);background:var(--btn-quiet-bg);padding:3px 10px;border-radius:var(--r-pill);}
+.c-tag-accent{font-size:11.5px;color:var(--accent-link);background:rgba(0,113,227,0.08);padding:3px 10px;border-radius:var(--r-pill);font-weight:600;}
+.c-tag-heat{font-size:11.5px;font-weight:700;color:var(--heat);background:var(--heat-bg);padding:3px 10px;border-radius:var(--r-pill);}
 
 /* Buttons */
 .c-btn-primary{display:inline-flex;align-items:center;height:44px;padding:0 22px;border-radius:var(--r-pill);
   background:var(--accent);color:#fff;font-size:15px;font-weight:600;text-decoration:none;}
 .c-btn-secondary{display:inline-flex;align-items:center;height:44px;padding:0 19px;border-radius:var(--r-pill);
-  background:rgba(255,255,255,0.8);border:1px solid rgba(0,0,0,0.08);box-shadow:0 1px 2px rgba(0,0,0,0.05);
-  color:var(--text);font-size:14px;font-weight:550;text-decoration:none;}
+  background:var(--btn-soft-bg);border:1px solid var(--btn-soft-border);box-shadow:var(--sh-btn);
+  color:var(--text);font-size:14px;font-weight:600;text-decoration:none;}
 
 /* Colored CTA */
 .c-cta{position:relative;overflow:hidden;border-radius:var(--r-hero);padding:clamp(26px,4vw,40px);
@@ -70,7 +70,7 @@ All snippets use the `tokens.css` custom properties (`var(--…)`). Paste the **
 .c-cta p{margin-top:10px;font-size:14px;color:rgba(255,255,255,0.82);line-height:1.6;max-width:460px;}
 .c-cta-actions{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap;}
 .c-glass-chip{display:inline-flex;align-items:center;height:42px;padding:0 18px;border-radius:var(--r-pill);
-  color:#fff;font-size:13.5px;font-weight:550;text-decoration:none;}
+  color:#fff;font-size:13.5px;font-weight:600;text-decoration:none;}
 ```
 
 ---
@@ -85,11 +85,11 @@ A control surface that overlaps scrolling content — Regular glass is mandatory
               display:flex; align-items:center; justify-content:space-between; gap:16px;">
     <a href="/" style="display:flex; align-items:center; gap:9px; text-decoration:none; color:var(--text);">
       <img src="/icon.png" width="24" height="24" alt="">
-      <span style="font-size:15px; font-weight:650; letter-spacing:-0.01em;">Brand</span>
+      <span style="font-size:15px; font-weight:700; letter-spacing:-0.01em;">Brand</span>
     </a>
     <a href="/search" style="display:inline-flex; align-items:center; height:32px; padding:0 14px;
-       border-radius:var(--r-pill); background:rgba(0,0,0,0.05); color:var(--text); font-size:13px;
-       font-weight:550; text-decoration:none;">Ask AI</a>
+       border-radius:var(--r-pill); background:var(--btn-quiet-bg); color:var(--text); font-size:13px;
+       font-weight:600; text-decoration:none;">Ask AI</a>
   </div>
 </header>
 ```
@@ -99,14 +99,14 @@ A control surface that overlaps scrolling content — Regular glass is mandatory
 ```html
 <section style="max-width:var(--max-read); margin:0 auto; padding:clamp(36px,6vw,64px) var(--pad-x) clamp(20px,4vw,32px);">
   <div style="display:flex; align-items:center; gap:9px; font-size:12px; font-weight:600;
-              letter-spacing:0.14em; color:var(--text-3);">
+              letter-spacing:0.14em; color:var(--text-2);">
     <span style="width:7px; height:7px; border-radius:50%; background:var(--live); animation:pulse-dot 2.2s infinite;"></span>
     EYEBROW · LIVE
   </div>
   <h1 style="margin-top:15px; font-size:clamp(32px,6vw,52px); font-weight:700; letter-spacing:-0.03em; line-height:1.06;">
     The headline
   </h1>
-  <p style="margin-top:16px; font-size:clamp(15px,2.5vw,18px); color:var(--text-2); line-height:1.6; max-width:560px;">
+  <p style="margin-top:16px; font-size:clamp(15px,2.5vw,18px); color:var(--text-2); line-height:1.6; max-width:600px;">
     One restrained sub-line. No filler, no "in today's world".
   </p>
 </section>
@@ -165,10 +165,10 @@ Grey track + a single moving pill. Two selected styles: **black** (strong filter
 ```css
 /* Extends the shared .c-seg / .c-seg button from the CSS block above */
 .c-seg button.active {                 /* WHITE pill (light toggle) */
-  background:var(--surface); color:var(--text); font-weight:600; box-shadow:0 1px 3px rgba(0,0,0,0.12);
+  background:var(--surface); color:var(--text); font-weight:600; box-shadow:var(--sh-seg-active);
 }
 .c-seg button.active--black {          /* BLACK pill (strong filter) */
-  background:var(--text); color:#fff; box-shadow:0 1px 2px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.16);
+  background:var(--text); color:#fff; box-shadow:var(--sh-seg-active-strong);
 }
 ```
 ```js
@@ -185,9 +185,9 @@ seg.querySelector('button').classList.add('active');
 
 ```html
 <span style="font-family:var(--mono); font-size:10.5px; font-weight:700; color:#fff; background:var(--x-blue); padding:2px 7px; border-radius:var(--r-chip);">X</span>
-<span style="font-size:11.5px; color:var(--text-2); background:rgba(0,0,0,0.05); padding:3px 10px; border-radius:var(--r-pill);">plain tag</span>
-<span style="font-size:11.5px; color:var(--accent-link); background:rgba(0,113,227,0.08); padding:3px 10px; border-radius:var(--r-pill); font-weight:550;">accent tag</span>
-<span style="font-size:11.5px; font-weight:650; color:var(--heat); background:var(--heat-bg); padding:3px 10px; border-radius:var(--r-pill);">hottest</span>
+<span style="font-size:11.5px; color:var(--text-2); background:var(--btn-quiet-bg); padding:3px 10px; border-radius:var(--r-pill);">plain tag</span>
+<span style="font-size:11.5px; color:var(--accent-link); background:rgba(0,113,227,0.08); padding:3px 10px; border-radius:var(--r-pill); font-weight:600;">accent tag</span>
+<span style="font-size:11.5px; font-weight:700; color:var(--heat); background:var(--heat-bg); padding:3px 10px; border-radius:var(--r-pill);">hottest</span>
 ```
 
 ## 7. Buttons
@@ -198,8 +198,8 @@ seg.querySelector('button').classList.add('active');
    background:var(--accent); color:#fff; font-size:15px; font-weight:600; text-decoration:none;">Primary →</a>
 <!-- secondary / light glass -->
 <a style="display:inline-flex; align-items:center; height:44px; padding:0 19px; border-radius:var(--r-pill);
-   background:rgba(255,255,255,0.8); border:1px solid rgba(0,0,0,0.08); box-shadow:0 1px 2px rgba(0,0,0,0.05);
-   color:var(--text); font-size:14px; font-weight:550; text-decoration:none;">Secondary</a>
+   background:var(--btn-soft-bg); border:1px solid var(--btn-soft-border); box-shadow:var(--sh-btn);
+   color:var(--text); font-size:14px; font-weight:600; text-decoration:none;">Secondary</a>
 ```
 Touch target ≥ 44px high.
 
@@ -216,7 +216,7 @@ Glass needs *something to refract* — put blurred light orbs behind the glass e
     <h2 style="font-size:clamp(18px,3vw,24px); font-weight:700; color:#fff; letter-spacing:-0.02em;">CTA headline</h2>
     <p style="margin-top:10px; font-size:14px; color:rgba(255,255,255,0.82); line-height:1.6; max-width:460px;">Supporting line.</p>
     <div style="display:flex; gap:10px; margin-top:20px; flex-wrap:wrap;">
-      <a class="glass-chip" style="display:inline-flex; align-items:center; height:42px; padding:0 18px; border-radius:var(--r-pill); color:#fff; font-size:13.5px; font-weight:550; text-decoration:none;">Glass button</a>
+      <a class="glass-chip" style="display:inline-flex; align-items:center; height:42px; padding:0 18px; border-radius:var(--r-pill); color:#fff; font-size:13.5px; font-weight:600; text-decoration:none;">Glass button</a>
     </div>
   </div>
 </section>
@@ -231,7 +231,7 @@ Glass needs *something to refract* — put blurred light orbs behind the glass e
 
 ## 10. Glass control-layer components
 
-Liquid Glass is the **main material for control surfaces**. Every component below uses `var(--glass-*)` tokens — never hard-coded blur/sat/shadow. Each carries state transitions (rest → active → pressed → scrolled), dark-mode tuning, ARIA attributes, and `var(--z-*)` z-index. The 5-level degradation ladder in `tokens.css` covers all `.glass-*` classes automatically.
+Liquid Glass is the **main material for control surfaces**. Every component below uses `var(--glass-*)` tokens — never hard-coded blur/sat/shadow. Each carries state transitions (rest → active → pressed → scrolled), dark-mode tuning, ARIA attributes, and `var(--z-*)` z-index. The 4-level degradation ladder in `tokens.css` uses one `:is(...)` selector list covering every glass class (including `.glass-base`, `.glass-slider`, `.glass-check`, `.glass-radio`, `.glass-context`) — no per-component patch required.
 
 ### Glass shared CSS (paste once with the block above)
 
@@ -303,16 +303,16 @@ Bottom navigation with real line icons. One accent on the active tab; the rest g
      style="position:fixed;bottom:0;left:0;right:0;z-index:var(--z-sticky);
             border-radius:var(--r-pill) var(--r-pill) 0 0;padding:8px 0 max(8px,env(safe-area-inset-bottom));
             display:flex;justify-content:space-around;align-items:flex-start;border-top:1px solid var(--glass-hairline-light);">
-  <a class="tab on" role="tab" aria-selected="true" aria-current="page"
-     style="display:flex;flex-direction:column;align-items:center;gap:3px;width:64px;font-size:10px;
+  <button type="button" class="tab on" role="tab" aria-selected="true" tabindex="0"
+     style="display:flex;flex-direction:column;align-items:center;gap:3px;width:64px;font-size:11px;
             font-weight:500;color:var(--accent);text-decoration:none;">
     <svg class="ic" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10.5h18"/><circle cx="17" cy="14.5" r="1.25"/></svg>Wallet
-  </a>
-  <a class="tab" role="tab" aria-selected="false"
-     style="display:flex;flex-direction:column;align-items:center;gap:3px;width:64px;font-size:10px;
-            font-weight:500;color:var(--text-3);text-decoration:none;">
+  </button>
+  <button type="button" class="tab" role="tab" aria-selected="false" tabindex="-1"
+     style="display:flex;flex-direction:column;align-items:center;gap:3px;width:64px;font-size:11px;
+            font-weight:500;color:var(--text-2);text-decoration:none;">
     <svg class="ic" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0 1 16 0"/></svg>Me
-  </a>
+  </button>
 </nav>
 ```
 
@@ -325,11 +325,11 @@ A vertical navigation panel (iPad / desktop). Regular glass. Concentric radii: o
       style="position:fixed;top:0;left:0;bottom:0;width:260px;z-index:var(--z-sidebar);
              padding:16px 12px;display:flex;flex-direction:column;gap:4px;border-right:1px solid var(--glass-hairline-light);">
   <a href="#" style="height:44px;padding:0 14px;border-radius:var(--r-pill);display:flex;align-items:center;gap:10px;
-     font-size:15px;font-weight:550;color:var(--text);text-decoration:none;background:rgba(0,0,0,0.05);">
+     font-size:15px;font-weight:600;color:var(--text);text-decoration:none;background:var(--btn-quiet-bg);">
     <svg class="ic" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>Home
   </a>
   <a href="#" style="height:44px;padding:0 14px;border-radius:var(--r-pill);display:flex;align-items:center;gap:10px;
-     font-size:15px;font-weight:550;color:var(--text-2);text-decoration:none;">
+     font-size:15px;font-weight:600;color:var(--text-2);text-decoration:none;">
     <svg class="ic" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>Search
   </a>
 </aside>
@@ -340,13 +340,13 @@ A vertical navigation panel (iPad / desktop). Regular glass. Concentric radii: o
 A glass-track segmented control with state transitions. Inner pill radius is concentric: outer `--r-pill` (999), inner padding 3px → inner pill also `--r-pill`.
 
 ```html
-<div class="glass-seg glass-base" role="group" aria-label="View mode"
+<div class="glass-seg glass-base" role="tablist" aria-label="View mode"
      style="display:inline-flex;border-radius:var(--r-pill);padding:3px;gap:2px;">
-  <button type="button" aria-pressed="true"
+  <button type="button" role="tab" aria-selected="true" tabindex="0"
           style="border:none;cursor:pointer;font-size:13px;font-weight:600;padding:7px 15px;
                  border-radius:var(--r-pill);background:var(--surface);color:var(--text);
-                 box-shadow:0 1px 3px rgba(0,0,0,0.12);">Unified</button>
-  <button type="button" aria-pressed="false"
+                 box-shadow:var(--sh-seg-active);">Unified</button>
+  <button type="button" role="tab" aria-selected="false" tabindex="-1"
           style="border:none;cursor:pointer;font-size:13px;font-weight:500;padding:7px 15px;
                  border-radius:var(--r-pill);background:transparent;color:var(--text-2);">Grid</button>
 </div>
@@ -417,15 +417,15 @@ A floating menu anchored to a trigger. Clear glass if over media; Regular if ove
      style="position:absolute;z-index:var(--z-popover);border-radius:var(--r-panel);
             padding:6px;min-width:200px;">
   <button type="button" role="menuitem"
-          style="width:100%;height:40px;padding:0 14px;border:none;border-radius:var(--r-pill);
+          style="width:100%;height:44px;padding:0 14px;border:none;border-radius:var(--r-pill);
                  background:transparent;color:var(--text);font-size:14px;font-weight:500;
                  text-align:left;cursor:pointer;">Edit</button>
   <button type="button" role="menuitem"
-          style="width:100%;height:40px;padding:0 14px;border:none;border-radius:var(--r-pill);
+          style="width:100%;height:44px;padding:0 14px;border:none;border-radius:var(--r-pill);
                  background:transparent;color:var(--text);font-size:14px;font-weight:500;
                  text-align:left;cursor:pointer;">Duplicate</button>
   <button type="button" role="menuitem" aria-disabled="false"
-          style="width:100%;height:40px;padding:0 14px;border:none;border-radius:var(--r-pill);
+          style="width:100%;height:44px;padding:0 14px;border:none;border-radius:var(--r-pill);
                  background:transparent;color:var(--danger);font-size:14px;font-weight:500;
                  text-align:left;cursor:pointer;">Delete</button>
 </div>
@@ -467,7 +467,7 @@ A circular glass button that floats above content. `--z-fab` z-index, `--glass-s
                display:flex;align-items:center;justify-content:center;cursor:pointer;
                box-shadow:var(--glass-shadow-floating);">
   <svg class="ic" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="var(--accent)"
-       stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+       stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
     <path d="M12 5v14"/><path d="M5 12h14"/>
   </svg>
 </button>
@@ -488,7 +488,7 @@ Glass-backed check controls with accent fill on checked state. `role="checkbox"`
                background:var(--glass-bg-clear-light);backdrop-filter:blur(var(--glass-clear-blur));
                -webkit-backdrop-filter:blur(var(--glass-clear-blur));border:var(--glass-edge-light);">
   <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="var(--accent)"
-       stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+       stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"
        style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);">
     <path d="M5 12l5 5L20 6"/>
   </svg>
@@ -517,16 +517,16 @@ A right-click / long-press menu. Regular glass (carries text). `role="menu"` + `
 <div class="glass-context glass-base" role="menu" aria-label="Context actions"
      style="position:fixed;z-index:var(--z-popover);border-radius:var(--r-panel);padding:6px;min-width:180px;">
   <button type="button" role="menuitem"
-          style="width:100%;height:40px;padding:0 14px;border:none;border-radius:var(--r-pill);
+          style="width:100%;height:44px;padding:0 14px;border:none;border-radius:var(--r-pill);
                  background:transparent;color:var(--text);font-size:14px;font-weight:500;
                  text-align:left;cursor:pointer;">Copy</button>
   <button type="button" role="menuitem"
-          style="width:100%;height:40px;padding:0 14px;border:none;border-radius:var(--r-pill);
+          style="width:100%;height:44px;padding:0 14px;border:none;border-radius:var(--r-pill);
                  background:transparent;color:var(--text);font-size:14px;font-weight:500;
                  text-align:left;cursor:pointer;">Paste</button>
   <div style="height:1px;margin:4px 8px;background:var(--glass-hairline-light);"></div>
   <button type="button" role="menuitem"
-          style="width:100%;height:40px;padding:0 14px;border:none;border-radius:var(--r-pill);
+          style="width:100%;height:44px;padding:0 14px;border:none;border-radius:var(--r-pill);
                  background:transparent;color:var(--danger);font-size:14px;font-weight:500;
                  text-align:left;cursor:pointer;">Delete</button>
 </div>
@@ -535,7 +535,7 @@ A right-click / long-press menu. Regular glass (carries text). `role="menu"` + `
 .glass-context{transform-origin:top left;transform:scale(0.95);opacity:0;pointer-events:none;
   transition:opacity .2s var(--ease-spring),transform .2s var(--ease-spring);}
 .glass-context.open{transform:scale(1);opacity:1;pointer-events:auto;}
-.glass-context button:hover{background:rgba(0,0,0,0.05);}
+.glass-context button:hover{background:var(--btn-quiet-bg);}
 @media (prefers-color-scheme:dark){
   .glass-context button:hover{background:rgba(255,255,255,0.08);}
   .glass-context>div{background:var(--glass-hairline-dark)!important;}

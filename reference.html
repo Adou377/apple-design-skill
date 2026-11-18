@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Apple Liquid Glass · Design System</title>
+<meta name="description" content="Apple 液态玻璃设计系统参考样板：色板、字阶、组件与可访问性降级阶梯。">
 <link rel="stylesheet" href="tokens.css">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -31,8 +32,9 @@
 
   .ds-row + .ds-row { border-top: 1px solid var(--hairline); }
   @media (max-width: 680px) {
-    .ds-2col { grid-template-columns: 1fr !important; }
+    .ds-2col, .ds-4col { grid-template-columns: 1fr !important; }
     .ds-3col { grid-template-columns: 1fr !important; }
+    .ds-ladder { grid-template-columns: 1fr 1fr !important; }
   }
 
   /* ════════════════════════════════════════════════════════════════
@@ -62,9 +64,9 @@
     backdrop-filter: saturate(var(--glass-sat-rest)) blur(var(--glass-blur-rest));
     box-shadow: var(--glass-shadow-rest);
     border: 1px solid var(--glass-hairline-light);
-    transition: -webkit-backdrop-filter .28s var(--ease-out-quart),
-                backdrop-filter .28s var(--ease-out-quart),
-                box-shadow .28s var(--ease-out-quart),
+    transition: -webkit-backdrop-filter .3s var(--ease-spring),
+                backdrop-filter .3s var(--ease-spring),
+                box-shadow .3s var(--ease-spring),
                 transform .18s var(--ease-out-quart);
   }
 
@@ -75,10 +77,10 @@
     backdrop-filter: saturate(var(--glass-sat-rest)) blur(var(--glass-blur-rest));
     box-shadow: var(--glass-shadow-rest);
     border-bottom: 1px solid transparent;
-    transition: -webkit-backdrop-filter .28s var(--ease-out-quart),
-                backdrop-filter .28s var(--ease-out-quart),
-                box-shadow .28s var(--ease-out-quart),
-                border-color .28s var(--ease-out-quart);
+    transition: -webkit-backdrop-filter .3s var(--ease-spring),
+                backdrop-filter .3s var(--ease-spring),
+                box-shadow .3s var(--ease-spring),
+                border-color .3s var(--ease-spring);
   }
   /* Scrolled: content has moved under the nav — bump blur + shadow, reveal hairline */
   .glass-nav.is-scrolled {
@@ -170,7 +172,7 @@
   .seg-btn:hover { background: var(--btn-quiet-bg); }
   .seg-btn[aria-selected="true"] {
     background: var(--text); color: #fff; font-weight: 600;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.16);
+    box-shadow: var(--sh-seg-active-strong);
   }
 
   /* Button active states */
@@ -190,9 +192,14 @@
   @media (prefers-reduced-motion: reduce) {
     #mSheet { transition: opacity .2s ease !important; transform: none !important; }
   }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: .01ms !important; }
+  #mSheet { transition: opacity .2s ease !important; }
+}
 </style>
 </head>
 <body>
+<noscript><p style="max-width:1080px;margin:16px auto;padding:0 var(--pad-x);font-size:15px;color:var(--text);">本页的色板、字阶与降级演示由 JavaScript 渲染，请启用 JavaScript 查看完整样板。</p></noscript>
 <div style="min-height: 100vh; padding-bottom: 64px;">
 
   <!-- ── Glass nav (state-token system; scroll-edge) ── -->
@@ -200,40 +207,40 @@
     <div style="max-width: var(--max-grid); margin: 0 auto; padding: 0 var(--pad-x); height: 54px; display: flex; align-items: center; justify-content: space-between; gap: 16px;">
       <div style="display: flex; align-items: center; gap: 9px;">
         <span style="width: 26px; height: 26px; border-radius: var(--r-chip); background: var(--text); color: #fff; display: grid; place-items: center; font-size: 13px; font-weight: 700; letter-spacing: -0.02em;" aria-hidden="true">A</span>
-        <span style="font-size: 15px; font-weight: 650; letter-spacing: -0.01em;">Apple Liquid Glass</span><span style="font-size:15px;font-weight:650;letter-spacing:-0.01em;"> · 设计系统</span>
+        <span style="font-size: 15px; font-weight:700; letter-spacing: -0.01em;">Apple Liquid Glass</span><span style="font-size:15px;font-weight:700;letter-spacing:-0.01em;"> · 设计系统</span>
       </div>
-      <span style="font-size: 12.5px; color: var(--text-3);">液态玻璃 · v2</span>
+      <span style="font-size: 12.5px; color: var(--text-2);">液态玻璃 · v2</span>
     </div>
   </header>
 
-  <main style="max-width: 1080px; margin: 0 auto; padding: 0 24px;">
+  <main style="max-width: 1080px; margin: 0 auto; padding: 0 var(--pad-x);">
 
     <!-- ── Intro: dual-track model ── -->
     <section style="padding: clamp(36px,6vw,64px) 0 clamp(20px,4vw,32px);">
-      <div style="display: flex; align-items: center; gap: 9px; font-size: 12px; font-weight: 600; letter-spacing: 0.14em; color: var(--text-3);">
+      <div style="display: flex; align-items: center; gap: 9px; font-size: 12px; font-weight: 600; letter-spacing: 0.14em; color: var(--text-2);">
         <span style="width: 7px; height: 7px; border-radius: 50%; background: var(--live); animation: pulse-dot 2.2s infinite;" aria-hidden="true"></span>
         样板间 · LIVING STYLE GUIDE
       </div>
-      <h1 style="margin-top: 15px; font-size: clamp(32px,6vw,52px); font-weight: 700; letter-spacing: -0.03em; line-height: 1.06;">双轨材质系统</h1>
+      <h1 style="margin-top: 15px; font-size: clamp(28px,5vw,44px); font-weight: 700; letter-spacing: -0.03em; line-height: 1.08;">双轨材质系统</h1>
       <p style="margin-top: 16px; font-size: clamp(15px,2.5vw,18px); color: var(--text-2); line-height: 1.6; max-width: 600px;"><strong style="color: var(--text);">双轨模型：</strong>内容表面用实色 <code style="font-family: var(--mono);">#fff</code>，控制表面用液态玻璃作为主材质。玻璃只作为<strong style="color: var(--text);">控制层</strong>出现在图层重叠处——导航、工具栏、标签栏、侧栏与各类控件；阅读内容永远是实色白 + 阴影，绝不玻璃。所有玻璃统一走 <code style="font-family: var(--mono);">--glass-*</code> 令牌，状态由 rest → hover → pressed → scrolled 驱动。</p>
     </section>
 
     <!-- 颜色 -->
     <section style="margin-top: 18px;" aria-labelledby="color-section-title">
-      <div id="color-section-title" style="font-size: 12px; font-weight: 650; letter-spacing: 0.14em; color: var(--text-2); margin-bottom: 16px;">01 — 颜色</div>
+      <h2 id="color-section-title" style="font-size: 12px; font-weight:700; letter-spacing: 0.14em; color: var(--text-2); margin: 0 0 16px;">01 — 颜色</h2>
       <div style="background: var(--surface); border-radius: var(--r-panel); padding: clamp(20px,3vw,30px); box-shadow: var(--sh-panel);">
-        <h3 style="font-size: 13px; font-weight: 600; color: var(--text-3); margin-bottom: 14px;">中性 · 界面骨架</h3>
+        <h3 style="font-size: 13px; font-weight: 600; color: var(--text-2); margin-bottom: 14px;">中性 · 界面骨架</h3>
         <div id="ds-neutrals" role="list" aria-label="中性色板" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(116px, 1fr)); gap: 12px;"></div>
-        <h3 style="font-size: 13px; font-weight: 600; color: var(--text-3); margin: 26px 0 14px;">强调 · 仅用于重点</h3>
+        <h3 style="font-size: 13px; font-weight: 600; color: var(--text-2); margin: 26px 0 14px;">强调 · 仅用于重点</h3>
         <div id="ds-accents" role="list" aria-label="强调色板" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(116px, 1fr)); gap: 12px;"></div>
-        <h3 style="font-size: 13px; font-weight: 600; color: var(--text-3); margin: 26px 0 14px;">标志性渐变 · hero / CTA / 题图</h3>
+        <h3 style="font-size: 13px; font-weight: 600; color: var(--text-2); margin: 26px 0 14px;">标志性渐变 · hero / CTA / 题图</h3>
         <div id="ds-gradients" role="list" aria-label="渐变色板" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px;"></div>
       </div>
     </section>
 
     <!-- 字体 -->
     <section style="margin-top: 40px;" aria-labelledby="type-section-title">
-      <div id="type-section-title" style="font-size: 12px; font-weight: 650; letter-spacing: 0.14em; color: var(--text-2); margin-bottom: 16px;">02 — 字体与排版</div>
+      <h2 id="type-section-title" style="font-size: 12px; font-weight:700; letter-spacing: 0.14em; color: var(--text-2); margin: 0 0 16px;">02 — 字体与排版</h2>
       <div style="background: var(--surface); border-radius: var(--r-panel); padding: clamp(20px,3vw,34px); box-shadow: var(--sh-panel);">
         <div id="ds-type" role="list" aria-label="字体排版示例" style="display: flex; flex-direction: column; gap: 22px;"></div>
       </div>
@@ -241,14 +248,14 @@
 
     <!-- 圆角阴影 -->
     <section style="margin-top: 40px;" aria-labelledby="radius-shadow-title">
-      <div id="radius-shadow-title" style="font-size: 12px; font-weight: 650; letter-spacing: 0.14em; color: var(--text-2); margin-bottom: 16px;">03 — 圆角 · 阴影</div>
+      <div id="radius-shadow-title" style="font-size: 12px; font-weight:700; letter-spacing: 0.14em; color: var(--text-2); margin-bottom: 16px;">03 — 圆角 · 阴影</div>
       <div class="ds-2col" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
         <div style="background: var(--surface); border-radius: var(--r-panel); padding: clamp(20px,3vw,28px); box-shadow: var(--sh-panel);">
-          <h3 style="font-size: 13px; font-weight: 600; color: var(--text-3); margin-bottom: 16px;">圆角档位</h3>
+          <h3 style="font-size: 13px; font-weight: 600; color: var(--text-2); margin-bottom: 16px;">圆角档位</h3>
           <div id="ds-radii" role="list" aria-label="圆角档位" style="display: flex; flex-wrap: wrap; gap: 14px;"></div>
         </div>
         <div style="background: var(--surface); border-radius: var(--r-panel); padding: clamp(20px,3vw,28px); box-shadow: var(--sh-panel);">
-          <h3 style="font-size: 13px; font-weight: 600; color: var(--text-3); margin-bottom: 20px;">阴影档位</h3>
+          <h3 style="font-size: 13px; font-weight: 600; color: var(--text-2); margin-bottom: 20px;">阴影档位</h3>
           <div id="ds-shadows" role="list" aria-label="阴影档位" style="display: flex; flex-wrap: wrap; gap: 22px; padding: 6px;"></div>
         </div>
       </div>
@@ -256,36 +263,36 @@
 
     <!-- 组件 -->
     <section style="margin-top: 40px;" aria-labelledby="components-section-title">
-      <div id="components-section-title" style="font-size: 12px; font-weight: 650; letter-spacing: 0.14em; color: var(--text-2); margin-bottom: 16px;">04 — 组件</div>
+      <h2 id="components-section-title" style="font-size: 12px; font-weight:700; letter-spacing: 0.14em; color: var(--text-2); margin: 0 0 16px;">04 — 组件</h2>
       <div class="ds-2col" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
 
         <div style="background: var(--surface); border-radius: var(--r-panel); padding: clamp(20px,3vw,28px); box-shadow: var(--sh-panel);">
-          <h3 style="font-size: 13px; font-weight: 600; color: var(--text-3); margin-bottom: 16px;">胶囊分段控件</h3>
+          <h3 style="font-size: 13px; font-weight: 600; color: var(--text-2); margin-bottom: 16px;">胶囊分段控件</h3>
           <div id="ds-seg" role="tablist" aria-label="分段控件示例" style="display: inline-flex; background: var(--btn-quiet-bg); border-radius: var(--r-pill); padding: 3px; gap: 2px; margin-bottom: 14px;"></div>
           <p style="font-size: 12.5px; color: var(--text-2);">点一下试试选中态切换。</p>
         </div>
 
         <div style="background: var(--surface); border-radius: var(--r-panel); padding: clamp(20px,3vw,28px); box-shadow: var(--sh-panel);">
-          <h3 style="font-size: 13px; font-weight: 600; color: var(--text-3); margin-bottom: 16px;">按钮</h3>
+          <h3 style="font-size: 13px; font-weight: 600; color: var(--text-2); margin-bottom: 16px;">按钮</h3>
           <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
-            <span class="btn-primary" role="button" tabindex="0" style="display: inline-flex; align-items: center; height: 44px; padding: 0 22px; border-radius: var(--r-pill); background: var(--accent); color: #fff; font-size: 15px; font-weight: 600; cursor: pointer;">主按钮 →</span>
-            <span class="btn-secondary" role="button" tabindex="0" style="display: inline-flex; align-items: center; height: 44px; padding: 0 19px; border-radius: var(--r-pill); background: rgba(255,255,255,0.8); border: 1px solid rgba(0,0,0,0.08); box-shadow: 0 1px 2px rgba(0,0,0,0.05); font-size: 14px; color: var(--text); font-weight: 550; cursor: pointer;">次按钮</span>
+            <button type="button" class="btn-primary" style="display: inline-flex; align-items: center; height: 44px; padding: 0 22px; border-radius: var(--r-pill); background: var(--accent); color: #fff; font-size: 15px; font-weight: 600; cursor: pointer;">主按钮 →</button>
+            <button type="button" class="btn-secondary" style="display: inline-flex; align-items: center; height: 44px; padding: 0 19px; border-radius: var(--r-pill); background: var(--btn-soft-bg); border: 1px solid var(--btn-soft-border); box-shadow: var(--sh-btn); font-size: 14px; color: var(--text); font-weight:600; cursor: pointer;">次按钮</button>
           </div>
         </div>
 
         <div style="background: var(--surface); border-radius: var(--r-panel); padding: clamp(20px,3vw,28px); box-shadow: var(--sh-panel);">
-          <h3 style="font-size: 13px; font-weight: 600; color: var(--text-3); margin-bottom: 16px;">标签 / 胶囊徽标</h3>
+          <h3 style="font-size: 13px; font-weight: 600; color: var(--text-2); margin-bottom: 16px;">标签 / 胶囊徽标</h3>
           <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-            <span style="font-family: var(--mono); font-size: 10.5px; font-weight: 700; color: #fff; background: var(--x-blue); padding: 2px 7px; border-radius: var(--r-chip);">X</span>
-            <span style="font-size: 11.5px; color: var(--text-2); background: rgba(0,0,0,0.05); padding: 3px 10px; border-radius: var(--r-pill);">普通标签</span>
-            <span style="font-size: 11.5px; color: var(--accent-link); background: rgba(0,113,227,0.08); padding: 3px 10px; border-radius: var(--r-pill); font-weight: 550;">强调标签</span>
-            <span style="font-size: 11.5px; font-weight: 650; color: var(--heat); background: var(--heat-bg); padding: 3px 10px; border-radius: var(--r-pill);">最热</span>
-            <span style="font-size: 11.5px; font-weight: 650; color: var(--accent); background: rgba(0,113,227,0.1); padding: 3px 10px; border-radius: var(--r-pill);">热议</span>
+            <span style="font-family: var(--mono); font-size: 10.5px; font-weight: 700; color: #fff; background: var(--x-blue-strong); padding: 2px 7px; border-radius: var(--r-chip);">X</span>
+            <span style="font-size: 11.5px; color: var(--text-body); background: var(--btn-quiet-bg); padding: 3px 10px; border-radius: var(--r-pill);">普通标签</span>
+            <span style="font-size: 11.5px; color: var(--accent-link); background: rgba(0,113,227,0.08); padding: 3px 10px; border-radius: var(--r-pill); font-weight:600;">强调标签</span>
+            <span style="font-size: 11.5px; font-weight:700; color: var(--heat-fg); background: var(--heat-bg); padding: 3px 10px; border-radius: var(--r-pill);">最热</span>
+            <span style="font-size: 11.5px; font-weight:700; color: var(--accent-link); background: rgba(0,113,227,0.1); padding: 3px 10px; border-radius: var(--r-pill);">热议</span>
           </div>
         </div>
 
         <div style="background: var(--surface); border-radius: var(--r-panel); padding: clamp(20px,3vw,28px); box-shadow: var(--sh-panel);">
-          <h3 style="font-size: 13px; font-weight: 600; color: var(--text-3); margin-bottom: 16px;">统一列表 + 发丝线</h3>
+          <h3 style="font-size: 13px; font-weight: 600; color: var(--text-2); margin-bottom: 16px;">统一列表 + 发丝线</h3>
           <div role="list" aria-label="示例列表" style="border-radius: var(--r-card); border: 1px solid rgba(0,0,0,0.06); overflow: hidden;">
             <div class="ds-row" role="listitem" style="padding: 13px 16px;"><div style="font-size: 14px; font-weight: 600;">条目一</div><div style="font-size: 12px; color: var(--text-2); margin-top: 2px;">发丝线分隔，连续表面</div></div>
             <div class="ds-row" role="listitem" style="padding: 13px 16px;"><div style="font-size: 14px; font-weight: 600;">条目二</div><div style="font-size: 12px; color: var(--text-2); margin-top: 2px;">而非碎片卡片</div></div>
@@ -298,16 +305,16 @@
 
     <!-- ═══════ 05 — 液态玻璃（扩展） ═══════ -->
     <section style="margin-top: 40px;" aria-labelledby="glass-section-title">
-      <div id="glass-section-title" style="font-size: 12px; font-weight: 650; letter-spacing: 0.14em; color: var(--text-2); margin-bottom: 16px;">05 — 液态玻璃 · 控制层系统</div>
+      <h2 id="glass-section-title" style="font-size: 12px; font-weight:700; letter-spacing: 0.14em; color: var(--text-2); margin: 0 0 16px;">05 — 液态玻璃 · 控制层系统</h2>
 
       <!-- Dual-track explainer (content solid / control glass) -->
       <div class="ds-2col" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
         <div style="background: var(--surface); border-radius: var(--r-thumb); padding: 16px 18px; border: 1px solid var(--hairline);">
-          <div style="font-size: 13px; font-weight: 650; color: var(--text); margin-bottom: 6px;">内容轨 · 实色 #fff</div>
+          <div style="font-size: 13px; font-weight:700; color: var(--text); margin-bottom: 6px;">内容轨 · 实色 #fff</div>
           <div style="font-size: 12.5px; color: var(--text-2); line-height: 1.6;">卡片、列表行、阅读区块——永远 <code style="font-family: var(--mono);">var(--surface)</code> + 阴影 + 发丝线。实色保证可读与连续表面。</div>
         </div>
         <div style="background: var(--glass-bg-regular-light); border: 1px solid var(--glass-hairline-light); border-radius: var(--r-thumb); padding: 16px 18px; -webkit-backdrop-filter: saturate(var(--glass-sat-rest)) blur(var(--glass-blur-rest)); backdrop-filter: saturate(var(--glass-sat-rest)) blur(var(--glass-blur-rest));">
-          <div style="font-size: 13px; font-weight: 650; color: var(--text); margin-bottom: 6px;">控制轨 · 液态玻璃</div>
+          <div style="font-size: 13px; font-weight:700; color: var(--text); margin-bottom: 6px;">控制轨 · 液态玻璃</div>
           <div style="font-size: 12.5px; color: var(--text-2); line-height: 1.6;">导航 / 工具栏 / 标签栏 / 侧栏 / 控件——作为<strong>控制层</strong>浮于内容之上，统一 <code style="font-family: var(--mono);">--glass-*</code> 令牌。</div>
         </div>
       </div>
@@ -319,19 +326,19 @@
         <div class="stage-inner" style="display: flex; flex-direction: column; gap: 18px;">
 
           <div>
-            <div style="font-size: 11px; font-weight: 700; letter-spacing: 0.12em; color: rgba(255,255,255,0.8); margin-bottom: 10px;">A · 控制层玻璃展示 · CONTROL LAYER GLASS</div>
+            <div style="font-size: 11px; font-weight: 700; letter-spacing: 0.12em; color: #fff; margin-bottom: 10px;">A · 控制层玻璃展示 · CONTROL LAYER GLASS</div>
 
             <!-- glass nav (mini) -->
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
               <div>
-                <div style="font-size: 11px; color: rgba(255,255,255,0.7); margin-bottom: 6px;">glass-nav</div>
+                <div style="font-size: 11px; color: #fff; margin-bottom: 6px;">glass-nav</div>
                 <div class="glass-nav" style="position: relative; border-radius: var(--r-pill); padding: 0 14px; height: 38px; display: flex; align-items: center; justify-content: space-between; border-bottom: none;">
-                  <span style="font-size: 13px; font-weight: 650; color: var(--text);">导航 Nav</span>
+                  <span style="font-size: 13px; font-weight:700; color: var(--text);">导航 Nav</span>
                   <span style="font-size: 11px; color: var(--text-2);">滚动时进入 scrolled 态</span>
                 </div>
               </div>
               <div>
-                <div style="font-size: 11px; color: rgba(255,255,255,0.7); margin-bottom: 6px;">glass-toolbar</div>
+                <div style="font-size: 11px; color: #fff; margin-bottom: 6px;">glass-toolbar</div>
                 <div class="glass-toolbar" style="position: relative; border-radius: var(--r-card); padding: 8px 12px; display: flex; align-items: center; gap: 8px;">
                   <span class="glass-float" style="display: grid; place-items: center; width: 30px; height: 30px; border-radius: var(--r-pill); cursor: pointer; color: var(--text);" aria-hidden="true">←</span>
                   <span class="glass-float" style="display: grid; place-items: center; width: 30px; height: 30px; border-radius: var(--r-pill); cursor: pointer; color: var(--text);" aria-hidden="true">→</span>
@@ -344,15 +351,15 @@
             <!-- glass tabbar + sidebar -->
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 14px;">
               <div>
-                <div style="font-size: 11px; color: rgba(255,255,255,0.7); margin-bottom: 6px;">glass-tabbar</div>
-                <div class="glass-tabbar" style="position: relative; border-radius: var(--r-pill); padding: 6px; display: inline-flex; gap: 4px;">
-                  <span style="font-size: 12px; font-weight: 600; color: var(--accent); padding: 6px 14px; border-radius: var(--r-pill); background: var(--surface);">首页</span>
-                  <span style="font-size: 12px; color: var(--text-2); padding: 6px 14px; border-radius: var(--r-pill);">发现</span>
-                  <span style="font-size: 12px; color: var(--text-2); padding: 6px 14px; border-radius: var(--r-pill);">我的</span>
+                <div style="font-size: 11px; color: #fff; margin-bottom: 6px;">glass-tabbar</div>
+                <div class="glass-tabbar" role="tablist" aria-label="示例标签栏" style="position: relative; border-radius: var(--r-pill); padding: 6px; display: inline-flex; gap: 4px;">
+                  <button type="button" role="tab" aria-selected="true" tabindex="0" style="border:none; cursor:pointer; font:inherit; font-size: 12px; font-weight: 600; color: var(--accent); padding: 6px 14px; border-radius: var(--r-pill); background: var(--surface); min-height: 44px; display: inline-flex; align-items: center; justify-content: center;">首页</button>
+                  <button type="button" role="tab" aria-selected="false" tabindex="-1" style="border:none; cursor:pointer; font:inherit; font-size: 12px; color: var(--text-2); padding: 6px 14px; border-radius: var(--r-pill); background: transparent; min-height: 44px; display: inline-flex; align-items: center; justify-content: center;">发现</button>
+                  <button type="button" role="tab" aria-selected="false" tabindex="-1" style="border:none; cursor:pointer; font:inherit; font-size: 12px; color: var(--text-2); padding: 6px 14px; border-radius: var(--r-pill); background: transparent; min-height: 44px; display: inline-flex; align-items: center; justify-content: center;">我的</button>
                 </div>
               </div>
               <div>
-                <div style="font-size: 11px; color: rgba(255,255,255,0.7); margin-bottom: 6px;">glass-sidebar</div>
+                <div style="font-size: 11px; color: #fff; margin-bottom: 6px;">glass-sidebar</div>
                 <div class="glass-sidebar" style="position: relative; border-radius: var(--r-card); padding: 10px; display: flex; flex-direction: column; gap: 6px; width: 150px;">
                   <span style="font-size: 12px; color: var(--text); font-weight: 600; padding: 4px 8px; background: var(--btn-quiet-bg); border-radius: var(--r-pill);">概览</span>
                   <span style="font-size: 12px; color: var(--text-2); padding: 4px 8px;">项目</span>
@@ -364,54 +371,55 @@
             <!-- glass switches / sliders / segmented -->
             <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-top: 14px;" class="ds-3col">
               <div>
-                <div style="font-size: 11px; color: rgba(255,255,255,0.7); margin-bottom: 8px;">glass-switch</div>
-                <div class="glass-switch" style="position: relative; border-radius: var(--r-pill); padding: 8px 12px; display: flex; align-items: center; justify-content: space-between; min-height: 44px;">
+                <div style="font-size: 11px; color: #fff; margin-bottom: 8px;">glass-switch</div>
+                <button type="button" class="glass-switch" id="gSwitch" role="switch" aria-checked="true" aria-label="通知" style="width:100%; border:none; background:transparent; color:inherit; font:inherit; cursor:pointer; position: relative; border-radius: var(--r-pill); padding: 8px 12px; display: flex; align-items: center; justify-content: space-between; min-height: 44px;">
                   <span style="font-size: 12px; color: var(--text);">通知</span>
-                  <span style="width: 30px; height: 18px; border-radius: var(--r-pill); background: var(--accent); position: relative;">
-                    <span style="position: absolute; top: 2px; right: 2px; width: 14px; height: 14px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.2);"></span>
+                  <span aria-hidden="true" style="width: 30px; height: 18px; border-radius: var(--r-pill); background: var(--accent); position: relative;">
+                    <span id="gSwitchKnob" style="position: absolute; top: 2px; right: 2px; width: 14px; height: 14px; border-radius: 50%; background: #fff; box-shadow: var(--sh-btn);"></span>
+                  </span>
+                </button>
+              </div>
+              <div>
+                <div style="font-size: 11px; color: #fff; margin-bottom: 8px;">glass slider</div>
+                <div class="glass-switch" id="gSlider" role="slider" tabindex="0" aria-label="示例滑块" aria-valuemin="0" aria-valuemax="100" aria-valuenow="55" aria-valuetext="55%" style="position: relative; border-radius: var(--r-pill); padding: 14px 12px; min-height: 44px; cursor: pointer;">
+                  <span aria-hidden="true" style="display: block; height: 4px; border-radius: var(--r-pill); background: var(--track); position: relative;">
+                    <span id="gSliderFill" style="position: absolute; left: 0; top: 0; height: 100%; width: 55%; border-radius: var(--r-pill); background: var(--accent);"></span>
+                    <span id="gSliderThumb" style="position: absolute; left: 55%; top: 50%; transform: translate(-50%,-50%); width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: var(--sh-seg-active);"></span>
                   </span>
                 </div>
               </div>
               <div>
-                <div style="font-size: 11px; color: rgba(255,255,255,0.7); margin-bottom: 8px;">glass slider</div>
-                <div class="glass-switch" style="position: relative; border-radius: var(--r-pill); padding: 14px 12px; min-height: 44px;">
-                  <span style="display: block; height: 4px; border-radius: var(--r-pill); background: var(--track); position: relative;">
-                    <span style="position: absolute; left: 0; top: 0; height: 100%; width: 55%; border-radius: var(--r-pill); background: var(--accent);"></span>
-                    <span style="position: absolute; left: 55%; top: 50%; transform: translate(-50%,-50%); width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.25);"></span>
-                  </span>
-                </div>
-              </div>
-              <div>
-                <div style="font-size: 11px; color: rgba(255,255,255,0.7); margin-bottom: 8px;">glass-seg</div>
+                <div style="font-size: 11px; color: #fff; margin-bottom: 8px;">glass-seg</div>
                 <div class="glass-seg" role="tablist" aria-label="玻璃分段" style="position: relative; border-radius: var(--r-pill); padding: 4px; display: inline-flex; gap: 2px;">
-                  <button class="seg-btn" role="tab" aria-selected="true" data-gseg="a" style="color:#fff;">日</button>
-                  <button class="seg-btn" role="tab" aria-selected="false" data-gseg="b" style="color:var(--text-2);">周</button>
-                  <button class="seg-btn" role="tab" aria-selected="false" data-gseg="c" style="color:var(--text-2);">月</button>
+                  <button class="seg-btn" role="tab" aria-selected="true" aria-controls="gsegPanel" tabindex="0" data-gseg="a" style="color:#fff;">日</button>
+                  <button class="seg-btn" role="tab" aria-selected="false" aria-controls="gsegPanel" tabindex="-1" data-gseg="b" style="color:var(--text-2);">周</button>
+                  <button class="seg-btn" role="tab" aria-selected="false" aria-controls="gsegPanel" tabindex="-1" data-gseg="c" style="color:var(--text-2);">月</button>
                 </div>
+                <p id="gsegPanel" role="tabpanel" aria-label="分段内容" aria-live="polite" tabindex="0" style="margin-top:6px; font-size:11px; color:#fff;">当前：日</p>
               </div>
             </div>
-            <p style="margin-top: 14px; font-size: 12.5px; color: rgba(255,255,255,0.82); line-height: 1.6;">所有控制层玻璃统一使用 <code style="font-family: var(--mono);">--glass-*</code> 令牌；背景的彩色光球给玻璃提供可折射内容。悬停 / 按下即时进入对应材质态。</p>
+            <p style="margin-top: 14px; font-size: 12.5px; color: #fff; line-height: 1.6;">所有控制层玻璃统一使用 <code style="font-family: var(--mono);">--glass-*</code> 令牌；背景的彩色光球给玻璃提供可折射内容。悬停 / 按下即时进入对应材质态。</p>
           </div>
 
           <!-- State ladder: rest → hover → pressed → scrolled -->
           <div>
-            <div style="font-size: 11px; font-weight: 700; letter-spacing: 0.12em; color: rgba(255,255,255,0.8); margin-bottom: 10px;">B · 状态阶梯 · rest → hover → pressed → scrolled</div>
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;" class="ds-3col">
+            <div style="font-size: 11px; font-weight: 700; letter-spacing: 0.12em; color: #fff; margin-bottom: 10px;">B · 状态阶梯 · rest → hover → pressed → scrolled</div>
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;" class="ds-4col">
               <div>
                 <div class="gdemo gs-rest" style="height: 76px; display: grid; place-items: center; font-size: 12px; font-weight: 600; color: var(--text);">rest</div>
-                <div style="font-size: 10.5px; color: rgba(255,255,255,0.7); margin-top: 6px; font-family: var(--mono);">blur-rest · sat-rest</div>
+                <div style="font-size: 10.5px; color: #fff; margin-top: 6px; font-family: var(--mono);">blur-rest · sat-rest</div>
               </div>
               <div>
                 <div class="gdemo gs-hover" style="height: 76px; display: grid; place-items: center; font-size: 12px; font-weight: 600; color: var(--text);">hover</div>
-                <div style="font-size: 10.5px; color: rgba(255,255,255,0.7); margin-top: 6px; font-family: var(--mono);">blur-active · sat-active</div>
+                <div style="font-size: 10.5px; color: #fff; margin-top: 6px; font-family: var(--mono);">blur-active · sat-active</div>
               </div>
               <div>
                 <div class="gdemo gs-pressed" style="height: 76px; display: grid; place-items: center; font-size: 12px; font-weight: 600; color: var(--text);">pressed</div>
-                <div style="font-size: 10.5px; color: rgba(255,255,255,0.7); margin-top: 6px; font-family: var(--mono);">shadow-pressed</div>
+                <div style="font-size: 10.5px; color: #fff; margin-top: 6px; font-family: var(--mono);">shadow-pressed</div>
               </div>
               <div>
                 <div class="gdemo gs-scrolled" style="height: 76px; display: grid; place-items: center; font-size: 12px; font-weight: 600; color: var(--text);">scrolled</div>
-                <div style="font-size: 10.5px; color: rgba(255,255,255,0.7); margin-top: 6px; font-family: var(--mono);">blur-scrolled</div>
+                <div style="font-size: 10.5px; color: #fff; margin-top: 6px; font-family: var(--mono);">blur-scrolled</div>
               </div>
             </div>
           </div>
@@ -422,24 +430,24 @@
       <!-- do / don't -->
       <div class="ds-2col" style="margin-top: 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
         <div style="background: var(--success-bg); border: 1px solid color-mix(in srgb, var(--success) 25%, transparent); border-radius: var(--r-thumb); padding: 16px 18px;">
-          <div style="font-size: 13px; font-weight: 650; color: var(--success-fg); margin-bottom: 6px;">✓ 玻璃用于控制层</div>
+          <div style="font-size: 13px; font-weight:700; color: var(--success-fg); margin-bottom: 6px;">✓ 玻璃用于控制层</div>
           <div style="font-size: 12.5px; color: var(--text-2); line-height: 1.6;">吸顶导航、工具栏、标签栏、侧栏、模态浮层、浮岛 / FAB、控件——图层重叠处的控制表面。</div>
         </div>
         <div style="background: var(--danger-bg); border: 1px solid color-mix(in srgb, var(--danger) 25%, transparent); border-radius: var(--r-thumb); padding: 16px 18px;">
-          <div style="font-size: 13px; font-weight: 650; color: var(--danger-fg); margin-bottom: 6px;">✕ 内容不用玻璃</div>
+          <div style="font-size: 13px; font-weight:700; color: var(--danger-fg); margin-bottom: 6px;">✕ 内容不用玻璃</div>
           <div style="font-size: 12.5px; color: var(--text-2); line-height: 1.6;">普通内容卡片、列表行、阅读区块之间——实色 <code style="font-family: var(--mono);">var(--surface)</code> + 阴影即可。</div>
         </div>
       </div>
 
-      <!-- (b) Degradation ladder — 5 levels -->
+      <!-- (b) Degradation ladder — 4 levels -->
       <div style="margin-top: 18px; background: var(--surface); border-radius: var(--r-panel); padding: clamp(20px,3vw,28px); box-shadow: var(--sh-panel);">
-        <h3 style="font-size: 13px; font-weight: 600; color: var(--text-3); margin-bottom: 6px;">C · 性能降级阶梯 · 5 级</h3>
-        <p style="font-size: 12.5px; color: var(--text-2); line-height: 1.6; margin-bottom: 16px; max-width: 620px;">下方为各降级层的<strong>视觉示意</strong>；真实阶梯写在 <code style="font-family: var(--mono);">tokens.css</code>，按 <code style="font-family: var(--mono);">prefers-reduced-transparency</code> → <code style="font-family: var(--mono);">reduced-data</code> → <code style="font-family: var(--mono);">contrast</code> → <code style="font-family: var(--mono);">@supports</code> → <code style="font-family: var(--mono);">print</code> 顺序自动套用，无需嗅探硬件。</p>
+        <h3 style="font-size: 13px; font-weight: 600; color: var(--text-2); margin-bottom: 6px;">C · 性能降级阶梯 · 4 级</h3>
+        <p style="font-size: 12.5px; color: var(--text-2); line-height: 1.6; margin-bottom: 16px; max-width: 620px;">下方为各降级层的<strong>视觉示意</strong>；真实阶梯写在 <code style="font-family: var(--mono);">tokens.css</code>，按 <code style="font-family: var(--mono);">prefers-reduced-transparency</code> → <code style="font-family: var(--mono);">prefers-contrast</code> → <code style="font-family: var(--mono);">@supports</code> → <code style="font-family: var(--mono);">print</code> 顺序自动套用，无需嗅探硬件。</p>
 
         <div class="stage" style="padding: 18px;">
           <div class="stage-orb" style="width: 180px; height: 180px; background: rgba(255,255,255,0.18); filter: blur(40px); top: -60px; right: 10%;" aria-hidden="true"></div>
           <div class="stage-orb" style="width: 150px; height: 150px; background: rgba(120,80,255,0.5); filter: blur(44px); bottom: -60px; left: 10%;" aria-hidden="true"></div>
-          <div class="stage-inner" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px;" id="ladderGrid"></div>
+          <div class="stage-inner" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px;" id="ladderGrid" class="ds-ladder"></div>
         </div>
       </div>
     </section>
@@ -449,21 +457,21 @@
 
     <!-- 06 — 动效 -->
     <section style="margin-top: 40px;" aria-labelledby="motion-section-title">
-      <div id="motion-section-title" style="font-size: 12px; font-weight: 650; letter-spacing: 0.14em; color: var(--text-2); margin-bottom: 16px;">06 — 动效(交互层,见 motion.md)</div>
+      <h2 id="motion-section-title" style="font-size: 12px; font-weight:700; letter-spacing: 0.14em; color: var(--text-2); margin: 0 0 16px;">06 — 动效(交互层,见 motion.md)</h2>
       <div style="background: var(--surface); border-radius: var(--r-panel); padding: clamp(22px,4vw,32px); box-shadow: var(--sh-panel);">
         <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
           <button id="mSheetBtn" aria-haspopup="dialog" style="height: 44px; padding: 0 22px; border: none; border-radius: var(--r-pill); background: var(--accent); color: #fff; font: 600 14.5px/1 var(--font); cursor: pointer; transition: background .2s var(--ease-out-quart), transform .1s ease-out;">召出 Sheet(材质化入场)</button>
-          <button id="mFeedbackBtn" style="height: 44px; padding: 0 20px; border-radius: var(--r-pill); background: rgba(255,255,255,0.8); border: 1px solid rgba(0,0,0,0.1); box-shadow: 0 1px 2px rgba(0,0,0,0.05); font: 600 14.5px/1 var(--font); color: var(--text); cursor: pointer; transition: transform .1s ease-out;">按下反馈(pointer-down)</button>
+          <button id="mFeedbackBtn" style="height: 44px; padding: 0 20px; border-radius: var(--r-pill); background: var(--btn-soft-bg); border: 1px solid var(--btn-soft-border); box-shadow: var(--sh-btn); font: 600 14.5px/1 var(--font); color: var(--text); cursor: pointer; transition: transform .1s ease-out;">按下反馈(pointer-down)</button>
           <input id="mFocusInput" placeholder="焦点环 200ms 过渡" aria-label="焦点环测试输入框" style="height: 44px; padding: 0 16px; border: 1px solid rgba(0,0,0,0.1); border-radius: var(--r-pill); font: 400 14px var(--font); outline: none; transition: border-color .2s var(--ease-out-quart), box-shadow .2s var(--ease-out-quart);">
         </div>
-        <p style="margin-top: 14px; font-size: 13px; color: var(--text-3); line-height: 1.6;">规则:反馈在按下瞬间(不等松开);入场 ~400ms <code style="font-family: var(--mono);">--ease-spring</code>、退场同路径 ~260ms;玻璃面 opacity+scale+shadow 同动(材质化);CSS transition 可中途反向(不用 keyframes);三条 <code style="font-family: var(--mono);">prefers-reduced-*</code> 必备。</p>
+        <p style="margin-top: 14px; font-size: 13px; color: var(--text-2); line-height: 1.6;">规则:反馈在按下瞬间(不等松开);入场 ~400ms <code style="font-family: var(--mono);">--ease-spring</code>、退场同路径 ~260ms;玻璃面 opacity+scale+shadow 同动(材质化);CSS transition 可中途反向(不用 keyframes);三条 <code style="font-family: var(--mono);">prefers-reduced-*</code> 必备。</p>
       </div>
     </section>
 
     <!-- Sheet demo:同路径进出 + 材质化 + scrim (glass-modal tokens) -->
     <div id="mScrim" aria-hidden="true" style="position: fixed; inset: 0; background: var(--glass-dim); opacity: 0; pointer-events: none; transition: opacity .25s ease; z-index: var(--z-modal);"></div>
-    <div id="mSheet" class="glass-modal" role="dialog" aria-modal="true" aria-labelledby="mSheetTitle" aria-hidden="true" style="position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%) translateY(24px) scale(0.98); width: min(480px, calc(100vw - 32px)); padding: 26px; border-radius: var(--r-hero); opacity: 0; pointer-events: none; transform-origin: 50% 100%; transition: opacity .4s var(--ease-spring), transform .4s var(--ease-spring), box-shadow .4s var(--ease-spring); z-index: var(--z-toast);">
-      <h3 id="mSheetTitle" style="font: 700 18px/1.2 var(--font); letter-spacing: -0.02em; color: var(--text);">材质化 Sheet</h3>
+    <div id="mSheet" class="glass-modal" role="dialog" aria-modal="true" aria-labelledby="mSheetTitle" aria-hidden="true" inert style="position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%) translateY(24px) scale(0.98); width: min(480px, calc(100vw - 32px)); padding: 26px; border-radius: var(--r-hero); opacity: 0; pointer-events: none; transform-origin: 50% 100%; transition: opacity .4s var(--ease-spring), transform .4s var(--ease-spring), box-shadow .4s var(--ease-spring); z-index: var(--z-modal);">
+      <h2 id="mSheetTitle" style="font: 700 18px/1.2 var(--font); letter-spacing: -0.02em; color: var(--text);">材质化 Sheet</h2>
       <p style="margin-top: 8px; font: 400 14px/1.65 var(--font); color: var(--text-body);">opacity + 位移 + 缩放同动,从触发方向(底部)升起,退场原路返回。玻璃使用 <code style="font-family: var(--mono);">--glass-*</code> 令牌保持全程一致。连点按钮试试中途反向——transition 天然可打断。</p>
       <button id="mSheetClose" style="margin-top: 16px; height: 44px; padding: 0 18px; border: none; border-radius: var(--r-pill); background: var(--accent); color: #fff; font: 600 13.5px/1 var(--font); cursor: pointer;">收回</button>
     </div>
@@ -472,50 +480,51 @@
 </div>
 
 <script>
-// 设计令牌(单一数据源;与 design-system.md / tokens.css 对齐)
+// 设计令牌(单一数据源:直接读取 tokens.css 的 CSS 自定义属性)
 const DATA = {
   neutrals: [
-    { name: '页面背景', hex: '#f5f5f7' },
-    { name: '表面', hex: '#ffffff' },
-    { name: '正文主色', hex: '#1d1d1f' },
-    { name: '次级', hex: '#6e6e73' },
-    { name: '三级', hex: '#86868b' },
-    { name: '四级', hex: '#aeaeb2' },
-    { name: '极淡', hex: '#d2d2d7' }
+    { name: '页面背景', token: '--bg' },
+    { name: '表面', token: '--surface' },
+    { name: '正文主色', token: '--text' },
+    { name: '次级', token: '--text-2' },
+    { name: '三级（仅大字号）', token: '--text-3' },
+    { name: '四级', token: '--text-4' },
+    { name: '极淡', token: '--faint' }
   ],
   accents: [
-    { name: 'Apple 蓝', hex: '#0071e3' },
-    { name: '靛蓝', hex: '#5e5ce6' },
-    { name: 'X 蓝', hex: '#1d9bf0' },
-    { name: '热度橙', hex: '#ff6b00' },
-    { name: '实时绿', hex: '#30d158' }
+    { name: 'Apple 蓝', token: '--accent' },
+    { name: '靛蓝', token: '--indigo' },
+    { name: 'X 蓝', token: '--x-blue' },
+    { name: '热度橙', token: '--heat' },
+    { name: '实时绿', token: '--live' }
   ],
   gradients: [
-    { name: '蓝紫', css: 'linear-gradient(135deg, #0a84ff 0%, #5e5ce6 100%)' },
-    { name: '暖橙红', css: 'linear-gradient(135deg, #ff9f0a 0%, #ff375f 100%)' },
-    { name: '绿蓝', css: 'linear-gradient(135deg, #30d158 0%, #0a84ff 100%)' },
-    { name: 'CTA 主色', css: 'linear-gradient(135deg, #0071e3 0%, #5e5ce6 100%)' }
+    { name: '蓝紫', token: '--grad-blue' },
+    { name: '暖橙红', token: '--grad-warm' },
+    { name: '绿蓝', token: '--grad-green' },
+    { name: 'CTA 主色', token: '--grad-cta' }
   ],
   typeScale: [
-    { spec: 'H1 · clamp(27,5vw,46) · 700 · -0.03em', size: 'clamp(27px,5vw,44px)', weight: '700', tracking: '-0.03em', lh: '1.12', sample: '今天，苹果圈在聊什么' },
+    { spec: 'H1 · clamp(28,5vw,44) · 700 · -0.03em', size: 'clamp(28px,5vw,44px)', weight: '700', tracking: '-0.03em', lh: '1.08', sample: '今天，苹果圈在聊什么' },
     { spec: 'H2 · clamp(20,3.4vw,26) · 700 · -0.02em', size: 'clamp(20px,3.4vw,26px)', weight: '700', tracking: '-0.02em', lh: '1.25', sample: '信号雷达' },
     { spec: 'H3 · 17 · 600 · -0.01em', size: '17px', weight: '600', tracking: '-0.01em', lh: '1.45', sample: 'iPhone 17 Pro 号称充电最快' },
     { spec: '长正文 · 17 · 400 · 行高 1.9', size: '17px', weight: '400', tracking: '0', lh: '1.9', sample: '苹果灰白底加统一白色表面与发丝分隔线，玻璃只在图层真正重叠处点到为止。' },
-    { spec: 'meta · 13 · 550', size: '13px', weight: '550', tracking: '0', lh: '1.6', sample: '@MacRumors · 82.6万 浏览 · 5.0K 赞' }
+    { spec: 'meta · 13 · 600', size: '13px', weight: '600', tracking: '0', lh: '1.6', sample: '@MacRumors · 82.6万 浏览 · 5.0K 赞' }
   ],
   radii: [
-    { label: '标签/按钮', value: '999px' },
-    { label: '徽标', value: '6px' },
-    { label: '缩略图', value: '12px' },
-    { label: '卡片', value: '18px' },
-    { label: '大面板', value: '22px' }
+    { label: '标签/按钮', value: '--r-pill' },
+    { label: '徽标', value: '--r-chip' },
+    { label: '缩略图', value: '--r-thumb' },
+    { label: '卡片', value: '--r-card' },
+    { label: '大面板', value: '--r-panel' }
   ],
   shadows: [
-    { label: '卡片', value: '0 1px 2px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.05)' },
-    { label: '大面板', value: '0 1px 3px rgba(0,0,0,0.05), 0 14px 40px rgba(0,0,0,0.05)' },
-    { label: '悬浮', value: '0 12px 32px rgba(0,0,0,0.1)' }
+    { label: '卡片', value: '--sh-card' },
+    { label: '大面板', value: '--sh-panel' },
+    { label: '悬浮', value: '--sh-lift' }
   ]
 };
+const tokenValue = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 
 // Safe DOM helpers — never innerHTML with data, always textContent / createElement
 function byId(id) { return document.getElementById(id); }
@@ -530,10 +539,11 @@ function createEl(tag, className, textContent) {
 function createSwatch(c) {
   const container = createEl('div'); container.setAttribute('role', 'listitem');
   const colorBox = createEl('div');
-  colorBox.style.cssText = 'height: 64px; border-radius: var(--r-thumb); background: ' + c.hex + '; border: 1px solid rgba(0,0,0,0.06); box-shadow: inset 0 0 0 0.5px rgba(0,0,0,0.02);';
+  const hex = c.token ? tokenValue(c.token) : c.hex;
+  colorBox.style.cssText = 'height: 64px; border-radius: var(--r-thumb); background: ' + hex + '; border: 1px solid rgba(0,0,0,0.06); box-shadow: inset 0 0 0 0.5px rgba(0,0,0,0.02);';
   const nameLabel = createEl('div', null, c.name);
   nameLabel.style.cssText = 'margin-top: 8px; font-size: 12px; font-weight: 600;';
-  const hexLabel = createEl('div', null, c.hex);
+  const hexLabel = createEl('div', null, hex);
   hexLabel.style.cssText = 'font-size: 11px; color: var(--text-2); font-family: var(--mono);';
   container.appendChild(colorBox); container.appendChild(nameLabel); container.appendChild(hexLabel);
   return container;
@@ -544,7 +554,8 @@ DATA.accents.forEach(c => byId('ds-accents').appendChild(createSwatch(c)));
 
 DATA.gradients.forEach(g => {
   const container = createEl('div'); container.setAttribute('role', 'listitem');
-  container.style.cssText = 'height: 70px; border-radius: var(--r-thumb); background: ' + g.css + '; display: flex; align-items: flex-end; padding: 10px;';
+  const bg = g.token ? tokenValue(g.token) : g.css;
+  container.style.cssText = 'height: 70px; border-radius: var(--r-thumb); background: ' + bg + '; display: flex; align-items: flex-end; padding: 10px;';
   const label = createEl('span', null, g.name);
   label.style.cssText = 'font-size: 11px; color: rgba(255,255,255,0.95); font-weight: 600; background: rgba(0,0,0,0.45); padding: 2px 8px; border-radius: var(--r-chip);';
   container.appendChild(label);
@@ -566,10 +577,11 @@ DATA.radii.forEach(r => {
   const container = createEl('div'); container.setAttribute('role', 'listitem');
   container.style.cssText = 'text-align: center;';
   const box = createEl('div');
-  box.style.cssText = 'width: 60px; height: 60px; background: var(--bg); border: 1px solid rgba(0,0,0,0.08); border-radius: ' + r.value + ';';
+  const rv = tokenValue(r.value) || r.value;
+  box.style.cssText = 'width: 60px; height: 60px; background: var(--bg); border: 1px solid rgba(0,0,0,0.08); border-radius: ' + rv + ';';
   const label = createEl('div', null, r.label);
-  label.style.cssText = 'margin-top: 7px; font-size: 11px; color: var(--text-2); font-weight: 550;';
-  const value = createEl('div', null, r.value);
+  label.style.cssText = 'margin-top: 7px; font-size: 11px; color: var(--text-2); font-weight:600;';
+  const value = createEl('div', null, rv);
   value.style.cssText = 'font-size: 10.5px; color: var(--text-2); font-family: var(--mono);';
   container.appendChild(box); container.appendChild(label); container.appendChild(value);
   byId('ds-radii').appendChild(container);
@@ -579,9 +591,10 @@ DATA.shadows.forEach(sh => {
   const container = createEl('div'); container.setAttribute('role', 'listitem');
   container.style.cssText = 'text-align: center;';
   const box = createEl('div');
-  box.style.cssText = 'width: 78px; height: 56px; background: var(--surface); border-radius: var(--r-card); box-shadow: ' + sh.value + ';';
+  const shv = tokenValue(sh.value) || sh.value;
+  box.style.cssText = 'width: 78px; height: 56px; background: var(--surface); border-radius: var(--r-card); box-shadow: ' + shv + ';';
   const label = createEl('div', null, sh.label);
-  label.style.cssText = 'margin-top: 12px; font-size: 11px; color: var(--text-2); font-weight: 550;';
+  label.style.cssText = 'margin-top: 12px; font-size: 11px; color: var(--text-2); font-weight:600;';
   container.appendChild(box); container.appendChild(label);
   byId('ds-shadows').appendChild(container);
 });
@@ -606,7 +619,7 @@ function renderSeg() {
       btn.style.background = 'var(--text)';
       btn.style.color = '#fff';
       btn.style.fontWeight = '600';
-      btn.style.boxShadow = '0 1px 2px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.16)';
+      btn.style.boxShadow = 'var(--sh-seg-active-strong)';
     }
     container.appendChild(btn);
   });
@@ -627,42 +640,90 @@ byId('ds-seg').addEventListener('keydown', function(e) {
   renderSeg(); buttons[nextIndex].focus();
 });
 
-// Glass segmented (05) — toggle selected
-byId('glass-section-title') && document.querySelectorAll('[data-gseg]').forEach(b => {
-  b.addEventListener('click', function() {
-    document.querySelectorAll('[data-gseg]').forEach(x => {
-      x.setAttribute('aria-selected', 'false');
-      x.style.color = 'var(--text-2)';
-      x.style.background = 'transparent';
-      x.style.fontWeight = '500';
-    });
-    this.setAttribute('aria-selected', 'true');
-    this.style.color = '#fff';
-    this.style.background = 'var(--text)';
-    this.style.fontWeight = '600';
+// Glass switch (05) — real role=switch + keyboard
+const gSwitch = byId('gSwitch');
+if (gSwitch) {
+  const track = gSwitch.querySelector('span[aria-hidden]');
+  const knob = byId('gSwitchKnob');
+  function setSwitch(on) {
+    gSwitch.setAttribute('aria-checked', String(on));
+    track.style.background = on ? 'var(--accent)' : 'var(--track)';
+    knob.style.left = on ? 'auto' : '2px';
+    knob.style.right = on ? '2px' : 'auto';
+  }
+  gSwitch.addEventListener('click', function() {
+    setSwitch(gSwitch.getAttribute('aria-checked') !== 'true');
   });
+  gSwitch.addEventListener('keydown', function(e) {
+    if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); gSwitch.click(); }
+  });
+}
+
+// Glass slider (05) — real role=slider + keyboard
+const gSlider = byId('gSlider');
+if (gSlider) {
+  const fill = byId('gSliderFill'), thumb = byId('gSliderThumb');
+  function setSlider(v) {
+    v = Math.max(0, Math.min(100, v));
+    gSlider.setAttribute('aria-valuenow', String(v));
+    gSlider.setAttribute('aria-valuetext', v + '%');
+    fill.style.width = v + '%'; thumb.style.left = v + '%';
+  }
+  gSlider.addEventListener('keydown', function(e) {
+    const cur = Number(gSlider.getAttribute('aria-valuenow'));
+    if (e.key === 'ArrowRight' || e.key === 'ArrowUp') { e.preventDefault(); setSlider(cur + 5); }
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') { e.preventDefault(); setSlider(cur - 5); }
+  });
+  gSlider.addEventListener('click', function(e) {
+    const r = gSlider.getBoundingClientRect();
+    setSlider(Math.round((e.clientX - r.left) / r.width * 100));
+  });
+}
+
+// Glass segmented (05) — toggle selected + roving tabindex + arrow keys
+const gsegs = Array.from(document.querySelectorAll('[data-gseg]'));
+function selectGseg(target) {
+  gsegs.forEach(x => {
+    const on = x === target;
+    x.setAttribute('aria-selected', String(on));
+    x.setAttribute('tabindex', on ? '0' : '-1');
+    x.style.background = on ? 'var(--text)' : 'transparent';
+    x.style.color = on ? '#fff' : 'var(--text-2)';
+    x.style.fontWeight = on ? '600' : '500';
+  });
+  const panel = byId('gsegPanel');
+  if (panel) panel.textContent = '当前：' + target.textContent;
+}
+gsegs.forEach(b => {
+  b.addEventListener('click', function() { selectGseg(b); });
+});
+gsegs[0] && gsegs[0].parentElement.addEventListener('keydown', function(e) {
+  if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+  const cur = gsegs.findIndex(b => b.getAttribute('aria-selected') === 'true');
+  const next = e.key === 'ArrowRight' ? (cur + 1) % gsegs.length : (cur - 1 + gsegs.length) % gsegs.length;
+  selectGseg(gsegs[next]); gsegs[next].focus();
 });
 
-// Degradation ladder — 5 visual levels (static representation)
+// Degradation ladder — 1 baseline + 4 degradation levels (static representation)
 const LADDER = [
-  { n: '1', cls: 'gdemo gs-rest', title: '完整玻璃', sub: 'backdrop-filter 完整', mq: '默认' },
-  { n: '2', cls: 'gdemo lvl2', title: '减少透明度', sub: '实色表面 · 去模糊', mq: 'prefers-reduced-transparency' },
-  { n: '3', cls: 'gdemo lvl3', title: '省流量', sub: '仅模糊 · 去饱和', mq: 'prefers-reduced-data' },
-  { n: '4', cls: 'gdemo lvl4', title: '增强对比', sub: '实色 + 高对比边', mq: 'prefers-contrast' },
-  { n: '5', cls: 'gdemo lvl5', title: '不支持回退', sub: '近不透明', mq: '@supports not backdrop-filter' }
+  { n: '—', cls: 'gdemo gs-rest', title: '基线 · 完整玻璃', sub: 'backdrop-filter 完整（非降级级）', mq: '默认' },
+  { n: '1', cls: 'gdemo lvl2', title: '减少透明度', sub: '实色表面 · 去模糊', mq: 'prefers-reduced-transparency' },
+  { n: '2', cls: 'gdemo lvl4', title: '增强对比', sub: '实色 + 高对比边', mq: 'prefers-contrast' },
+  { n: '3', cls: 'gdemo lvl5', title: '不支持回退', sub: '近不透明', mq: '@supports not backdrop-filter' },
+  { n: '4', cls: 'gdemo lvl6', title: '打印', sub: '白底 · 去玻璃', mq: 'print' }
 ];
 LADDER.forEach(l => {
   const wrap = createEl('div');
   const tile = createEl('div', l.cls);
   tile.style.cssText = 'height: 84px; border-radius: var(--r-card); display: grid; place-items: center; text-align: center; color: var(--text);';
-  const t = createEl('div'); t.style.cssText = 'font-size: 12px; font-weight: 650;';
+  const t = createEl('div'); t.style.cssText = 'font-size: 12px; font-weight:700;';
   t.textContent = l.title;
   tile.appendChild(t);
   wrap.appendChild(tile);
   const sub = createEl('div', null, l.sub);
-  sub.style.cssText = 'font-size: 10.5px; color: rgba(255,255,255,0.85); margin-top: 6px;';
+  sub.style.cssText = 'font-size: 10.5px; color: #fff; margin-top: 6px;';
   const mq = createEl('div', null, l.mq);
-  mq.style.cssText = 'font-size: 9.5px; color: rgba(255,255,255,0.6); margin-top: 2px; font-family: var(--mono);';
+  mq.style.cssText = 'font-size: 9.5px; color: #fff; margin-top: 2px; font-family: var(--mono);';
   wrap.appendChild(sub); wrap.appendChild(mq);
   byId('ladderGrid').appendChild(wrap);
 });
@@ -693,6 +754,7 @@ function mToggle(want) {
   mSheet.style.boxShadow = on ? 'var(--glass-shadow-active)' : 'var(--glass-shadow-rest)';
   mSheet.style.pointerEvents = on ? 'auto' : 'none';
   mSheet.setAttribute('aria-hidden', String(!on));
+  if (on) mSheet.removeAttribute('inert'); else mSheet.setAttribute('inert', '');
   mScrim.style.opacity = on ? '1' : '0';
   mScrim.style.pointerEvents = on ? 'auto' : 'none';
   mScrim.setAttribute('aria-hidden', String(!on));

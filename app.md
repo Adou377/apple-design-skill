@@ -46,10 +46,10 @@ Mobile-first spacing uses safe areas, not magic numbers: `padding-bottom: max(16
   padding:0 32px; font-size:15px; font-weight:600; color:var(--text); }
 .ios-status .i{ display:flex; align-items:center; gap:5px; font-size:13px; }
 .ios-home{ position:absolute; bottom:8px; left:50%; transform:translateX(-50%);
-  width:139px; height:5px; border-radius:999px; background:rgba(0,0,0,.85); z-index:var(--z-popover); }
+  width:139px; height:5px; border-radius:999px; background:rgba(0,0,0,.85); z-index:var(--z-toast); }
 ```
 - On a **dark** screen, status text and home bar go white (`#fff` / `rgba(255,255,255,.9)`).
-- The home indicator is `z-index:var(--z-popover)` — **above** sheets and tab bar, so it never disappears under an overlay (a common hand-roll bug).
+- The home indicator is `z-index:var(--z-toast)` — **above** sheets and tab bar, so it never disappears under an overlay (a common hand-roll bug).
 - The status-bar right cluster in a real app is SF Symbols; in a static mock, simple bars/glyphs read fine — don't over-invest.
 
 ## 2. Large-title nav (collapses on scroll — the signature iOS move)
@@ -105,14 +105,14 @@ Real line icons — **read `icons.md`** for the set + rules (grayscale `currentC
 
 ```html
 <nav class="tabbar glass-tabbar" role="tablist" aria-label="Main navigation">
-  <a class="tab on" role="tab" aria-selected="true" aria-current="page">
-    <svg class="ic" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10.5h18"/><circle cx="17" cy="14.5" r="1.25"/></svg>钱包</a>
-  <a class="tab" role="tab" aria-selected="false">
-    <svg class="ic" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M2.5 10h19"/></svg>卡片</a>
-  <a class="tab" role="tab" aria-selected="false">
-    <svg class="ic" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>添加</a>
-  <a class="tab" role="tab" aria-selected="false">
-    <svg class="ic" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0 1 16 0"/></svg>我的</a>
+  <button type="button" class="tab on" role="tab" aria-selected="true" tabindex="0">
+    <svg class="ic" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10.5h18"/><circle cx="17" cy="14.5" r="1.25"/></svg>钱包</button>
+  <button type="button" class="tab" role="tab" aria-selected="false" tabindex="-1">
+    <svg class="ic" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M2.5 10h19"/></svg>卡片</button>
+  <button type="button" class="tab" role="tab" aria-selected="false" tabindex="-1">
+    <svg class="ic" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>添加</button>
+  <button type="button" class="tab" role="tab" aria-selected="false" tabindex="-1">
+    <svg class="ic" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0 1 16 0"/></svg>我的</button>
 </nav>
 ```
 ```css
@@ -128,14 +128,14 @@ Real line icons — **read `icons.md`** for the set + rules (grayscale `currentC
 /* Scroll-collapse: when content scrolls down, the tab bar can shrink/hide for immersive browsing */
 .tabbar.collapsed{ transform:translateY(100%); }
 .tab{ display:flex; flex-direction:column; align-items:center; gap:3px; width:64px;
-  font-size:10px; font-weight:500; color:var(--text-3); text-decoration:none; }
+  font-size:11px; font-weight:500; color:var(--text-2); text-decoration:none; }
 .tab.on{ color:var(--accent); }              /* active = the one accent */
 .tab .ic{ color:currentColor; }              /* icon inherits the tab color: grey inactive, accent active */
 @media (prefers-color-scheme:dark){
   .tabbar{ background:var(--glass-bg-regular-dark); border-top-color:var(--glass-hairline-dark); }
 }
 ```
-- Exactly **one** accent tab (the active one); the rest are `--text-3` grey. Never color multiple tabs. Because `.ic` uses `stroke:currentColor`, the label color drives the icon — no separate icon-color rule.
+- Exactly **one** accent tab (the active one); the rest are `--text-2` grey. Never color multiple tabs. Because `.ic` uses `stroke:currentColor`, the label color drives the icon — no separate icon-color rule.
 - Real Lucide line icons (see `icons.md`); the active tab's ideal is a **filled** variant, single accent color is the acceptable floor. Never leave grey filled squares — that's placeholder slop.
 - `padding-bottom:34px` is the home-indicator safe area — or `max(8px, env(safe-area-inset-bottom))` on device.
 
@@ -144,17 +144,17 @@ Real line icons — **read `icons.md`** for the set + rules (grayscale `currentC
 The core `motion.md` modal materializes at screen center. An **iOS sheet rises from the bottom edge**, has a grab handle, rounds only its top, and keeps the home indicator visible above it.
 
 ```css
-.sheet{ position:absolute; left:0; right:0; bottom:0; z-index:var(--z-fab); 
+.sheet{ position:absolute; left:0; right:0; bottom:0; z-index:var(--z-modal);
   background:var(--glass-bg-surface-light);
   backdrop-filter:saturate(var(--glass-sat-rest)) blur(var(--glass-blur-rest));
   -webkit-backdrop-filter:saturate(var(--glass-sat-rest)) blur(var(--glass-blur-rest));
-  border-radius:22px 22px 0 0; padding:10px 20px max(24px, env(safe-area-inset-bottom));
+  border-radius:var(--r-panel) var(--r-panel) 0 0; padding:10px 20px max(24px, env(safe-area-inset-bottom));
   box-shadow:var(--glass-shadow-floating);
   transform:translateY(100%); transition:transform .4s var(--ease-spring),
     backdrop-filter .4s var(--ease-spring), -webkit-backdrop-filter .4s var(--ease-spring); }
 .sheet.open{ transform:translateY(0); }
 .sheet .grab{ width:38px; height:5px; border-radius:999px; background:var(--faint); margin:0 auto 16px; }
-.scrim{ position:absolute; inset:0; z-index:var(--z-sticky); background:var(--glass-dim);
+.scrim{ position:absolute; inset:0; z-index:var(--z-modal); background:var(--glass-dim);
   opacity:0; pointer-events:none; transition:opacity .25s ease; }
 .scrim.open{ opacity:1; pointer-events:auto; }
 @media (prefers-color-scheme:dark){
@@ -163,7 +163,7 @@ The core `motion.md` modal materializes at screen center. An **iOS sheet rises f
 ```
 - Enter/exit **same path** (from bottom, dismiss to bottom) — inherits `--ease-spring`, interruptible (transition, not keyframe).
 - Grab handle `--faint`; top corners `--r-panel` (22), bottom square (glued to the edge).
-- Home indicator stays `z-index:var(--z-popover)` above the sheet. Detents (half / full) are the iOS norm — a resting half-sheet is often better than full.
+- Home indicator stays `z-index:var(--z-toast)` above the sheet. Detents (half / full) are the iOS norm — a resting half-sheet is often better than full.
 - `prefers-reduced-motion`: cross-fade, no travel (same three media queries as `motion.md`).
 
 ## 5. Sidebar (iPad glass control surface)
@@ -183,12 +183,12 @@ On iPad / large-screen layouts, a **glass sidebar** is the primary navigation co
                 backdrop-filter .4s var(--ease-spring), -webkit-backdrop-filter .4s var(--ease-spring);">
   <a class="side-item on" href="#" aria-current="page"
      style="height:44px;padding:0 14px;border-radius:var(--r-pill);display:flex;align-items:center;gap:10px;
-            font-size:15px;font-weight:550;color:var(--accent);text-decoration:none;background:rgba(0,0,0,0.05);">
+            font-size:15px;font-weight:600;color:var(--accent);text-decoration:none;background:var(--btn-quiet-bg);">
     <svg class="ic" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>Home
   </a>
   <a class="side-item" href="#"
      style="height:44px;padding:0 14px;border-radius:var(--r-pill);display:flex;align-items:center;gap:10px;
-            font-size:15px;font-weight:550;color:var(--text-2);text-decoration:none;">
+            font-size:15px;font-weight:600;color:var(--text-2);text-decoration:none;">
     <svg class="ic" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>Search
   </a>
 </aside>
@@ -199,7 +199,7 @@ On iPad / large-screen layouts, a **glass sidebar** is the primary navigation co
   -webkit-backdrop-filter:saturate(var(--glass-sat-scrolled)) blur(var(--glass-blur-scrolled));
   box-shadow:var(--glass-shadow-scrolled);
 }
-.side-item:hover{ background:rgba(0,0,0,0.05); transition:background .15s; }
+.side-item:hover{ background:var(--btn-quiet-bg); transition:background .15s; }
 .side-item.on{ color:var(--accent); }
 .side-item .ic{ color:currentColor; }
 @media (prefers-color-scheme:dark){

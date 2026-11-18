@@ -1,0 +1,17 @@
+{
+  "name": "liquid-glass-design-system",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Apple-inspired Liquid Glass design system: tokens, docs, and reference pages.",
+  "scripts": {
+    "serve": "python3 -m http.server 8000",
+    "lint:html": "htmlhint \"*.html\" \"examples/*.html\"",
+    "lint:css": "stylelint \"**/*.css\"",
+    "a11y": "axe http://localhost:8000/reference.html http://localhost:8000/examples/account.html http://localhost:8000/examples/wallet.html http://localhost:8000/examples/liquid-controls.html http://localhost:8000/examples/sidebar.html http://localhost:8000/examples/toolbar.html --tags wcag2a,wcag2aa,wcag21a,wcag21aa --exit --chrome-options=\"no-sandbox\""
+  },
+  "devDependencies": {
+    "@axe-core/cli": "^4.10.1",
+    "htmlhint": "^1.1.4",
+    "stylelint": "^16.10.0"
+  }
+}

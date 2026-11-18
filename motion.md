@@ -43,6 +43,7 @@ Apple's two designer parameters: **damping ratio** (1.0 = no overshoot; ~0.8 = s
 :root {
   --ease-spring: cubic-bezier(0.32, 0.72, 0, 1);   /* enter: fast start, long settle (sheet/dialog standard) */
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1); /* small moves: hover, segmented slide */
+  --ease-spring-reverse: cubic-bezier(1, 0, 0.68, 0.28); /* exit: mirrored spring for dismissals */
 }
 /* enter ~400ms with --ease-spring; exit ~250-300ms, same path (§4) */
 ```
@@ -93,7 +94,7 @@ Scrim: plain opacity fade (`.25s`), slightly faster than the surface so the surf
 
 ## 7. Frame-level smoothness
 
-- Animate **only `transform` and `opacity`** (compositor-friendly); `will-change` where motion is imminent — and remove it after.
+- Animate **only `transform` and `opacity`** for *travel* (compositor-friendly); glass material props (`backdrop-filter`, `box-shadow`) transition as one documented material-state exception. `will-change` where motion is imminent — and remove it after.
 - `requestAnimationFrame` is the display-synced clock for JS-driven motion.
 
 ## 8. Reduced motion & transparency — three independent signals
@@ -181,8 +182,8 @@ When a glass sidebar opens/closes, the content beneath it should shift, not just
   backdrop-filter: blur(0px);
   -webkit-backdrop-filter: blur(0px);
   transition: transform .4s var(--ease-spring),
-              backdrop-filter .4s var(--ease-spring) .1s,
-              -webkit-backdrop-filter .4s var(--ease-spring) .1s;
+              backdrop-filter .4s var(--ease-spring),
+              -webkit-backdrop-filter .4s var(--ease-spring);
 }
 .glass-sidebar.open {
   transform: translateX(0);
@@ -193,7 +194,7 @@ When a glass sidebar opens/closes, the content beneath it should shift, not just
 .content-shifted { transform: translateX(80px); transition: transform .4s var(--ease-spring); }
 ```
 
-The `.1s` delay on `backdrop-filter` lets the panel start sliding before the glass materializes — the refraction effect reads as the content "bending" behind the arriving surface. On exit, reverse: blur collapses first, then the panel slides out.
+Blur, transform and shadow share the same duration and easing — never stagger them (a delayed blur reads as lag, not refraction). The content edge bends behind the arriving surface because the sidebar is translucent, not because the material lags behind the panel.
 
 ### rAF-throttled scroll handling
 
@@ -259,9 +260,9 @@ Sync the `aria-expanded` / `aria-hidden` flip with the glass state transition in
 - [ ] Easing is `--ease-spring` / `--ease-out-quart` (or a real spring) — no `linear`, no default `ease`.
 - [ ] Enter ~350–450ms, exit ~250–300ms; **no overshoot** unless the gesture carried momentum.
 - [ ] Glass surfaces **materialize** (blur+scale+opacity together), scrim fades slightly faster.
-- [ ] Glass control surfaces use **state tokens** (`var(--glass-blur-rest/active/scrolled)`, `var(--glass-shadow-*)`) — blur, saturation, and shadow transition as one unit, not staggered.
+- [ ] Glass control surfaces use **state tokens** (`var(--glass-blur-rest)`, `var(--glass-blur-active)`, `var(--glass-blur-scrolled)`, `var(--glass-shadow-*)`) — blur, saturation, and shadow transition as one unit, not staggered.
 - [ ] Scroll-driven glass state changes are **rAF-throttled** (no direct class toggle on scroll); `passive: true` on the listener.
 - [ ] Glass control state changes are **communicated via ARIA** (`aria-expanded`, `aria-selected`, `aria-checked`); accessibility state and visual state never desync.
 - [ ] Input is **never locked** during transitions; re-trigger mid-flight reverses smoothly (CSS transition, not keyframes).
-- [ ] Only `transform`/`opacity` animated.
+- [ ] Travel uses only `transform`/`opacity`; glass material props are the documented exception and never staggered.
 - [ ] All three media queries present: `prefers-reduced-motion`, `prefers-reduced-transparency`, `prefers-contrast`.

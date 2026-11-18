@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Glass Toolbar · 玻璃工具栏</title>
+<meta name="description" content="吸顶玻璃工具栏示例：rest / hover / pressed / scrolled 状态。">
 <link rel="stylesheet" href="../tokens.css">
 <style>
   /* ── tokens.css provides neutrals, motion curves, glass material tokens,
@@ -34,11 +35,11 @@
     backdrop-filter: saturate(var(--glass-sat-rest)) blur(var(--glass-blur-rest));
     box-shadow: var(--glass-shadow-rest);
     border: 1px solid var(--glass-hairline-light);
-    transition: -webkit-backdrop-filter .28s var(--ease-out-quart),
-                backdrop-filter .28s var(--ease-out-quart),
-                box-shadow .28s var(--ease-out-quart),
+    transition: -webkit-backdrop-filter .3s var(--ease-spring),
+                backdrop-filter .3s var(--ease-spring),
+                box-shadow .3s var(--ease-spring),
                 transform .18s var(--ease-out-quart),
-                border-color .28s var(--ease-out-quart);
+                border-color .3s var(--ease-spring);
   }
 
   /* SCROLLED — content has moved under the toolbar: stronger blur + shadow + hairline */
@@ -93,7 +94,7 @@
     background: var(--surface); color: var(--text); font: 400 14px var(--font);
     outline: none; transition: border-color .2s var(--ease-out-quart), box-shadow .2s var(--ease-out-quart);
   }
-  .search::placeholder { color: var(--text-4); }
+  .search::placeholder { color: var(--text-2); }
   .search:focus { border-color: var(--accent); box-shadow: var(--focus-ring); }
 
   /* Segmented control inside the glass toolbar */
@@ -106,21 +107,21 @@
   .seg-btn:hover { background: var(--btn-quiet-bg); }
   .seg-btn[aria-selected="true"] {
     background: var(--text); color: #fff; font-weight: 600;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.16);
+    box-shadow: var(--sh-seg-active-strong);
   }
 
   /* ── Content (solid white panels — NEVER glass) ── */
   .wrap { max-width: var(--max-grid); margin: 0 auto; padding: 0 var(--pad-x); }
   .hero { padding: clamp(34px,6vw,58px) 0 clamp(18px,3vw,28px); }
   .hero h1 { font-size: clamp(28px,5vw,44px); font-weight: 700; letter-spacing: -0.03em; line-height: 1.08; }
-  .hero p { margin-top: 14px; font-size: clamp(15px,2.5vw,18px); color: var(--text-2); max-width: 560px; line-height: 1.6; }
+  .hero p { margin-top: 14px; font-size: clamp(15px,2.5vw,18px); color: var(--text-2); max-width: 600px; line-height: 1.6; }
 
   .panel { background: var(--surface); border-radius: var(--r-panel); box-shadow: var(--sh-panel); overflow: hidden; margin-top: 20px; }
   .panel-row { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding: 18px clamp(18px,3vw,26px); }
   .panel-row + .panel-row { border-top: 1px solid var(--hairline); }
-  .panel-row h3 { font-size: 17px; font-weight: 600; letter-spacing: -0.01em; }
+  .panel-row h2 { font-size: 17px; font-weight: 600; letter-spacing: -0.01em; }
   .panel-row p { margin-top: 4px; font-size: 13.5px; color: var(--text-2); }
-  .panel-row .meta { font-size: 12.5px; color: var(--text-3); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .panel-row .meta { font-size: 12.5px; color: var(--text-2); font-variant-numeric: tabular-nums; white-space: nowrap; }
 
   .state-readout {
     position: fixed; right: 18px; bottom: 18px; z-index: var(--z-popover);
@@ -133,6 +134,10 @@
     .seg { display: none; } /* keep toolbar uncluttered on small screens */
     .search { max-width: none; }
   }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: .01ms !important; }
+}
 </style>
 </head>
 <body>
@@ -160,9 +165,9 @@
     </div>
   </header>
 
-  <div class="wrap">
+  <main class="wrap" role="main">
     <section class="hero">
-      <div style="font-size:12px;font-weight:600;letter-spacing:0.14em;color:var(--text-3);">EXAMPLE · GLASS TOOLBAR</div>
+      <div style="font-size:12px;font-weight:600;letter-spacing:0.14em;color:var(--text-2);">EXAMPLE · GLASS TOOLBAR</div>
       <h1>吸顶玻璃工具栏</h1>
       <p>Regular 玻璃作为控制层浮于内容之上。滚动时进入 <code style="font-family:var(--mono);">scrolled</code> 态（更强模糊 + 阴影 + 发丝线）；悬停按钮进入 <code style="font-family:var(--mono);">hover</code> 态；按下进入 <code style="font-family:var(--mono);">pressed</code> 态。下方内容永远是实色 <code style="font-family:var(--mono);">var(--surface)</code> 白面板。</p>
     </section>
@@ -170,34 +175,34 @@
     <!-- Solid white content panels (never glass) -->
     <div class="panel" role="list" aria-label="文档列表">
       <div class="panel-row" role="listitem">
-        <div><h3>液态玻璃控制层规范</h3><p>双轨模型：内容实色，控制层玻璃。</p></div>
+        <div><h2>液态玻璃控制层规范</h2><p>双轨模型：内容实色，控制层玻璃。</p></div>
         <span class="meta">v2.0</span>
       </div>
       <div class="panel-row" role="listitem">
-        <div><h3>工具栏状态机</h3><p>rest → hover → pressed → scrolled 四态切换。</p></div>
+        <div><h2>工具栏状态机</h2><p>rest → hover → pressed → scrolled 四态切换。</p></div>
         <span class="meta">更新于 07-29</span>
       </div>
       <div class="panel-row" role="listitem">
-        <div><h3>rAF 节流滚动</h3><p>requestAnimationFrame 合并滚动事件，避免抖动。</p></div>
+        <div><h2>rAF 节流滚动</h2><p>requestAnimationFrame 合并滚动事件，避免抖动。</p></div>
         <span class="meta">性能</span>
       </div>
       <div class="panel-row" role="listitem">
-        <div><h3>深色模式玻璃变体</h3><p>使用 --glass-bg-regular-dark 与 --glass-hairline-dark。</p></div>
+        <div><h2>深色模式玻璃变体</h2><p>使用 --glass-bg-regular-dark 与 --glass-hairline-dark。</p></div>
         <span class="meta">a11y</span>
       </div>
       <div class="panel-row" role="listitem">
-        <div><h3>降级阶梯自动套用</h3><p>tokens.css 的 prefers-reduced-* / @supports 已覆盖 .glass-toolbar。</p></div>
+        <div><h2>降级阶梯自动套用</h2><p>tokens.css 的 prefers-reduced-* / @supports 已覆盖 .glass-toolbar。</p></div>
         <span class="meta">稳健</span>
       </div>
     </div>
 
     <div class="panel" role="list" aria-label="更多文档">
-      <div class="panel-row" role="listitem"><div><h3>继续向下滚动</h3><p>观察顶部工具栏在内容滑入下方时的材质变化。</p></div><span class="meta">↓</span></div>
-      <div class="panel-row" role="listitem"><div><h3>更多条目</h3><p>占位内容以提供滚动长度。</p></div><span class="meta">—</span></div>
-      <div class="panel-row" role="listitem"><div><h3>更多条目</h3><p>占位内容以提供滚动长度。</p></div><span class="meta">—</span></div>
-      <div class="panel-row" role="listitem"><div><h3>更多条目</h3><p>占位内容以提供滚动长度。</p></div><span class="meta">—</span></div>
+      <div class="panel-row" role="listitem"><div><h2>继续向下滚动</h2><p>观察顶部工具栏在内容滑入下方时的材质变化。</p></div><span class="meta">↓</span></div>
+      <div class="panel-row" role="listitem"><div><h2>更多条目</h2><p>占位内容以提供滚动长度。</p></div><span class="meta">—</span></div>
+      <div class="panel-row" role="listitem"><div><h2>更多条目</h2><p>占位内容以提供滚动长度。</p></div><span class="meta">—</span></div>
+      <div class="panel-row" role="listitem"><div><h2>更多条目</h2><p>占位内容以提供滚动长度。</p></div><span class="meta">—</span></div>
     </div>
-  </div>
+  </main>
 
   <!-- Live state readout (helper to see the current material state) -->
   <div class="state-readout" aria-live="polite">toolbar state: <b id="stateLabel">rest</b></div>

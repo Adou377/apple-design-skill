@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Glass Sidebar · 玻璃侧栏</title>
+<meta name="description" content="固定玻璃侧栏示例：可折叠导航与实色内容区。">
 <link rel="stylesheet" href="../tokens.css">
 <style>
   /* tokens.css supplies neutrals, motion curves, glass material tokens,
@@ -32,9 +33,9 @@
     box-shadow: var(--glass-shadow-rest);
     border: 1px solid var(--glass-hairline-light);
     transition: width .42s var(--ease-spring),
-                -webkit-backdrop-filter .28s var(--ease-out-quart),
-                backdrop-filter .28s var(--ease-out-quart),
-                box-shadow .28s var(--ease-out-quart);
+                -webkit-backdrop-filter .3s var(--ease-spring),
+                backdrop-filter .3s var(--ease-spring),
+                box-shadow .3s var(--ease-spring);
   }
   .glass-sidebar:hover {
     -webkit-backdrop-filter: saturate(var(--glass-sat-active)) blur(var(--glass-blur-active));
@@ -73,17 +74,17 @@
     font-size: 15px; font-weight: 700; letter-spacing: -0.02em;
   }
   .sb-label {
-    font-size: 14px; font-weight: 650; letter-spacing: -0.01em; color: var(--text);
+    font-size: 14px; font-weight:700; letter-spacing: -0.01em; color: var(--text);
     white-space: nowrap; opacity: 1;
     transition: opacity .2s var(--ease-out-quart);
   }
   .is-collapsed .sb-label,
   .is-collapsed .nav-text,
-  .is-collapsed .sb-section { opacity: 0; pointer-events: none; }
+  .is-collapsed .sb-section { opacity: 0; visibility: hidden; pointer-events: none; }
 
   .sb-section {
     font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em;
-    color: var(--text-3); padding: 12px 10px 4px;
+    color: var(--text-2); padding: 12px 10px 4px;
     transition: opacity .2s var(--ease-out-quart);
   }
 
@@ -91,7 +92,7 @@
   .nav-item {
     display: flex; align-items: center; gap: 12px;
     min-height: 44px; padding: 0 10px; border-radius: var(--r-pill);
-    color: var(--text-2); text-decoration: none; font-size: 14px; font-weight: 550;
+    color: var(--text-2); text-decoration: none; font-size: 14px; font-weight:600;
     cursor: pointer; background: transparent; border: none; width: 100%; text-align: left;
     transition: background .15s var(--ease-out-quart), color .15s var(--ease-out-quart);
   }
@@ -125,22 +126,30 @@
   }
   .content.is-collapsed { margin-left: 104px; } /* 72 + 16 + 16 */
 
-  .eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 0.14em; color: var(--text-3); }
+  .eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 0.14em; color: var(--text-2); }
   .content h1 { margin-top: 12px; font-size: clamp(28px,5vw,44px); font-weight: 700; letter-spacing: -0.03em; line-height: 1.08; }
   .content p.lede { margin-top: 14px; font-size: clamp(15px,2.5vw,18px); color: var(--text-2); max-width: 600px; }
 
   .panel { background: var(--surface); border-radius: var(--r-panel); box-shadow: var(--sh-panel); overflow: hidden; margin-top: 22px; }
   .panel-row { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding: 18px clamp(18px,3vw,26px); }
   .panel-row + .panel-row { border-top: 1px solid var(--hairline); }
-  .panel-row h3 { font-size: 17px; font-weight: 600; letter-spacing: -0.01em; }
+  .panel-row h2 { font-size: 17px; font-weight: 600; letter-spacing: -0.01em; }
   .panel-row p { margin-top: 4px; font-size: 13.5px; color: var(--text-2); }
-  .panel-row .meta { font-size: 12.5px; color: var(--text-3); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .panel-row .meta { font-size: 12.5px; color: var(--text-2); font-variant-numeric: tabular-nums; white-space: nowrap; }
 
   @media (max-width: 760px) {
     /* On small screens keep the sidebar collapsed by default to preserve space */
     .sidebar { width: 72px; }
     .content { margin-left: 104px; }
-    .sb-label, .nav-text, .sb-section, .collapse-text { opacity: 0; pointer-events: none; }
+    .sb-label, .nav-text, .sb-section, .collapse-text { opacity: 0; visibility: hidden; pointer-events: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      transition-duration: .01ms !important;
+      animation-duration: .01ms !important;
+      animation-iteration-count: 1 !important;
+    }
   }
 </style>
 </head>
@@ -156,21 +165,21 @@
 
       <div class="sb-section">工作区</div>
       <button class="nav-item" type="button" aria-current="page">
-        <span class="nav-ico" aria-hidden="true">◎</span><span class="nav-text">概览</span>
+        <span class="nav-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg></span><span class="nav-text">概览</span>
       </button>
       <button class="nav-item" type="button">
-        <span class="nav-ico" aria-hidden="true">▤</span><span class="nav-text">项目</span>
+        <span class="nav-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg></span><span class="nav-text">项目</span>
       </button>
       <button class="nav-item" type="button">
-        <span class="nav-ico" aria-hidden="true">⚐</span><span class="nav-text">任务</span>
+        <span class="nav-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span><span class="nav-text">任务</span>
       </button>
 
       <div class="sb-section">账户</div>
       <button class="nav-item" type="button">
-        <span class="nav-ico" aria-hidden="true">☻</span><span class="nav-text">个人</span>
+        <span class="nav-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span><span class="nav-text">个人</span>
       </button>
       <button class="nav-item" type="button">
-        <span class="nav-ico" aria-hidden="true">⚙</span><span class="nav-text">设置</span>
+        <span class="nav-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></span><span class="nav-text">设置</span>
       </button>
     </div>
 
@@ -189,16 +198,16 @@
     <p class="lede">Regular 玻璃侧栏作为控制层，<code style="font-family:var(--mono);">--z-sidebar</code> 层级浮于内容之上。点击底部按钮在 260px ↔ 72px 间折叠 / 展开，宽度用 <code style="font-family:var(--mono);">--ease-spring</code> 过渡；同心圆角（外 26 → 内 22）。内容区永远是实色 <code style="font-family:var(--mono);">var(--surface)</code> 白面板。</p>
 
     <div class="panel" role="list" aria-label="概览数据">
-      <div class="panel-row" role="listitem"><div><h3>同心圆角</h3><p>外层 26px，padding 4px，内层 22px——半径随嵌套递减。</p></div><span class="meta">--r-hero → --r-panel</span></div>
-      <div class="panel-row" role="listitem"><div><h3>弹簧折叠</h3><p>width 与 margin-left 同步用 --ease-spring 过渡。</p></div><span class="meta">~420ms</span></div>
-      <div class="panel-row" role="listitem"><div><h3>无障碍</h3><p>折叠按钮带 aria-expanded / aria-controls；触摸区 ≥ 44px。</p></div><span class="meta">a11y</span></div>
-      <div class="panel-row" role="listitem"><div><h3>深色模式</h3><p>玻璃自动切换 --glass-bg-regular-dark / --glass-hairline-dark。</p></div><span class="meta">auto</span></div>
+      <div class="panel-row" role="listitem"><div><h2>同心圆角</h2><p>外层 26px，padding 4px，内层 22px——半径随嵌套递减。</p></div><span class="meta">--r-hero → --r-panel</span></div>
+      <div class="panel-row" role="listitem"><div><h2>弹簧折叠</h2><p>width 与 margin-left 同步用 --ease-spring 过渡。</p></div><span class="meta">~420ms</span></div>
+      <div class="panel-row" role="listitem"><div><h2>无障碍</h2><p>折叠按钮带 aria-expanded / aria-controls；触摸区 ≥ 44px。</p></div><span class="meta">a11y</span></div>
+      <div class="panel-row" role="listitem"><div><h2>深色模式</h2><p>玻璃自动切换 --glass-bg-regular-dark / --glass-hairline-dark。</p></div><span class="meta">auto</span></div>
     </div>
 
     <div class="panel" role="list" aria-label="更多内容">
-      <div class="panel-row" role="listitem"><div><h3>实色内容轨</h3><p>侧栏是玻璃，内容是实色白——双轨模型。</p></div><span class="meta">dual-track</span></div>
-      <div class="panel-row" role="listitem"><div><h3>降级自动套用</h3><p>tokens.css 的 prefers-reduced-* 已覆盖 .glass-sidebar。</p></div><span class="meta">robust</span></div>
-      <div class="panel-row" role="listitem"><div><h3>更多条目</h3><p>占位内容。</p></div><span class="meta">—</span></div>
+      <div class="panel-row" role="listitem"><div><h2>实色内容轨</h2><p>侧栏是玻璃，内容是实色白——双轨模型。</p></div><span class="meta">dual-track</span></div>
+      <div class="panel-row" role="listitem"><div><h2>降级自动套用</h2><p>tokens.css 的降级阶梯覆盖 .glass-sidebar，且全站遵守 prefers-reduced-motion。</p></div><span class="meta">robust</span></div>
+      <div class="panel-row" role="listitem"><div><h2>更多条目</h2><p>占位内容。</p></div><span class="meta">—</span></div>
     </div>
   </main>
 
@@ -221,6 +230,12 @@
   collapseBtn.addEventListener('click', function () {
     setCollapsed(!sidebar.classList.contains('is-collapsed'));
   });
+
+  // The <=760px stylesheet forces the collapsed shell; keep ARIA/text in sync.
+  const mq = matchMedia('(max-width: 760px)');
+  function syncShell() { if (mq.matches) setCollapsed(true); }
+  syncShell();
+  mq.addEventListener('change', syncShell);
 
   // Keep nav selection in sync (visual only)
   sidebar.querySelectorAll('.nav-item').forEach(function (item) {

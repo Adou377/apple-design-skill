@@ -12,7 +12,7 @@
   --text:      #1d1d1f;   /* primary text / titles */
   --text-body: #424245;   /* long-form body */
   --text-2:    #6e6e73;   /* secondary / summary / meta */
-  --text-3:    #86868b;   /* tertiary / captions — LARGE TEXT ONLY (WCAG AA requires 18pt+) */
+  --text-3:    #86868b;   /* tertiary / captions — LARGE TEXT ONLY (3.6:1; never <24px regular / <18.66px bold) */
   --text-4:    #aeaeb2;   /* placeholder / quaternary — DECORATIVE ONLY (contrast ~2.2:1, NOT for readable text) */
   --faint:     #d2d2d7;   /* index numbers, arrows, dividers (very light) */
   --hairline:  rgba(0,0,0,0.07);   /* the divider line — used everywhere */
@@ -28,7 +28,9 @@
   --accent-link: #0066cc;  /* link/tag text on tinted ground */
   --indigo:      #5e5ce6;  /* gradient 2nd stop / supporting */
   --x-blue:      #1d9bf0;  /* platform / brand mark (e.g. X) */
-  --heat:        #ff6b00;  /* heat / "hottest" accent */
+  --x-blue-strong: #0b7bc0; /* brand fill behind white text — 4.5:1+ */
+  --heat:        #ff6b00;  /* heat / "hottest" accent (large text & fills only) */
+  --heat-fg:     #c2410c;  /* heat text on tint — 5.1:1, AA for small text */
   --heat-bg:     rgba(255,107,0,0.1);
   --live:        #30d158;  /* live / online (pulsing dot) */
 
@@ -70,6 +72,11 @@
   /* ── Component greys (semantic — don't hand-pick a one-off grey) ── */
   --track:  #e8e8ed;  /* progress/meter track, toggle-off track — visible-but-quiet fill grey */
   --btn-quiet-bg: rgba(0,0,0,0.05);  /* quiet/ghost button background — translucent overlay (dark-mode aware below) */
+  --btn-soft-bg: rgba(255,255,255,0.8);  /* secondary button on content surfaces (dark-mode aware below) */
+  --btn-soft-border: rgba(0,0,0,0.08);
+  --sh-btn: 0 1px 2px rgba(0,0,0,0.05);  /* tight contact shadow for 44px buttons */
+  --sh-seg-active: 0 1px 3px rgba(0,0,0,0.12);  /* segmented control — active white pill */
+  --sh-seg-active-strong: 0 1px 2px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.16);  /* dark pill variant */
 
   /* ── Layout ── */
   --max-read: 720px;   /* reading column */
@@ -160,6 +167,8 @@
 
     --track:       #3a3a3c;
     --btn-quiet-bg: rgba(255,255,255,0.08);
+    --btn-soft-bg: rgba(255,255,255,0.10);
+    --btn-soft-border: rgba(255,255,255,0.14);
 
     --focus-ring: 0 0 0 4px rgba(10,132,255,0.22);
   }
@@ -219,14 +228,18 @@ body {
 /* ════════════════════════════════════════════════════════════════
    Performance degradation ladder for liquid glass
    No hardware sniffing — relies on standard media queries + manual class.
-   Order: reduced-transparency > reduced-data > contrast > @supports > print
+   Order: reduced-transparency > contrast > @supports > print
+
+   prefers-reduced-data is deliberately absent: no stable browser
+   implements it, and blur is a GPU cost, not a network payload.
    ════════════════════════════════════════════════════════════════ */
 
+/* Keep the selector list in ONE place; every glass class must be listed. */
 @media (prefers-reduced-transparency: reduce) {
-  .glass-nav, .glass-chip,
-  .glass-toolbar, .glass-sidebar, .glass-tabbar,
-  .glass-modal, .glass-popover, .glass-tooltip,
-  .glass-seg, .glass-switch, .glass-fab, .glass-float {
+  :is(.glass-nav, .glass-chip, .glass-toolbar, .glass-sidebar, .glass-tabbar,
+      .glass-modal, .glass-popover, .glass-tooltip, .glass-seg, .glass-switch,
+      .glass-fab, .glass-float, .glass-base, .glass-clear-base, .glass-slider,
+      .glass-check, .glass-radio, .glass-context) {
     background: var(--surface) !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
@@ -234,63 +247,63 @@ body {
   }
 }
 
-@media (prefers-reduced-data: save) {
-  .glass-nav, .glass-chip,
-  .glass-toolbar, .glass-sidebar, .glass-tabbar,
-  .glass-modal, .glass-popover, .glass-tooltip,
-  .glass-seg, .glass-switch, .glass-fab, .glass-float {
-    backdrop-filter: blur(var(--glass-regular-blur)) !important;
-    -webkit-backdrop-filter: blur(var(--glass-regular-blur)) !important;
-  }
-}
-
 @media (prefers-contrast: more) {
-  .glass-nav, .glass-chip,
-  .glass-toolbar, .glass-sidebar, .glass-tabbar,
-  .glass-modal, .glass-popover, .glass-tooltip,
-  .glass-seg, .glass-switch, .glass-fab, .glass-float {
+  :is(.glass-nav, .glass-chip, .glass-toolbar, .glass-sidebar, .glass-tabbar,
+      .glass-modal, .glass-popover, .glass-tooltip, .glass-seg, .glass-switch,
+      .glass-fab, .glass-float, .glass-base, .glass-clear-base, .glass-slider,
+      .glass-check, .glass-radio, .glass-context) {
     background: var(--surface) !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
     border: 1px solid rgba(0,0,0,0.35) !important;
   }
   @media (prefers-color-scheme: dark) {
-    .glass-nav, .glass-chip,
-    .glass-toolbar, .glass-sidebar, .glass-tabbar,
-    .glass-modal, .glass-popover, .glass-tooltip,
-    .glass-seg, .glass-switch, .glass-fab, .glass-float {
+    :is(.glass-nav, .glass-chip, .glass-toolbar, .glass-sidebar, .glass-tabbar,
+        .glass-modal, .glass-popover, .glass-tooltip, .glass-seg, .glass-switch,
+        .glass-fab, .glass-float, .glass-base, .glass-clear-base, .glass-slider,
+        .glass-check, .glass-radio, .glass-context) {
       border: 1px solid rgba(255,255,255,0.35) !important;
     }
   }
 }
 
 @supports not (backdrop-filter: blur(1px)) {
-  .glass-nav, .glass-chip,
-  .glass-toolbar, .glass-sidebar, .glass-tabbar,
-  .glass-modal, .glass-popover, .glass-tooltip,
-  .glass-seg, .glass-switch, .glass-fab, .glass-float {
+  :is(.glass-nav, .glass-chip, .glass-toolbar, .glass-sidebar, .glass-tabbar,
+      .glass-modal, .glass-popover, .glass-tooltip, .glass-seg, .glass-switch,
+      .glass-fab, .glass-float, .glass-base, .glass-clear-base, .glass-slider,
+      .glass-check, .glass-radio, .glass-context) {
     background: rgba(245,245,247,0.94) !important;
   }
   @media (prefers-color-scheme: dark) {
-    .glass-nav, .glass-chip,
-    .glass-toolbar, .glass-sidebar, .glass-tabbar,
-    .glass-modal, .glass-popover, .glass-tooltip,
-    .glass-seg, .glass-switch, .glass-fab, .glass-float {
+    :is(.glass-nav, .glass-chip, .glass-toolbar, .glass-sidebar, .glass-tabbar,
+        .glass-modal, .glass-popover, .glass-tooltip, .glass-seg, .glass-switch,
+        .glass-fab, .glass-float, .glass-base, .glass-clear-base, .glass-slider,
+        .glass-check, .glass-radio, .glass-context) {
       background: rgba(28,28,30,0.94) !important;
     }
   }
 }
 
 @media print {
-  .glass-nav, .glass-chip,
-  .glass-toolbar, .glass-sidebar, .glass-tabbar,
-  .glass-modal, .glass-popover, .glass-tooltip,
-  .glass-seg, .glass-switch, .glass-fab, .glass-float {
+  :is(.glass-nav, .glass-chip, .glass-toolbar, .glass-sidebar, .glass-tabbar,
+      .glass-modal, .glass-popover, .glass-tooltip, .glass-seg, .glass-switch,
+      .glass-fab, .glass-float, .glass-base, .glass-clear-base, .glass-slider,
+      .glass-check, .glass-radio, .glass-context) {
     background: #fff !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
     box-shadow: none !important;
     border: 1px solid #ccc !important;
+  }
+}
+
+/* Reduced motion: stop decorative loops (e.g. pulse-dot). Page-level
+   rules handle travel/materialize transitions. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
   }
 }
 

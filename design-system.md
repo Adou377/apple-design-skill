@@ -9,7 +9,7 @@ The full reference. `SKILL.md` is the workflow + philosophy; this is the detaile
 2. **Dual-track materials: glass is seasoning on content, the main material on controls.** Content surfaces (articles, lists, form inputs, static text) = solid `#fff` + shadow. Control surfaces (nav, toolbar, sidebar, modal, popover, tab bar, switches, FAB) = liquid glass — dynamic, state-aware, content-adaptive.
 3. **Restraint is luxury on content surfaces.** Solve with whitespace + hierarchy before adding borders/fills/icons/numbers.
 4. **Hierarchy from weight + size + grayscale**, not color. Color = accent only.
-5. **Quality is in the details.** Negative tracking, tabular-nums, hairlines, gentle lift, concentric corner radii, state-aware glass deformation, 5-level degradation ladder.
+5. **Quality is in the details.** Negative tracking, tabular-nums, hairlines, gentle lift, concentric corner radii, state-aware glass deformation, 4-level degradation ladder.
 
 ## 1. Color
 
@@ -21,7 +21,7 @@ The full reference. `SKILL.md` is the workflow + philosophy; this is the detaile
 | Row hover | `#fbfbfd` |
 | Text primary | `#1d1d1f` |
 | Text body / secondary | `#424245` (long body) / `#6e6e73` (summary, meta) |
-| Text tertiary | `#86868b` |
+| Text tertiary (large only) | `#86868b` — 3.6:1; never below 24px regular / 18.66px bold |
 | Text quaternary / placeholder | `#aeaeb2` |
 | Faint (numbers, arrows) | `#d2d2d7` |
 | Hairline divider | `rgba(0,0,0,0.07)` |
@@ -31,9 +31,16 @@ The full reference. `SKILL.md` is the workflow + philosophy; this is the detaile
 |---|---|
 | Apple blue (action/link/focus) | `#0071e3` (on tint: `#0066cc`) |
 | Indigo (gradient 2nd stop) | `#5e5ce6` |
-| Platform/brand (e.g. X) | `#1d9bf0` |
-| Heat (hottest) | text `#ff6b00`, bg `rgba(255,107,0,0.1)` |
+| Platform/brand (e.g. X) | `#1d9bf0` (white-text fills use `--x-blue-strong #0b7bc0`) |
+| Heat (hottest) | text `--heat-fg #c2410c` for small text (5.1:1), `#ff6b00` large/fill only; bg `rgba(255,107,0,0.1)` |
 | Live / online | `#30d158` (pulsing) |
+
+### Semantic status (never decoration)
+| Role | Value |
+|---|---|
+| Link (large text / non-text only) | `--link #2997ff` — 3.0:1 on white; body-text links use `--accent-link #0066cc` (5.3:1) |
+| Success | `--success #30d158`; text `--success-fg #1f8a3b`; tint `--success-bg` |
+| Danger | `--danger #ff3b30`; text `--danger-fg #c4342b`; tint `--danger-bg` |
 
 ### Signature gradients (hero / CTA / placeholder art ONLY)
 - blue-purple `linear-gradient(135deg,#0a84ff,#5e5ce6)` · warm `#ff9f0a→#ff375f` · green-blue `#30d158→#0a84ff` · CTA `#0071e3→#5e5ce6`
@@ -51,13 +58,13 @@ Stack (always system; never Inter/Roboto):
 
 | Role | Size | Weight | Tracking | Line-height |
 |---|---|---|---|---|
-| H1 | `clamp(27px,5vw,46px)` | 700 | `-0.03em` | 1.1–1.18 |
+| H1 | `clamp(28px,5vw,44px)` | 700 | `-0.03em` | 1.08–1.18 |
 | H2 | `clamp(20px,3.4vw,26px)` | 700 | `-0.02em` | 1.25 |
 | H3 / item title | `15.5–18px` | 600 | `-0.01em` | 1.4–1.45 |
 | Long body | `clamp(16px,2.6vw,18px)` | 400 | — | **1.85–1.9** |
 | Summary / lede | `15–19px` | 400 | — | 1.55–1.7 |
-| meta / byline | `12–13.5px` | 400–550 | — | 1.6 |
-| Tag / chip | `11–12px` | 500–650 | — | — |
+| meta / byline | `12–13.5px` | 400–600 | — | 1.6 |
+| Tag / chip | `11–12px` | 500–700 | — | — |
 
 **Iron rules:** titles negative tracking (bigger = more negative); long body line-height ≥ 1.85; numbers `font-variant-numeric: tabular-nums`; multiline clamp via `-webkit-line-clamp`.
 
@@ -164,17 +171,18 @@ Glass backgrounds, highlights, and edges are light/dark adaptive. In dark mode, 
 ```
 Dark glass hairlines use `var(--glass-hairline-dark)`; highlights switch to `var(--glass-highlight-dark)`.
 
-### Degradation ladder (5 levels)
+### Degradation ladder (4 levels)
 
 Glass degrades gracefully through standard media queries — no hardware sniffing. The ladder in `tokens.css` covers every `.glass-*` class:
 
 | Level | Trigger | Behavior |
 |---|---|---|
 | 1 | `prefers-reduced-transparency: reduce` | Solid `var(--surface)`, no `backdrop-filter`, hairline border. |
-| 2 | `prefers-reduced-data: save` | Blur only (drop saturation) — lighter payload. |
-| 3 | `prefers-contrast: more` | Solid `var(--surface)`, no blur, stronger border (`rgba(0,0,0,0.35)`). |
-| 4 | `@supports not (backdrop-filter)` | Near-opaque fallback (`rgba(245,245,247,0.94)` / dark `0.94`). |
-| 5 | `@media print` | White background, no blur, no shadow, `#ccc` border. |
+| 2 | `prefers-contrast: more` | Solid `var(--surface)`, no blur, stronger border (`rgba(0,0,0,0.35)`). |
+| 3 | `@supports not (backdrop-filter)` | Near-opaque fallback (`rgba(245,245,247,0.94)` / dark `0.94`). |
+| 4 | `@media print` | White background, no blur, no shadow, `#ccc` border. |
+
+`prefers-reduced-data` is intentionally **not** a level: no stable browser implements it, and backdrop blur is GPU cost, not network payload. Every class named in `tokens.css` (including `.glass-base`, `.glass-slider`, `.glass-check`, `.glass-radio`, `.glass-context`) is covered by the same `:is(...)` selector list.
 
 Add the `.glass-perf` utility class to force Regular blur on a specific element when the full degradation chain isn't needed.
 
@@ -199,7 +207,15 @@ Always pull from the named tier set: `--r-pill 999 · --r-chip 6 · --r-thumb 12
 .nav.scrolled { border-bottom-color: var(--glass-hairline-light); box-shadow: var(--glass-shadow-scrolled); }
 ```
 ```js
-addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 8), { passive: true });
+let ticking = false;
+addEventListener('scroll', () => {
+  if (ticking) return;
+  ticking = true;
+  requestAnimationFrame(() => {
+    nav.classList.toggle('scrolled', scrollY > 8);
+    ticking = false;
+  });
+}, { passive: true });
 ```
 
 ### z-index hierarchy
@@ -253,5 +269,5 @@ glass Regular: blur20 sat180 · Clear: blur10 sat100
 glass states: blur rest/active(+4)/scrolled(+2) · sat rest/active(200)/scrolled(rest)
 glass bg: regular-light/dark · surface-light/dark · clear-light/dark
 glass highlights/edges/shadows(rest/active/pressed/scrolled/floating)/hairlines/dim
-glass degradation: reduced-transparency → reduced-data → contrast → @supports → print
+glass degradation: reduced-transparency → contrast → @supports → print
 ```

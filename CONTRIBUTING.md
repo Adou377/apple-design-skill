@@ -18,7 +18,7 @@ This skill is built on five rules (see `SKILL.md`):
 2. **Dual-track materials: glass is seasoning on content, the main material on controls.** Content surfaces (articles, lists, form inputs, static text) = solid `#fff` + shadow. Control surfaces (nav, toolbar, sidebar, modal, popover, tab bar, switches, FAB) = liquid glass as their main material — dynamic, state-aware, content-adaptive. Use `var(--glass-*)` tokens for all glass properties; never hard-code blur/sat/shadow values.
 3. **Restraint is luxury on content surfaces** — whitespace and hierarchy over decoration.
 4. **Hierarchy from weight + size + grayscale, not color** — one accent blue, everything else grayscale.
-5. **Apple quality lives in details** — negative tracking, `tabular-nums`, hairline dividers, concentric corner radii, state-aware glass deformation, 5-level degradation ladder.
+5. **Apple quality lives in details** — negative tracking, `tabular-nums`, hairline dividers, concentric corner radii, state-aware glass deformation, 4-level degradation ladder.
 
 Any contribution that violates these rules will be requested for changes.
 
@@ -48,7 +48,7 @@ Any contribution that violates these rules will be requested for changes.
 - Glass control surfaces use `var(--glass-*)` tokens (blur, saturation, background, shadow, highlight, edge, hairline, dim); z-index uses `var(--z-*)` tokens.
 - Use `clamp()` for responsive sizing; one design auto-adapts PC ↔ mobile.
 - Touch targets ≥ 44px.
-- Include `prefers-reduced-motion`, `prefers-reduced-transparency`, and `prefers-contrast` media queries for interactive layers. The 5-level degradation ladder in `tokens.css` handles these automatically for `.glass-*` classes.
+- Include `prefers-reduced-motion`, `prefers-reduced-transparency`, and `prefers-contrast` media queries for interactive layers. The 4-level degradation ladder in `tokens.css` handles these automatically for every glass class.
 
 ### Markdown
 - Keep documentation concise and scannable.
@@ -59,8 +59,23 @@ Any contribution that violates these rules will be requested for changes.
 - [ ] All interactive elements are keyboard accessible (Tab, Enter/Space, Escape for dialogs).
 - [ ] Dialogs/sheets have `role="dialog"`, `aria-modal="true"`, focus trap, and Escape to close.
 - [ ] Toggle controls have `role="switch"` and `aria-checked`.
-- [ ] Text contrast ≥ 4.5:1 for body text, ≥ 3:1 for large text (WCAG AA).
+- [ ] Text contrast ≥ 4.5:1 for body text, ≥ 3:1 for large text (WCAG AA). `--text-3` only at ≥24px regular / ≥18.66px bold.
 - [ ] `prefers-reduced-motion` respected on all animated elements.
+
+### Local checks
+```bash
+python3 -m http.server 8000            # serve the repo
+npx htmlhint "*.html" "examples/*.html"
+npx stylelint "**/*.css"
+npx @axe-core/cli http://localhost:8000/reference.html \
+  http://localhost:8000/examples/account.html \
+  http://localhost:8000/examples/wallet.html \
+  http://localhost:8000/examples/liquid-controls.html \
+  http://localhost:8000/examples/sidebar.html \
+  http://localhost:8000/examples/toolbar.html \
+  --tags wcag2a,wcag2aa,wcag21a,wcag21aa --exit --chrome-options="no-sandbox"
+```
+`npm run lint:html`, `npm run lint:css`, and `npm run a11y` wrap the same commands.
 
 ## Commit Messages
 

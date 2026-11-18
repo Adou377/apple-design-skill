@@ -22,7 +22,7 @@ This skill encodes *why* that's wrong and *what* Apple actually does, as executa
 - **Dual-track materials: glass is seasoning on content, the main material on controls.** Content surfaces (articles, lists, form inputs) stay solid white + soft shadow. Control surfaces (nav, toolbar, sidebar, modal, popover, tab bar, switches, FAB) use liquid glass as their main material — dynamic, state-aware, content-adaptive.
 - **Hierarchy from weight + size + grayscale, not color.** Body is black-white-grey; color is *accent only* (one blue).
 - **Restraint is luxury on content surfaces.** A thousand "no"s for one "yes." Whitespace and hierarchy before any border/fill/icon.
-- **Quality lives in details.** Negative tracking on titles, `tabular-nums`, hairlines, gentle hover lift, concentric corner radii, state-aware glass deformation (rest→active→scrolled), 5-level degradation ladder.
+- **Quality lives in details.** Negative tracking on titles, `tabular-nums`, hairlines, gentle hover lift, concentric corner radii, state-aware glass deformation (rest→active→scrolled), 4-level degradation ladder.
 
 ---
 

@@ -6,6 +6,15 @@ on:
   pull_request:
     branches: [main]
 
+env:
+  PAGES: |
+    http://localhost:8080/reference.html
+    http://localhost:8080/examples/account.html
+    http://localhost:8080/examples/wallet.html
+    http://localhost:8080/examples/liquid-controls.html
+    http://localhost:8080/examples/sidebar.html
+    http://localhost:8080/examples/toolbar.html
+
 jobs:
   lighthouse-desktop:
     name: Lighthouse Audit (Desktop)
@@ -16,15 +25,22 @@ jobs:
       - name: Start static server
         run: |
           python3 -m http.server 8080 &
-          sleep 2
+          for i in $(seq 1 40); do
+            curl -sf http://localhost:8080/reference.html >/dev/null && break
+            sleep 0.25
+          done
+          curl -sf http://localhost:8080/reference.html >/dev/null
 
       - name: Run Lighthouse CI (desktop)
         uses: treosh/lighthouse-ci-action@v12
         with:
           urls: |
+            http://localhost:8080/reference.html
             http://localhost:8080/examples/account.html
             http://localhost:8080/examples/wallet.html
-            http://localhost:8080/reference.html
+            http://localhost:8080/examples/liquid-controls.html
+            http://localhost:8080/examples/sidebar.html
+            http://localhost:8080/examples/toolbar.html
           uploadArtifacts: true
           temporaryPublicStorage: true
           configPath: ./.lighthouserc.json
@@ -38,15 +54,22 @@ jobs:
       - name: Start static server
         run: |
           python3 -m http.server 8080 &
-          sleep 2
+          for i in $(seq 1 40); do
+            curl -sf http://localhost:8080/reference.html >/dev/null && break
+            sleep 0.25
+          done
+          curl -sf http://localhost:8080/reference.html >/dev/null
 
       - name: Run Lighthouse CI (mobile)
         uses: treosh/lighthouse-ci-action@v12
         with:
           urls: |
-            http://localhost:8080/examples/wallet.html
-            http://localhost:8080/examples/account.html
             http://localhost:8080/reference.html
+            http://localhost:8080/examples/account.html
+            http://localhost:8080/examples/wallet.html
+            http://localhost:8080/examples/liquid-controls.html
+            http://localhost:8080/examples/sidebar.html
+            http://localhost:8080/examples/toolbar.html
           uploadArtifacts: true
           temporaryPublicStorage: true
           configPath: ./.lighthouserc-mobile.json
@@ -62,20 +85,33 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Cache npm
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-axe-${{ hashFiles('package.json') }}
+
       - name: Install @axe-core/cli
         run: npm install -g @axe-core/cli
 
       - name: Start static server
         run: |
           python3 -m http.server 8080 &
-          sleep 2
+          for i in $(seq 1 40); do
+            curl -sf http://localhost:8080/reference.html >/dev/null && break
+            sleep 0.25
+          done
+          curl -sf http://localhost:8080/reference.html >/dev/null
 
       - name: Run axe-core on all pages
         run: |
           axe \
+            http://localhost:8080/reference.html \
             http://localhost:8080/examples/account.html \
             http://localhost:8080/examples/wallet.html \
-            http://localhost:8080/reference.html \
+            http://localhost:8080/examples/liquid-controls.html \
+            http://localhost:8080/examples/sidebar.html \
+            http://localhost:8080/examples/toolbar.html \
             --tags wcag2a,wcag2aa,wcag21a,wcag21aa \
             --exit \
             --chrome-options="no-sandbox,disable-setuid-sandbox,disable-dev-shm-usage" \

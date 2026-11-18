@@ -38,7 +38,7 @@ Size per context by setting `width`/`height` (keep the `24` viewBox fixed — th
 
 ## Core set (24-grid — paste the inner path(s) into the recipe)
 
-The curated set includes **20 icons** covering the most common App/web needs: chevron-right, chevron-down, arrow-left, plus, x, check, search, bell, user, home, credit-card, wallet, settings, share (iOS), trash, bookmark, more-horizontal, more-vertical, sidebar, and panel-right.
+The curated set includes **21 icons** covering the most common App/web needs: chevron-right, chevron-down, arrow-left, plus, x, check, search, bell, user, home, credit-card, wallet, settings, share (iOS), trash, bookmark, more-horizontal, more-vertical, sidebar, panel-right, and scan.
 
 ```
 chevron-right   <path d="M9 6l6 6-6 6"/>
@@ -59,6 +59,7 @@ trash           <path d="M4 7h16"/><path d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1
 bookmark        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
 more-horizontal <circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/>
 more-vertical   <circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/>
+scan            <path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M7 12h10"/>
 sidebar         <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/>
 panel-right     <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M15 3v18"/>
 ```

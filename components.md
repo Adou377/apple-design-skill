@@ -103,7 +103,7 @@ A control surface that overlaps scrolling content — Regular glass is mandatory
     <span style="width:7px; height:7px; border-radius:50%; background:var(--live); animation:pulse-dot 2.2s infinite;"></span>
     EYEBROW · LIVE
   </div>
-  <h1 style="margin-top:15px; font-size:clamp(32px,6vw,52px); font-weight:700; letter-spacing:-0.03em; line-height:1.06;">
+  <h1 style="margin-top:15px; font-size:clamp(28px,5vw,44px); font-weight:700; letter-spacing:-0.03em; line-height:1.08;">
     The headline
   </h1>
   <p style="margin-top:16px; font-size:clamp(15px,2.5vw,18px); color:var(--text-2); line-height:1.6; max-width:600px;">

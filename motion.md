@@ -94,7 +94,7 @@ Scrim: plain opacity fade (`.25s`), slightly faster than the surface so the surf
 
 ## 7. Frame-level smoothness
 
-- Animate **only `transform` and `opacity`** for *travel* (compositor-friendly); glass material props (`backdrop-filter`, `box-shadow`) transition as one documented material-state exception. `will-change` where motion is imminent — and remove it after.
+- Animate **only `transform` and `opacity`** for *travel* (compositor-friendly); glass material props (`backdrop-filter`, `box-shadow`) transition as one documented material-state exception. **Persistent icon-rail sidebars** are the second documented exception: collapsing the rail 260px ↔ 72px changes intrinsic layout, so `width` and the content track's `margin-left` animate together on the shared `--ease-spring` — never animate any other layout property. `will-change` where motion is imminent — and remove it after.
 - `requestAnimationFrame` is the display-synced clock for JS-driven motion.
 
 ## 8. Reduced motion & transparency — three independent signals
@@ -196,6 +196,8 @@ When a glass sidebar opens/closes, the content beneath it should shift, not just
 
 Blur, transform and shadow share the same duration and easing — never stagger them (a delayed blur reads as lag, not refraction). The content edge bends behind the arriving surface because the sidebar is translucent, not because the material lags behind the panel.
 
+**Overlay vs. persistent rail.** The transform sample above is for an *overlay* sidebar that slides in over the content. A *persistent icon-rail* sidebar that collapses its own box (260px ↔ 72px, as in `examples/sidebar.html`) changes intrinsic layout instead; that is the documented exception in §7 — animate `width` and the content track's `margin-left` together, never one alone.
+
 ### rAF-throttled scroll handling
 
 Glass state transitions on scroll (rest → scrolled) fire on every scroll event. **Never attach a heavy class toggle directly to the scroll listener** — throttle with `requestAnimationFrame`:
@@ -264,5 +266,5 @@ Sync the `aria-expanded` / `aria-hidden` flip with the glass state transition in
 - [ ] Scroll-driven glass state changes are **rAF-throttled** (no direct class toggle on scroll); `passive: true` on the listener.
 - [ ] Glass control state changes are **communicated via ARIA** (`aria-expanded`, `aria-selected`, `aria-checked`); accessibility state and visual state never desync.
 - [ ] Input is **never locked** during transitions; re-trigger mid-flight reverses smoothly (CSS transition, not keyframes).
-- [ ] Travel uses only `transform`/`opacity`; glass material props are the documented exception and never staggered.
+- [ ] Travel uses only `transform`/`opacity`; glass material props and a persistent icon-rail sidebar's `width`/`margin-left` are the documented exceptions and never staggered.
 - [ ] All three media queries present: `prefers-reduced-motion`, `prefers-reduced-transparency`, `prefers-contrast`.

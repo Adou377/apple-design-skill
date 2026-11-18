@@ -62,7 +62,7 @@ Run this on any page/component before claiming it's finished. Every box must be 
 ## Motion (only if the UI has interactive layers — full list in motion.md)
 - [ ] Press feedback on pointer-down; enter/exit same path, origin anchored to trigger.
 - [ ] `--ease-spring`/`--ease-out-quart` (no `linear`/default `ease`); no overshoot without momentum.
-- [ ] Glass materializes (blur+scale+opacity together); *travel* animates only `transform`/`opacity` (blur/saturate/shadow are material-state exceptions).
+- [ ] Glass materializes (blur+scale+opacity together); *travel* animates only `transform`/`opacity` (blur/saturate/shadow, plus a persistent icon-rail sidebar's `width`/`margin-left`, are documented exceptions).
 - [ ] Glass control surfaces use state tokens (`var(--glass-blur-rest)`, `var(--glass-blur-active)`, `var(--glass-blur-scrolled)`, `var(--glass-shadow-*)`) — blur, saturation, and shadow transition as one unit.
 - [ ] Scroll-driven glass state changes are rAF-throttled; `passive: true` on the listener.
 - [ ] `prefers-reduced-motion` / `prefers-reduced-transparency` / `prefers-contrast` all handled (4-level ladder plus the motion-reduce block in `tokens.css`).
